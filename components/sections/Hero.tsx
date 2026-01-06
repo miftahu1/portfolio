@@ -24,11 +24,25 @@ const letter = {
     rotateX: 0,
     transition: {
       duration: 0.8,
+<<<<<<< HEAD
       ease: "easeOut", // CHANGED FROM: [0.16, 1, 0.3, 1]
+        ease: "easeOut" as const,
+      ease: "easeOut" as const,
+>>>>>>> 0d0b452 (Update: apply recent changes)
     },
-  },
-};
 
+  const floatingOrb = {
+    initial: { scale: 0.8, opacity: 0 },
+    animate: {
+      scale: 1,
+      opacity: 0.3,
+      transition: {
+        duration: 1.5,
+        ease: "easeOut" as const,
+      },
+    },
+  };
+>>>>>>> 0d0b452 (Update: apply recent changes)
 export default function Hero() {
   const title = "Mifta.dev".split("");
   const subtitle = "Full-Stack Developer".split("");
@@ -38,10 +52,15 @@ export default function Hero() {
       {/* Animated gradient orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
+<<<<<<< HEAD
+=======
+              initial={{ scale: 0.8, opacity: 0 }}
+>>>>>>> 0d0b452 (Update: apply recent changes)
           animate={{
+            scale: [0.8, 1, 1.2, 1],
+            opacity: [0, 0.3, 0.3, 0.3],
             x: [0, 100, 0],
             y: [0, 50, 0],
-            scale: [1, 1.2, 1],
           }}
           transition={{
             duration: 20,
@@ -51,10 +70,15 @@ export default function Hero() {
           className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-r from-accent-purple/30 to-accent-blue/30 rounded-full blur-3xl"
         />
         <motion.div
+<<<<<<< HEAD
+=======
+              initial={{ scale: 0.8, opacity: 0 }}
+>>>>>>> 0d0b452 (Update: apply recent changes)
           animate={{
+            scale: [0.8, 1, 1.3, 1],
+            opacity: [0, 0.3, 0.3, 0.3],
             x: [0, -80, 0],
             y: [0, -60, 0],
-            scale: [1, 1.3, 1],
           }}
           transition={{
             duration: 25,
@@ -140,7 +164,11 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1, duration: 0.6, ease: "easeOut" }}
-              className="text-lg text-white/80 leading-relaxed max-w-2xl"
+<<<<<<< HEAD
+              className="text-lg md:text-xl text-white/80 leading-relaxed max-w-2xl"
+=======
+              className="text-lg md:text-xl text-white/80 leading-relaxed max-w-2xl"
+>>>>>>> 0d0b452 (Update: apply recent changes)
             >
               I craft beautiful, performant web experiences with{" "}
               <span className="text-gradient bg-gradient-primary bg-clip-text text-transparent font-semibold">
@@ -157,7 +185,11 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2, duration: 0.6, ease: "easeOut" }}
-              className="flex flex-wrap items-center gap-4 pt-4"
+<<<<<<< HEAD
+              className="flex flex-wrap items-center gap-4 pt-2"
+=======
+              className="flex flex-wrap items-center gap-4 pt-2"
+>>>>>>> 0d0b452 (Update: apply recent changes)
             >
               <Link href="/projects">
                 <MagneticButton>View Work</MagneticButton>
@@ -174,7 +206,11 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.4, duration: 0.6, ease: "easeOut" }}
-          className="grid gap-6 md:grid-cols-3 mt-16 pt-12 border-t border-white/10"
+<<<<<<< HEAD
+          className="grid gap-6 md:grid-cols-3 mt-20 pt-12 border-t border-white/10"
+=======
+          className="grid gap-6 md:grid-cols-3 mt-20 pt-12 border-t border-white/10"
+>>>>>>> 0d0b452 (Update: apply recent changes)
         >
           {[
             {
@@ -195,8 +231,13 @@ export default function Hero() {
           ].map((item, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
+<<<<<<< HEAD
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+=======
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+>>>>>>> 0d0b452 (Update: apply recent changes)
               transition={{ delay: 1.5 + index * 0.1, ease: "easeOut" }}
               whileHover={{ scale: 1.03, y: -4 }}
               className="glass rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all duration-300"
@@ -213,6 +254,25 @@ export default function Hero() {
             </motion.div>
           ))}
         </motion.div>
+<<<<<<< HEAD
+=======
+
+        {/* Scroll indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2, duration: 1, ease: "easeOut" }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden lg:block"
+        >
+          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center p-2">
+            <motion.div
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              className="w-1 h-2 bg-white/50 rounded-full"
+            />
+          </div>
+        </motion.div>
+>>>>>>> 0d0b452 (Update: apply recent changes)
       </div>
     </section>
   );

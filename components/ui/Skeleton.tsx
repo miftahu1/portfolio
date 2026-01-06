@@ -3,7 +3,9 @@
 import { motion } from "framer-motion";
 import type { HTMLAttributes } from "react";
 
-export default function Skeleton(props: HTMLAttributes<HTMLDivElement>) {
+type Props = Omit<HTMLAttributes<HTMLDivElement>, 'onAnimationStart' | 'onDragStart' | 'onDragEnd' | 'onDrag'>;
+
+export default function Skeleton(props: Props) {
   const { className = "", ...rest } = props;
   return (
     <motion.div

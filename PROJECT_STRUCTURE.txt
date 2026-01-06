@@ -1,12 +1,16 @@
 Project structure (excluded: .next, node_modules)
 
+.gitattributes
+.gitignore
 next-env.d.ts
 next.config.mjs
 package.json
+package-lock.json
 postcss.config.mjs
 README.md
 tailwind.config.ts
 tsconfig.json
+
 app/
   layout.tsx
   page.tsx
@@ -22,14 +26,15 @@ app/
   api/
     upload/
       route.ts
-    blog/
+  blog/
+    page.tsx
+    [slug]/
       page.tsx
-      [slug]/
-        page.tsx
   contact/
     page.tsx
   projects/
     page.tsx
+
 components/
   admin/
     ImageUpload.tsx
@@ -48,17 +53,27 @@ components/
     Hero.tsx
     ProjectsGrid.tsx
   ui/
+    AnimatedBackground.tsx
     AnimatedLogo.tsx
     ContactForm.tsx
+    GlowingCard.tsx
     MagneticButton.tsx
     Skeleton.tsx
+    SocialLinks.tsx
+
 lib/
   auth.ts
   firebase.ts
   firestore.ts
   types.ts
+
 public/
+  logo.png
   blog/
+    1767716551355-marvels-spider-man-3840x2160-11990.jpeg
+    1767716384020-marvels-spider-man-3840x2160-11990.jpeg
   projects/
+    1767708977155-Screenshot_2026-01-06_194605.png
+
 styles/
   globals.css

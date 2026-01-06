@@ -3,7 +3,7 @@
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
+type Props = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onAnimationStart' | 'onDragStart' | 'onDragEnd' | 'onDrag'> & {
   children: ReactNode;
   variant?: "primary" | "ghost";
   size?: "sm" | "md" | "lg";
