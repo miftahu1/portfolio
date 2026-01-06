@@ -22,7 +22,7 @@ const letter = {
     rotateX: 0,
     transition: {
       duration: 0.8,
-      ease: [0.16, 1, 0.3, 1],
+      ease: "easeOut", // Changed from array to string
     },
   },
 };
@@ -167,7 +167,7 @@ export default function Hero() {
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1, duration: 0.6 }}
+              transition={{ delay: 1, duration: 0.6, ease: "easeOut" }}
               className="text-lg md:text-xl text-white/80 leading-relaxed max-w-2xl"
             >
               I craft <span className="text-gradient bg-gradient-primary bg-clip-text text-transparent font-semibold">beautiful, performant web experiences</span> with modern technologies and smooth animations. Let&apos;s build something extraordinary together.
@@ -177,7 +177,7 @@ export default function Hero() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.2, duration: 0.6 }}
+              transition={{ delay: 1.2, duration: 0.6, ease: "easeOut" }}
               className="flex flex-wrap items-center gap-4 pt-2"
             >
               <Link href="/projects">
@@ -202,7 +202,7 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.4, duration: 0.6 }}
+          transition={{ delay: 1.4, duration: 0.6, ease: "easeOut" }}
           className="grid gap-6 md:grid-cols-3 mt-20 pt-12 border-t border-white/10"
         >
           {[
@@ -229,7 +229,7 @@ export default function Hero() {
               key={index}
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ delay: 1.5 + index * 0.1 }}
+              transition={{ delay: 1.5 + index * 0.1, ease: "easeOut" }}
               whileHover={{ scale: 1.03, y: -4 }}
               className="glass rounded-2xl p-8 border border-white/10 hover:border-white/20 transition-all duration-300 group"
             >
@@ -253,13 +253,13 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 2, duration: 1 }}
+          transition={{ delay: 2, duration: 1, ease: "easeOut" }}
           className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden lg:block"
         >
           <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center p-2">
             <motion.div
               animate={{ y: [0, 8, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
               className="w-1 h-2 bg-white/50 rounded-full"
             />
           </div>
