@@ -1,5 +1,7 @@
 "use client";
 
+import AnimatedBackground from "@/components/ui/AnimatedBackground";
+import GlowingCard from "@/components/ui/GlowingCard";
 import { motion } from "framer-motion";
 import MagneticButton from "@/components/ui/MagneticButton";
 import AnimatedLogo from "@/components/ui/AnimatedLogo";
@@ -22,7 +24,7 @@ const letter = {
     rotateX: 0,
     transition: {
       duration: 0.8,
-      ease: "easeOut", // Changed from array to string
+      ease: "easeOut", // CHANGED FROM: [0.16, 1, 0.3, 1]
     },
   },
 };
