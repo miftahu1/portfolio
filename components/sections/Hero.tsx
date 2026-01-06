@@ -24,7 +24,7 @@ const letter = {
     rotateX: 0,
     transition: {
       duration: 0.8,
-      ease: "easeOut" as const,
+      ease: "easeOut" as const, // FIXED: Changed from array to string with 'as const'
     },
   },
 };
@@ -145,26 +145,26 @@ export default function Hero() {
             {
               title: "Focus",
               desc: "TypeScript, React, Next.js, Motion Design",
-              gradient: "purple",
+              glowColor: "purple",
               icon: "⚡",
             },
             {
               title: "Approach",
               desc: "Beautiful, performant, user-centered design",
-              gradient: "blue",
+              glowColor: "blue",
               icon: "🎯",
             },
             {
               title: "Status",
               desc: "Available for exciting projects",
-              gradient: "cyan",
+              glowColor: "cyan",
               icon: "✅",
             },
           ].map((item, index) => (
             <GlowingCard
               key={index}
               delay={1.5 + index * 0.1}
-              glowColor={item.gradient as any}
+              glowColor={item.glowColor as "purple" | "blue" | "cyan"}
               className="h-full"
             >
               <div className="flex items-center gap-3 mb-4">
@@ -177,7 +177,13 @@ export default function Hero() {
                 {item.desc}
               </p>
               <div
-                className={`h-1 w-full mt-6 rounded-full bg-gradient-to-r from-accent-${item.gradient} to-accent-${item.gradient === 'purple' ? 'blue' : item.gradient === 'blue' ? 'cyan' : 'yellow'} opacity-60 group-hover:opacity-100 transition-opacity duration-300`}
+                className={`h-1 w-full mt-6 rounded-full bg-gradient-to-r ${
+                  item.glowColor === 'purple' 
+                    ? 'from-accent-purple to-accent-blue' 
+                    : item.glowColor === 'blue' 
+                    ? 'from-accent-blue to-accent-cyan' 
+                    : 'from-accent-cyan to-accent-yellow'
+                } opacity-60 group-hover:opacity-100 transition-opacity duration-300`}
               />
             </GlowingCard>
           ))}
