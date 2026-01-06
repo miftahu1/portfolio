@@ -1,0 +1,64 @@
+Project structure (excluded: .next, node_modules)
+
+next-env.d.ts
+next.config.mjs
+package.json
+postcss.config.mjs
+README.md
+tailwind.config.ts
+tsconfig.json
+app/
+  layout.tsx
+  page.tsx
+  admin/
+    layout.tsx
+    page.tsx
+    blog/
+      page.tsx
+    projects/
+      page.tsx
+    requests/
+      page.tsx
+  api/
+    upload/
+      route.ts
+    blog/
+      page.tsx
+      [slug]/
+        page.tsx
+  contact/
+    page.tsx
+  projects/
+    page.tsx
+components/
+  admin/
+    ImageUpload.tsx
+  blog/
+    BlogCard.tsx
+    Prose.tsx
+  layout/
+    Footer.tsx
+    Navbar.tsx
+    PageTransition.tsx
+  projects/
+    ProjectCard.tsx
+  sections/
+    BlogList.tsx
+    ContactSection.tsx
+    Hero.tsx
+    ProjectsGrid.tsx
+  ui/
+    AnimatedLogo.tsx
+    ContactForm.tsx
+    MagneticButton.tsx
+    Skeleton.tsx
+lib/
+  auth.ts
+  firebase.ts
+  firestore.ts
+  types.ts
+public/
+  blog/
+  projects/
+styles/
+  globals.css
