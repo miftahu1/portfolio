@@ -24,238 +24,164 @@ const letter = {
     rotateX: 0,
     transition: {
       duration: 0.8,
-<<<<<<< HEAD
-      ease: "easeOut", // CHANGED FROM: [0.16, 1, 0.3, 1]
-        ease: "easeOut" as const,
       ease: "easeOut" as const,
->>>>>>> 0d0b452 (Update: apply recent changes)
     },
+  },
+};
 
-  const floatingOrb = {
-    initial: { scale: 0.8, opacity: 0 },
-    animate: {
-      scale: 1,
-      opacity: 0.3,
-      transition: {
-        duration: 1.5,
-        ease: "easeOut" as const,
-      },
-    },
-  };
->>>>>>> 0d0b452 (Update: apply recent changes)
 export default function Hero() {
   const title = "Mifta.dev".split("");
   const subtitle = "Full-Stack Developer".split("");
 
   return (
-    <section className="relative pt-20 overflow-hidden">
-      {/* Animated gradient orbs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-<<<<<<< HEAD
-=======
-              initial={{ scale: 0.8, opacity: 0 }}
->>>>>>> 0d0b452 (Update: apply recent changes)
-          animate={{
-            scale: [0.8, 1, 1.2, 1],
-            opacity: [0, 0.3, 0.3, 0.3],
-            x: [0, 100, 0],
-            y: [0, 50, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute top-20 left-10 w-96 h-96 bg-gradient-to-r from-accent-purple/30 to-accent-blue/30 rounded-full blur-3xl"
-        />
-        <motion.div
-<<<<<<< HEAD
-=======
-              initial={{ scale: 0.8, opacity: 0 }}
->>>>>>> 0d0b452 (Update: apply recent changes)
-          animate={{
-            scale: [0.8, 1, 1.3, 1],
-            opacity: [0, 0.3, 0.3, 0.3],
-            x: [0, -80, 0],
-            y: [0, -60, 0],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 0.5,
-          }}
-          className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-accent-pink/30 to-accent-cyan/30 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{
-            rotate: [0, 360],
-            scale: [1, 1.1, 1],
-          }}
-          transition={{
-            duration: 30,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-mesh rounded-full opacity-50"
-        />
-      </div>
+    <section className="relative pt-20 overflow-hidden min-h-screen flex items-center">
+      {/* Use AnimatedBackground as the main background */}
+      <AnimatedBackground />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6">
-        {/* Hero Content Row: Logo on left, Text on right */}
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16 py-16">
-          {/* LEFT: Logo - Smaller size */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6">
+        {/* Hero Content */}
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16 py-16">
+          {/* Logo Section */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="lg:w-2/5 flex justify-center"
+            className="lg:w-2/5 flex justify-center order-2 lg:order-1"
           >
-            <AnimatedLogo size={160} />
+            <AnimatedLogo size={180} />
           </motion.div>
 
-          {/* RIGHT: Text Content */}
-          <div className="lg:w-3/5 space-y-6">
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={container}
-              className="inline-flex flex-wrap gap-2 text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight"
-            >
-              {title.map((char, index) => (
-                <motion.span
-                  key={index}
-                  variants={letter}
-                  className="font-display inline-block"
-                  style={{ perspective: "1000px" }}
-                >
-                  {char === " " ? (
-                    "\u00A0"
-                  ) : char === "." ? (
-                    <span className="text-gradient bg-gradient-primary bg-clip-text text-transparent">
-                      {char}
-                    </span>
-                  ) : (
-                    <span className="text-white drop-shadow-lg">{char}</span>
-                  )}
-                </motion.span>
-              ))}
-            </motion.div>
+          {/* Text Content */}
+          <div className="lg:w-3/5 space-y-8 order-1 lg:order-2">
+            {/* Animated Title */}
+            <div className="space-y-4">
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                variants={container}
+                className="inline-flex flex-wrap gap-2 text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight"
+              >
+                {title.map((char, index) => (
+                  <motion.span
+                    key={index}
+                    variants={letter}
+                    className="font-display inline-block"
+                    style={{ perspective: "1000px" }}
+                  >
+                    {char === " " ? (
+                      "\u00A0"
+                    ) : char === "." ? (
+                      <span className="text-gradient bg-gradient-primary bg-clip-text text-transparent">
+                        {char}
+                      </span>
+                    ) : (
+                      <span className="text-white drop-shadow-lg">{char}</span>
+                    )}
+                  </motion.span>
+                ))}
+              </motion.div>
 
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={container}
-              className="flex flex-wrap gap-1 text-lg md:text-xl lg:text-2xl font-medium"
-            >
-              {subtitle.map((char, index) => (
-                <motion.span
-                  key={index}
-                  variants={letter}
-                  className="text-gradient bg-gradient-primary bg-clip-text text-transparent"
-                >
-                  {char === " " ? "\u00A0" : char}
-                </motion.span>
-              ))}
-            </motion.div>
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                variants={container}
+                className="flex flex-wrap gap-1 text-lg md:text-xl lg:text-2xl xl:text-3xl font-medium"
+              >
+                {subtitle.map((char, index) => (
+                  <motion.span
+                    key={index}
+                    variants={letter}
+                    className="text-gradient bg-gradient-primary bg-clip-text text-transparent"
+                  >
+                    {char === " " ? "\u00A0" : char}
+                  </motion.span>
+                ))}
+              </motion.div>
+            </div>
 
+            {/* Description */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1, duration: 0.6, ease: "easeOut" }}
-<<<<<<< HEAD
               className="text-lg md:text-xl text-white/80 leading-relaxed max-w-2xl"
-=======
-              className="text-lg md:text-xl text-white/80 leading-relaxed max-w-2xl"
->>>>>>> 0d0b452 (Update: apply recent changes)
             >
-              I craft beautiful, performant web experiences with{" "}
-              <span className="text-gradient bg-gradient-primary bg-clip-text text-transparent font-semibold">
-                modern technologies
-              </span>{" "}
-              and{" "}
-              <span className="text-gradient bg-gradient-primary bg-clip-text text-transparent font-semibold">
-                smooth animations
-              </span>
-              . Let&apos;s build something extraordinary together.
+              I craft <span className="text-gradient bg-gradient-primary bg-clip-text text-transparent font-semibold">beautiful, performant web experiences</span> with modern technologies and smooth animations. Let&apos;s build something extraordinary together.
             </motion.p>
 
+            {/* CTA Buttons */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2, duration: 0.6, ease: "easeOut" }}
-<<<<<<< HEAD
               className="flex flex-wrap items-center gap-4 pt-2"
-=======
-              className="flex flex-wrap items-center gap-4 pt-2"
->>>>>>> 0d0b452 (Update: apply recent changes)
             >
               <Link href="/projects">
-                <MagneticButton>View Work</MagneticButton>
+                <MagneticButton size="lg" className="px-8 py-4">
+                  View Work
+                </MagneticButton>
               </Link>
               <Link href="/contact">
-                <MagneticButton variant="ghost">Contact Me</MagneticButton>
+                <MagneticButton 
+                  variant="ghost" 
+                  size="lg"
+                  className="px-8 py-4 border-white/20 hover:bg-white/5"
+                >
+                  Contact Me
+                </MagneticButton>
               </Link>
             </motion.div>
           </div>
         </div>
 
-        {/* Info Cards - On next line, full width */}
+        {/* Info Cards - Using GlowingCard component */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.4, duration: 0.6, ease: "easeOut" }}
-<<<<<<< HEAD
           className="grid gap-6 md:grid-cols-3 mt-20 pt-12 border-t border-white/10"
-=======
-          className="grid gap-6 md:grid-cols-3 mt-20 pt-12 border-t border-white/10"
->>>>>>> 0d0b452 (Update: apply recent changes)
         >
           {[
             {
               title: "Focus",
               desc: "TypeScript, React, Next.js, Motion Design",
-              gradient: "from-accent-purple to-accent-blue",
+              gradient: "purple",
+              icon: "⚡",
             },
             {
               title: "Approach",
               desc: "Beautiful, performant, user-centered design",
-              gradient: "from-accent-blue to-accent-cyan",
+              gradient: "blue",
+              icon: "🎯",
             },
             {
               title: "Status",
               desc: "Available for exciting projects",
-              gradient: "from-accent-cyan to-accent-yellow",
+              gradient: "cyan",
+              icon: "✅",
             },
           ].map((item, index) => (
-            <motion.div
+            <GlowingCard
               key={index}
-<<<<<<< HEAD
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-=======
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
->>>>>>> 0d0b452 (Update: apply recent changes)
-              transition={{ delay: 1.5 + index * 0.1, ease: "easeOut" }}
-              whileHover={{ scale: 1.03, y: -4 }}
-              className="glass rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all duration-300"
+              delay={1.5 + index * 0.1}
+              glowColor={item.gradient as any}
+              className="h-full"
             >
-              <h3 className="text-base font-semibold text-white/90 mb-3">
-                {item.title}
-              </h3>
-              <p className="text-sm text-white/70 leading-relaxed">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-2xl">{item.icon}</span>
+                <h3 className="text-xl font-semibold text-white/90">
+                  {item.title}
+                </h3>
+              </div>
+              <p className="text-base text-white/70 leading-relaxed">
                 {item.desc}
               </p>
               <div
-                className={`h-1 w-full mt-4 rounded-full bg-gradient-to-r ${item.gradient} opacity-60`}
+                className={`h-1 w-full mt-6 rounded-full bg-gradient-to-r from-accent-${item.gradient} to-accent-${item.gradient === 'purple' ? 'blue' : item.gradient === 'blue' ? 'cyan' : 'yellow'} opacity-60 group-hover:opacity-100 transition-opacity duration-300`}
               />
-            </motion.div>
+            </GlowingCard>
           ))}
         </motion.div>
-<<<<<<< HEAD
-=======
 
         {/* Scroll indicator */}
         <motion.div
@@ -272,7 +198,6 @@ export default function Hero() {
             />
           </div>
         </motion.div>
->>>>>>> 0d0b452 (Update: apply recent changes)
       </div>
     </section>
   );
