@@ -79,6 +79,7 @@ export default function AdminBlogPage() {
               published: false,
               createdAt: Date.now(),
               updatedAt: Date.now(),
+              heroImageUrl: "", // FIXED: Added default value
             })
           }
         >
@@ -209,20 +210,26 @@ function PostForm({ initial, onCancel, onSaved }: FormProps) {
   };
 
   return (
-    <form
+    <motion.form
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
       onSubmit={handleSubmit}
-      className="space-y-3 rounded-xl border border-white/10 bg-backgroundElevated/80 p-4 text-xs"
+      className="space-y-5 glass-strong rounded-2xl border border-white/20 p-6"
     >
-      <h3 className="font-medium text-white">
-        {isNew ? "New post" : "Edit post"}
+      <h3 className="font-display text-xl font-bold text-white mb-1">
+        {isNew ? "Create New" : "Edit"} <span className="text-gradient bg-gradient-primary bg-clip-text text-transparent">Blog Post</span>
       </h3>
-      <div className="grid gap-3 md:grid-cols-2">
+      <p className="text-sm text-white/70 mb-4">
+        Fill in the details below to {isNew ? "create" : "update"} your blog post
+      </p>
+      <div className="grid gap-4 md:grid-cols-2">
         <Field label="Title">
           <input
             name="title"
             value={state.title}
             onChange={handleChange}
-            className="w-full rounded-md border border-white/10 bg-black/20 px-2 py-1.5"
+            className="w-full rounded-xl glass border border-white/20 px-4 py-3 text-sm text-white placeholder-white/40 outline-none transition-all focus:border-accent-purple focus:shadow-glow-pink"
+            placeholder="Post Title"
           />
         </Field>
         <Field label="Slug">
@@ -230,7 +237,8 @@ function PostForm({ initial, onCancel, onSaved }: FormProps) {
             name="slug"
             value={state.slug}
             onChange={handleChange}
-            className="w-full rounded-md border border-white/10 bg-black/20 px-2 py-1.5"
+            className="w-full rounded-xl glass border border-white/20 px-4 py-3 text-sm text-white placeholder-white/40 outline-none transition-all focus:border-accent-blue focus:shadow-glow-blue font-mono"
+            placeholder="post-slug"
           />
         </Field>
         <Field label="Excerpt" full>
@@ -238,7 +246,8 @@ function PostForm({ initial, onCancel, onSaved }: FormProps) {
             name="excerpt"
             value={state.excerpt}
             onChange={handleChange}
-            className="w-full rounded-md border border-white/10 bg-black/20 px-2 py-1.5"
+            className="w-full rounded-xl glass border border-white/20 px-4 py-3 text-sm text-white placeholder-white/40 outline-none transition-all focus:border-accent-cyan focus:shadow-glow-cyan"
+            placeholder="Brief description of the post"
           />
         </Field>
         <Field label="Tags (comma-separated)" full>
@@ -246,7 +255,8 @@ function PostForm({ initial, onCancel, onSaved }: FormProps) {
             name="tags"
             value={Array.isArray(state.tags) ? state.tags.join(", ") : state.tags}
             onChange={handleChange}
-            className="w-full rounded-md border border-white/10 bg-black/20 px-2 py-1.5"
+            className="w-full rounded-xl glass border border-white/20 px-4 py-3 text-sm text-white placeholder-white/40 outline-none transition-all focus:border-accent-yellow focus:shadow-glow"
+            placeholder="react, nextjs, typescript"
           />
         </Field>
         <Field label="SEO description" full>
@@ -254,7 +264,8 @@ function PostForm({ initial, onCancel, onSaved }: FormProps) {
             name="seoDescription"
             value={state.seoDescription ?? ""}
             onChange={handleChange}
-            className="w-full rounded-md border border-white/10 bg-black/20 px-2 py-1.5"
+            className="w-full rounded-xl glass border border-white/20 px-4 py-3 text-sm text-white placeholder-white/40 outline-none transition-all focus:border-accent-purple focus:shadow-glow-pink"
+            placeholder="SEO description for search engines"
           />
         </Field>
         <div className="flex items-center gap-2 pt-4">
@@ -264,15 +275,15 @@ function PostForm({ initial, onCancel, onSaved }: FormProps) {
             name="published"
             checked={state.published}
             onChange={handleCheckbox}
-            className="h-3 w-3 rounded border-white/20 bg-black/40"
+            className="h-4 w-4 rounded border-white/20 bg-black/40"
           />
-          <label htmlFor="published" className="text-[11px] text-white/80">
+          <label htmlFor="published" className="text-sm text-white/80">
             Published
           </label>
         </div>
       </div>
       <ImageUpload
-        value={state.heroImageUrl}
+        value={state.heroImageUrl || ""} // FIXED: Added default empty string
         onChange={(url) => setState((s) => ({ ...s, heroImageUrl: url }))}
         folder="blog"
         label="Cover Image"
@@ -283,26 +294,42 @@ function PostForm({ initial, onCancel, onSaved }: FormProps) {
           rows={8}
           value={state.contentMarkdown}
           onChange={handleChange}
-          className="w-full rounded-md border border-white/10 bg-black/20 px-2 py-1.5 font-mono"
+          className="w-full rounded-xl glass border border-white/20 px-4 py-3 text-sm text-white placeholder-white/40 outline-none transition-all focus:border-accent-purple focus:shadow-glow-pink resize-none font-mono"
+          placeholder="# Your Markdown content here..."
         />
       </Field>
-      <div className="flex justify-end gap-2">
-        <button
+      <div className="flex justify-end gap-3 pt-4">
+        <motion.button
           type="button"
           onClick={onCancel}
-          className="rounded-full border border-white/10 px-3 py-1 text-[11px] text-muted hover:border-accent/60 hover:text-white"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="rounded-xl glass border border-white/20 px-6 py-3 text-sm font-semibold text-white/80 hover:text-white hover:border-white/30 transition-all"
         >
           Cancel
-        </button>
-        <button
+        </motion.button>
+        <motion.button
           type="submit"
           disabled={saving}
-          className="rounded-full bg-accent px-4 py-1 text-[11px] font-medium text-black disabled:opacity-60"
+          whileHover={{ scale: saving ? 1 : 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="rounded-xl bg-gradient-primary px-6 py-3 text-sm font-semibold text-white shadow-glow hover:shadow-glow-pink disabled:opacity-60 disabled:cursor-not-allowed transition-all"
         >
-          {saving ? "Saving…" : "Save"}
-        </button>
+          {saving ? (
+            <span className="flex items-center gap-2">
+              <motion.span
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
+              />
+              Saving...
+            </span>
+          ) : (
+            "Save Post"
+          )}
+        </motion.button>
       </div>
-    </form>
+    </motion.form>
   );
 }
 
@@ -316,10 +343,9 @@ function Field({
   full?: boolean;
 }) {
   return (
-    <div className={full ? "md:col-span-2 space-y-1" : "space-y-1"}>
-      <label className="text-[11px] text-white/80">{label}</label>
+    <div className={full ? "md:col-span-2 space-y-2" : "space-y-2"}>
+      <label className="text-sm font-semibold text-white/90">{label}</label>
       {children}
     </div>
   );
 }
-
