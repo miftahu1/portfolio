@@ -1,47 +1,52 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
-import { existsSync } from "fs";
+import { v2 as cloudinary } from "cloudinary";
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File;
-    const folder = formData.get("folder") as string | null;
+    const folder = formData.get("folder") as string || "portfolio";
 
     if (!file) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
+    // Convert file to buffer
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Determine folder (projects, blog, or root uploads)
-    const uploadFolder = folder || "uploads";
-    const uploadDir = join(process.cwd(), "public", uploadFolder);
+    // Convert buffer to base64 for Cloudinary
+    const base64String = `data:${file.type};base64,${buffer.toString("base64")}`;
 
-    // Create directory if it doesn't exist
-    if (!existsSync(uploadDir)) {
-      await mkdir(uploadDir, { recursive: true });
-    }
+    // Upload to Cloudinary
+    const result = await cloudinary.uploader.upload(base64String, {
+      folder,
+      resource_type: "auto",
+      // Add any additional transformations here
+      transformation: [
+        { quality: "auto:good" },
+        { fetch_format: "auto" }
+      ]
+    });
 
-    // Generate unique filename
-    const timestamp = Date.now();
-    const originalName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
-    const filename = `${timestamp}-${originalName}`;
-    const filepath = join(uploadDir, filename);
-
-    // Write file
-    await writeFile(filepath, buffer);
-
-    // Return public URL path
-    const publicPath = `/${uploadFolder}/${filename}`;
-
-    return NextResponse.json({ url: publicPath, filename });
+    return NextResponse.json({ 
+      url: result.secure_url,
+      public_id: result.public_id,
+      width: result.width,
+      height: result.height,
+      format: result.format
+    });
   } catch (error) {
-    console.error("Upload error:", error);
+    console.error("Cloudinary upload error:", error);
     return NextResponse.json(
-      { error: "Failed to upload file" },
+      { error: "Failed to upload file to Cloudinary" },
       { status: 500 }
     );
   }
