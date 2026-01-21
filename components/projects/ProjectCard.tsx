@@ -27,69 +27,84 @@ export default function ProjectCard({ project }: Props) {
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      whileHover={{ y: -8, scale: 1.02 }}
-      transition={{ type: "tween", duration: 0.3 }} // FIXED: Changed from spring to tween
-      className="group cursor-pointer overflow-hidden rounded-2xl glass border border-white/10 hover:border-white/30 transition-all duration-300 hover:shadow-glow"
+      transition={{ type: "tween", duration: 0.3 }}
+      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/5 transition-all duration-300 hover:border-white/20 hover:bg-white/10 hover:shadow-lg hover:shadow-accent-purple/10"
     >
-      <Link href={projectUrl} target="_blank" rel="noopener noreferrer" className="block">
-      {project.heroImageUrl && (
-        <div className="relative h-48 w-full overflow-hidden">
-          <Image
-            src={project.heroImageUrl}
-            alt={project.title}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // ADDED: sizes prop
-            className="object-cover transition-transform duration-500 group-hover:scale-110"
-          />
-          <div
-            className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
-          />
-          {project.featured && (
-            <motion.div
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ type: "tween", duration: 0.3 }} // FIXED: Added transition type
-              className="absolute top-3 right-3"
-            >
-              <span className="rounded-full bg-gradient-primary px-3 py-1 text-[10px] font-semibold text-white shadow-glow">
-                ⭐ Featured
-              </span>
-            </motion.div>
-          )}
-        </div>
-      )}
-      <div className="p-6">
-        <div className="mb-3">
-          <h3 className="text-lg font-bold text-white mb-2 group-hover:text-gradient bg-gradient-primary bg-clip-text text-transparent transition-all duration-300">
+      <div className="relative aspect-[16/9] w-full overflow-hidden">
+        <Image
+          src={project.heroImageUrl || "/placeholder.png"}
+          alt={project.title}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+        <Link 
+          href={projectUrl} 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="absolute inset-0"
+        >
+          <span className="sr-only">View project: {project.title}</span>
+        </Link>
+      </div>
+      
+      <div className="flex flex-1 flex-col p-6">
+        <h3 className="text-xl font-bold text-white mb-2">
+          <Link 
+            href={projectUrl} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="transition-colors duration-300 hover:text-accent-purple focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-purple rounded-sm"
+          >
             {project.title}
-          </h3>
-          <p className="text-sm text-white/70 leading-relaxed line-clamp-2">
-            {project.excerpt}
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {project.tech.slice(0, 4).map((t, idx) => (
-            <motion.span
+          </Link>
+        </h3>
+        <p className="text-white/70 flex-1 mb-4 leading-relaxed">
+          {project.excerpt}
+        </p>
+        <div className="flex flex-wrap gap-2 mb-4">
+          {project.tech.slice(0, 4).map((t) => (
+            <span
               key={t}
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.05, type: "tween", duration: 0.2 }} // FIXED: Added type
-              whileHover={{ scale: 1.1 }}
-              className="rounded-full glass border border-white/10 px-3 py-1 text-[11px] font-medium text-white/80 group-hover:border-white/30 group-hover:text-white transition-all duration-300"
+              className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium text-white/80"
             >
               {t}
-            </motion.span>
+            </span>
           ))}
         </div>
-        {project.liveUrl && (
-          <div className="mt-4 flex items-center gap-2 text-sm font-medium text-gradient bg-gradient-primary bg-clip-text text-transparent">
-            View Project →
-          </div>
-        )}
+
+        <div className="mt-auto flex items-center gap-4">
+          {project.liveUrl && (
+            <Link 
+              href={project.liveUrl} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="inline-flex items-center gap-2 text-sm font-medium text-accent-purple transition-all duration-300 hover:gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-purple rounded-sm"
+            >
+              View Project →
+            </Link>
+          )}
+          {project.repoUrl && (
+            <Link 
+              href={project.repoUrl} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="inline-flex items-center gap-2 text-sm text-white/60 transition-colors duration-300 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-purple rounded-sm"
+            >
+              Source Code
+            </Link>
+          )}
+        </div>
       </div>
-      </Link>
+
+      {project.featured && (
+        <div className="absolute top-4 right-4 z-10">
+          <span className="inline-flex items-center rounded-full bg-accent-purple/10 px-3 py-1 text-xs font-medium text-accent-purple ring-1 ring-inset ring-accent-purple/20">
+            Featured
+          </span>
+        </div>
+      )}
     </motion.article>
   );
 }
-

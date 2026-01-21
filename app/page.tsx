@@ -7,10 +7,9 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <ProjectsGrid limit={3} />
+      <ProjectsGrid limit={6} />
       <BlogList limit={3} />
       <ContactSection />
     </>
   );
 }
-

@@ -1,11 +1,12 @@
 "use client";
 
 import AnimatedBackground from "@/components/ui/AnimatedBackground";
-import GlowingCard from "@/components/ui/GlowingCard";
 import { motion } from "framer-motion";
 import MagneticButton from "@/components/ui/MagneticButton";
 import AnimatedLogo from "@/components/ui/AnimatedLogo";
 import Link from "next/link";
+import InfoCard from "@/components/ui/InfoCard";
+import { Code, Users, Award } from "lucide-react";
 
 const container = {
   hidden: {},
@@ -134,60 +135,27 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Info Cards - Using GlowingCard component */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.4, duration: 0.6, ease: "easeOut" }}
-          className="grid gap-6 md:grid-cols-3 mt-20 pt-12 border-t border-white/10"
-        >
-          {[
-            {
-              title: "Focus",
-              desc: "TypeScript, React, Next.js, Motion Design",
-              glowColor: "purple",
-              icon: "⚡",
-            },
-            {
-              title: "Approach",
-              desc: "Beautiful, performant, user-centered design",
-              glowColor: "blue",
-              icon: "🎯",
-            },
-            {
-              title: "Status",
-              desc: "Available for exciting projects",
-              glowColor: "cyan",
-              icon: "✅",
-            },
-          ].map((item, index) => (
-            <GlowingCard
-              key={index}
-              delay={1.5 + index * 0.1}
-              glowColor={item.glowColor as "purple" | "blue" | "cyan"}
-              className="h-full"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <span className="text-2xl">{item.icon}</span>
-                <h3 className="text-xl font-semibold text-white/90">
-                  {item.title}
-                </h3>
-              </div>
-              <p className="text-base text-white/70 leading-relaxed">
-                {item.desc}
-              </p>
-              <div
-                className={`h-1 w-full mt-6 rounded-full bg-gradient-to-r ${
-                  item.glowColor === 'purple' 
-                    ? 'from-accent-purple to-accent-blue' 
-                    : item.glowColor === 'blue' 
-                    ? 'from-accent-blue to-accent-cyan' 
-                    : 'from-accent-cyan to-accent-yellow'
-                } opacity-60 group-hover:opacity-100 transition-opacity duration-300`}
-              />
-            </GlowingCard>
-          ))}
-        </motion.div>
+        {/* Info Cards */}
+        <div className="grid gap-6 md:grid-cols-3 mt-20 pt-12 border-t border-white/10">
+          <InfoCard 
+            icon={<Code size={24} />} 
+            title="Core Technologies" 
+            description="TypeScript, React, Next.js, and Framer Motion for sleek, modern web apps."
+            delay={1.4}
+          />
+          <InfoCard 
+            icon={<Users size={24} />} 
+            title="User-Centric Design"
+            description="Crafting intuitive and engaging interfaces that prioritize user experience."
+            delay={1.5}
+          />
+          <InfoCard 
+            icon={<Award size={24} />} 
+            title="Quality & Performance"
+            description="Building high-quality, performant websites that are optimized for success."
+            delay={1.6}
+          />
+        </div>
 
         {/* Scroll indicator */}
         <motion.div

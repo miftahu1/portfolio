@@ -1,126 +1,142 @@
 "use client";
 
-import Link from "next/link";
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
-import AnimatedLogo from "@/components/ui/AnimatedLogo";
 import { Menu, X } from "lucide-react";
+import AnimatedLogo from "@/components/ui/AnimatedLogo";
 
 const links = [
-  { href: "/", label: "Home", color: "from-accent-pink to-accent-purple" },
-  { href: "/projects", label: "Projects", color: "from-accent-purple to-accent-blue" },
-  { href: "/blog", label: "Blog", color: "from-accent-blue to-accent-cyan" },
-  { href: "/contact", label: "Contact", color: "from-accent-cyan to-accent-yellow" },
+  { href: "/", label: "Home" },
+  { href: "/projects", label: "Projects" },
+  { href: "/blog", label: "Blog" },
+  { href: "/contact", label: "Contact" },
 ];
 
+const AnimatedHamburger = ({ isOpen, onClick }: { isOpen: boolean, onClick: () => void }) => (
+  <button 
+    onClick={onClick} 
+    className="relative z-50 h-8 w-8 text-white transition-colors hover:text-white/80"
+  >
+    <motion.div 
+      animate={{ rotate: isOpen ? 45 : 0, y: isOpen ? 6 : 0 }}
+      className="absolute top-2 left-1/2 h-0.5 w-6 -translate-x-1/2 bg-current"
+    />
+    <motion.div 
+      animate={{ opacity: isOpen ? 0 : 1 }}
+      className="absolute top-1/2 left-1/2 h-0.5 w-6 -translate-y-1/2 -translate-x-1/2 bg-current"
+    />
+    <motion.div 
+      animate={{ rotate: isOpen ? -45 : 0, y: isOpen ? -6 : 0 }}
+      className="absolute bottom-2 left-1/2 h-0.5 w-6 -translate-x-1/2 bg-current"
+    />
+  </button>
+);
+
 export default function Navbar() {
-  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <motion.header
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="fixed inset-x-0 top-0 z-50 glass border-b border-white/10 shadow-glass"
-    >
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
-        {/* LEFT SIDE: Logo + Brand Name */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <AnimatedLogo size={44} />
-          <div className="flex flex-col">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="font-display text-xl font-bold tracking-tight"
-            >
-              <span className="text-gradient bg-gradient-primary bg-clip-text text-transparent">
-                Mifta
-              </span>
-              <span className="text-white/90">.dev</span>
-            </motion.div>
-            <motion.span
-              className="h-0.5 w-0 bg-gradient-primary group-hover:w-full transition-all duration-300"
-              initial={{ scaleX: 0 }}
-              whileHover={{ scaleX: 1 }}
-            />
-          </div>
-        </Link>
+    <>
+      <header
+        className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 ${
+          isScrolled || isOpen
+            ? "bg-background-primary/80 shadow-lg backdrop-blur-md"
+            : "bg-transparent"
+        }`}
+      >
+        <nav className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-3">
+              <AnimatedLogo size={40} />
+              <span className="text-xl font-bold text-white">Mifta.dev</span>
+            </Link>
 
-        {/* RIGHT SIDE: Navigation Links (Desktop) */}
-        <div className="hidden md:flex items-center gap-1 rounded-full glass-strong p-1">
-          {links.map((link, index) => {
-            const active = pathname === link.href;
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="relative px-4 py-2 rounded-full transition-all duration-300"
-              >
-                <motion.span
-                  className={`relative z-10 text-sm font-medium transition-colors ${
-                    active
+            {/* Desktop Menu */}
+            <div className="hidden md:flex items-center gap-1">
+              {links.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 ${
+                    pathname === link.href
                       ? "text-white"
                       : "text-white/60 hover:text-white"
                   }`}
-                  whileHover={{ scale: 1.05 }}
                 >
                   {link.label}
-                </motion.span>
-                {active && (
-                  <motion.div
-                    layoutId="activeTab"
-                    className={`absolute inset-0 rounded-full bg-gradient-to-r ${link.color} opacity-90`}
-                    transition={{
-                      type: "spring",
-                      stiffness: 380,
-                      damping: 30,
-                    }}
-                  />
-                )}
-              </Link>
-            );
-          })}
-        </div>
+                  {pathname === link.href && (
+                    <motion.div
+                      layoutId="underline"
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-primary"
+                    />
+                  )}
+                </Link>
+              ))}
+            </div>
 
-        {/* Mobile Menu Button */}
-        <div className="md:hidden">
-          <button onClick={() => setIsOpen(!isOpen)}>
-            <Menu className="h-6 w-6 text-white" />
-          </button>
-        </div>
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              <AnimatedHamburger isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
+            </div>
+          </div>
+        </nav>
+      </header>
 
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="absolute top-0 left-0 w-full bg-background-primary shadow-lg md:hidden"
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="fixed inset-0 z-30 bg-background-primary/95 backdrop-blur-lg md:hidden"
+          >
+            <motion.div 
+              initial={{ y: "-100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "-100%" }}
+              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              className="absolute top-0 left-0 w-full bg-background-primary shadow-xl"
             >
-              <div className="flex justify-end p-4">
-                <button onClick={() => setIsOpen(false)}>
-                  <X className="h-6 w-6 text-white" />
-                </button>
-              </div>
-              <div className="flex flex-col items-center gap-4 p-4">
-                {links.map((link) => (
-                  <Link
+              <div className="flex flex-col items-center gap-6 p-8 pt-24">
+                {links.map((link, i) => (
+                  <motion.div
                     key={link.href}
-                    href={link.href}
-                    className="text-white/80 hover:text-white"
-                    onClick={() => setIsOpen(false)}
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 + i * 0.05, ease: "easeOut" }}
                   >
-                    {link.label}
-                  </Link>
+                    <Link
+                      href={link.href}
+                      className={`text-2xl font-semibold transition-colors duration-300 ${
+                        pathname === link.href
+                          ? "text-white"
+                          : "text-white/60 hover:text-white"
+                      }`}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.div>
                 ))}
               </div>
             </motion.div>
-          )}
-        </AnimatePresence>
-      </nav>
-    </motion.header>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

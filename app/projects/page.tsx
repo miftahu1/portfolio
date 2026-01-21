@@ -6,14 +6,8 @@ export const metadata = {
 
 export default function ProjectsPage() {
   return (
-    <>
-      <h1 className="font-display text-2xl text-white md:text-3xl">Projects</h1>
-      <p className="mt-2 max-w-xl text-sm text-muted">
-        A curated selection of work spanning product engineering, UI/UX, and
-        motion-driven experiences.
-      </p>
+    <div className="py-16 md:py-24">
       <ProjectsGrid />
-    </>
+    </div>
   );
 }
-

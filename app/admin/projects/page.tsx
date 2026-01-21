@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import {
   collection,
   addDoc,
@@ -10,11 +10,11 @@ import {
   getDocs,
   orderBy,
   query,
-} from "firebase/firestore";
-import { motion } from "framer-motion";
-import { db } from "@/lib/firebase";
-import type { Project } from "@/lib/types";
-import ImageUpload from "@/components/admin/ImageUpload";
+} from 'firebase/firestore';
+import { motion } from 'framer-motion';
+import { db } from '@/lib/firebase';
+import type { Project } from '@/lib/types';
+import ImageUpload from '@/components/admin/ImageUpload';
 
 export default function AdminProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -23,13 +23,13 @@ export default function AdminProjectsPage() {
 
   useEffect(() => {
     async function load() {
-      const ref = collection(db, "projects");
-      const q = query(ref, orderBy("sortOrder", "asc"));
+      const ref = collection(db, 'projects');
+      const q = query(ref, orderBy('sortOrder', 'asc'));
       const snap = await getDocs(q);
       setProjects(
         snap.docs.map(
-          (d) => ({ id: d.id, ...(d.data() as Omit<Project, "id">) }) as Project,
-        ),
+          (d) => ({ id: d.id, ...(d.data() as Omit<Project, 'id'>) }) as Project
+        )
       );
       setLoading(false);
     }
@@ -38,28 +38,27 @@ export default function AdminProjectsPage() {
 
   const handleSaved = (project: Project, isNew: boolean) => {
     setProjects((prev) =>
-      isNew ? [...prev, project] : prev.map((p) => (p.id === project.id ? project : p)),
+      isNew ? [...prev, project] : prev.map((p) => (p.id === project.id ? project : p))
     );
     setEditing(null);
   };
 
   const handleDelete = async (project: Project) => {
-    if (!confirm(`Delete project "${project.title}"?`)) return;
-    await deleteDoc(doc(db, "projects", project.id));
+    if (!confirm(`Delete project '"${project.title}"'?`)) return;
+    await deleteDoc(doc(db, 'projects', project.id));
     setProjects((prev) => prev.filter((p) => p.id !== project.id));
   };
 
   const handleNewProject = () => {
-    const nextSortOrder = projects.length > 0 
-      ? Math.max(...projects.map(p => p.sortOrder)) + 1 
-      : 1;
-    
+    const nextSortOrder =
+      projects.length > 0 ? Math.max(...projects.map((p) => p.sortOrder)) + 1 : 1;
+
     setEditing({
-      id: "",
-      title: "",
-      slug: "",
-      excerpt: "",
-      description: "",
+      id: '',
+      title: '',
+      slug: '',
+      excerpt: '',
+      description: '',
       tech: [],
       sortOrder: nextSortOrder,
       featured: false,
@@ -77,11 +76,12 @@ export default function AdminProjectsPage() {
       >
         <div>
           <h2 className="font-display text-2xl font-bold text-white mb-1">
-            Projects <span className="text-gradient bg-gradient-primary bg-clip-text text-transparent">Management</span>
+            Projects{' '}
+            <span className="text-gradient bg-gradient-primary bg-clip-text text-transparent">
+              Management
+            </span>
           </h2>
-          <p className="text-sm text-white/70">
-            Create and manage your portfolio projects
-          </p>
+          <p className="text-sm text-white/70">Create and manage your portfolio projects</p>
         </div>
         <motion.button
           whileHover={{ scale: 1.05 }}
@@ -149,11 +149,7 @@ export default function AdminProjectsPage() {
       )}
 
       {editing && (
-        <ProjectForm
-          initial={editing}
-          onCancel={() => setEditing(null)}
-          onSaved={handleSaved}
-        />
+        <ProjectForm initial={editing} onCancel={() => setEditing(null)} onSaved={handleSaved} />
       )}
     </div>
   );
@@ -170,9 +166,7 @@ function ProjectForm({ initial, onCancel, onSaved }: FormProps) {
   const [state, setState] = useState<Project>(initial);
   const [saving, setSaving] = useState(false);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setState((s) => ({ ...s, [name]: value }));
   };
@@ -188,21 +182,21 @@ function ProjectForm({ initial, onCancel, onSaved }: FormProps) {
     const payload = {
       ...state,
       tech:
-        typeof state.tech === "string"
-          ? (state.tech as unknown as string).split(",").map((t) => t.trim())
+        typeof state.tech === 'string'
+          ? (state.tech as unknown as string).split(',').map((t) => t.trim())
           : state.tech,
       sortOrder: Number(state.sortOrder) || 0,
       updatedAt: Date.now(),
     };
 
     if (isNew) {
-      const ref = await addDoc(collection(db, "projects"), {
+      const ref = await addDoc(collection(db, 'projects'), {
         ...payload,
         createdAt: Date.now(),
       });
       onSaved({ ...(payload as Project), id: ref.id }, true);
     } else {
-      await updateDoc(doc(db, "projects", state.id), payload);
+      await updateDoc(doc(db, 'projects', state.id), payload);
       onSaved(payload as Project, false);
     }
     setSaving(false);
@@ -216,10 +210,13 @@ function ProjectForm({ initial, onCancel, onSaved }: FormProps) {
       className="space-y-5 glass-strong rounded-2xl border border-white/20 p-6"
     >
       <h3 className="font-display text-xl font-bold text-white mb-1">
-        {isNew ? "Create New" : "Edit"} <span className="text-gradient bg-gradient-primary bg-clip-text text-transparent">Project</span>
+        {isNew ? 'Create New' : 'Edit'}{' '}
+        <span className="text-gradient bg-gradient-primary bg-clip-text text-transparent">
+          Project
+        </span>
       </h3>
       <p className="text-sm text-white/70 mb-4">
-        Fill in the details below to {isNew ? "create" : "update"} your project
+        Fill in the details below to {isNew ? 'create' : 'update'} your project
       </p>
       <div className="grid gap-4 md:grid-cols-2">
         <Field label="Title">
@@ -252,7 +249,7 @@ function ProjectForm({ initial, onCancel, onSaved }: FormProps) {
         <Field label="Tech Stack (comma-separated)" full>
           <input
             name="tech"
-            value={Array.isArray(state.tech) ? state.tech.join(", ") : state.tech}
+            value={Array.isArray(state.tech) ? state.tech.join(', ') : state.tech}
             onChange={handleChange}
             className="w-full rounded-xl glass border border-white/20 px-4 py-3 text-sm text-white placeholder-white/40 outline-none transition-all focus:border-accent-yellow focus:shadow-glow"
             placeholder="React, TypeScript, Next.js"
@@ -261,7 +258,7 @@ function ProjectForm({ initial, onCancel, onSaved }: FormProps) {
         <Field label="Live URL">
           <input
             name="liveUrl"
-            value={state.liveUrl ?? ""}
+            value={state.liveUrl ?? ''}
             onChange={handleChange}
             className="w-full rounded-xl glass border border-white/20 px-4 py-3 text-sm text-white placeholder-white/40 outline-none transition-all focus:border-accent-purple focus:shadow-glow-pink font-mono"
             placeholder="https://project.com"
@@ -270,7 +267,7 @@ function ProjectForm({ initial, onCancel, onSaved }: FormProps) {
         <Field label="Repo URL">
           <input
             name="repoUrl"
-            value={state.repoUrl ?? ""}
+            value={state.repoUrl ?? ''}
             onChange={handleChange}
             className="w-full rounded-xl glass border border-white/20 px-4 py-3 text-sm text-white placeholder-white/40 outline-none transition-all focus:border-accent-blue focus:shadow-glow-blue font-mono"
             placeholder="https://github.com/user/repo"
@@ -301,7 +298,7 @@ function ProjectForm({ initial, onCancel, onSaved }: FormProps) {
         </div>
       </div>
       <ImageUpload
-        value={state.heroImageUrl}
+        value={state.heroImageUrl ?? ''}
         onChange={(url) => setState((s) => ({ ...s, heroImageUrl: url }))}
         folder="projects"
         label="Hero Image"
@@ -337,13 +334,13 @@ function ProjectForm({ initial, onCancel, onSaved }: FormProps) {
             <span className="flex items-center gap-2">
               <motion.span
                 animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
                 className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
               />
               Saving...
             </span>
           ) : (
-            "Save Project"
+            'Save Project'
           )}
         </motion.button>
       </div>
@@ -361,7 +358,7 @@ function Field({
   full?: boolean;
 }) {
   return (
-    <div className={full ? "md:col-span-2 space-y-2" : "space-y-2"}>
+    <div className={full ? 'md:col-span-2 space-y-2' : 'space-y-2'}>
       <label className="text-sm font-semibold text-white/90">{label}</label>
       {children}
     </div>
