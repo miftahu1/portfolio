@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
 import AnimatedLogo from "@/components/ui/AnimatedLogo";
+import { Menu, X } from "lucide-react";
 
 const links = [
   { href: "/", label: "Home", color: "from-accent-pink to-accent-purple" },
@@ -14,6 +16,7 @@ const links = [
 
 export default function Navbar() {
   const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <motion.header
@@ -45,8 +48,8 @@ export default function Navbar() {
           </div>
         </Link>
 
-        {/* RIGHT SIDE: Navigation Links */}
-        <div className="flex items-center gap-1 rounded-full glass-strong p-1">
+        {/* RIGHT SIDE: Navigation Links (Desktop) */}
+        <div className="hidden md:flex items-center gap-1 rounded-full glass-strong p-1">
           {links.map((link, index) => {
             const active = pathname === link.href;
             return (
@@ -80,6 +83,43 @@ export default function Navbar() {
             );
           })}
         </div>
+
+        {/* Mobile Menu Button */}
+        <div className="md:hidden">
+          <button onClick={() => setIsOpen(!isOpen)}>
+            <Menu className="h-6 w-6 text-white" />
+          </button>
+        </div>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="absolute top-0 left-0 w-full bg-background-primary shadow-lg md:hidden"
+            >
+              <div className="flex justify-end p-4">
+                <button onClick={() => setIsOpen(false)}>
+                  <X className="h-6 w-6 text-white" />
+                </button>
+              </div>
+              <div className="flex flex-col items-center gap-4 p-4">
+                {links.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="text-white/80 hover:text-white"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
     </motion.header>
   );
