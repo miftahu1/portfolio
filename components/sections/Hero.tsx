@@ -46,13 +46,13 @@ export default function Hero() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="lg:w-2/5 flex justify-center order-2 lg:order-1"
+            className="lg:w-2/5 flex justify-center order-1"
           >
             <AnimatedLogo size={180} />
           </motion.div>
 
           {/* Text Content */}
-          <div className="lg:w-3/5 space-y-8 order-1 lg:order-2">
+          <div className="lg:w-3/5 space-y-8 order-2">
             {/* Animated Title */}
             <div className="space-y-4">
               <motion.div
