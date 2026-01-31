@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jhanji (The Mongolian Kitchen) | Authentic Mongolian & Multi-Cuisine in Assam</title>
+    <meta name="description" content="Jhanji (The Mongolian Kitchen) offers authentic Mongolian cuisine and quick bites in a casual dining setting. Open 24 hours with ample parking. Visit us at NH-37, Jhanji, Assam.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #c53030;
+            --primary-dark: #9b2c2c;
+            --secondary-color: #ed8936;
+            --accent-color: #dd6b20;
+            --text-dark: #2d3748;
+            --text-light: #718096;
+            --light-bg: #f7fafc;
+            --white: #ffffff;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--white);
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 3px;
+            background-color: var(--primary-color);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .logo-text span {
+            color: var(--text-dark);
+            font-size: 1rem;
+            display: block;
+            font-family: 'Inter', sans-serif;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 30px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 1rem;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        nav ul li a.active {
+            color: var(--primary-color);
+        }
+
+        nav ul li a.active:after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-color);
+            bottom: -5px;
+            left: 0;
+        }
+
+        .mobile-toggle {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-dark);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            min-height: 700px;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 700px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: var(--white);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .hero-highlights {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .highlight {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .highlight i {
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 30px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid var(--white);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .about-image {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .about-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .feature i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-top: 3px;
+        }
+
+        /* Menu Section */
+        .menu {
+            background-color: var(--light-bg);
+        }
+
+        .menu-categories {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 10px 20px;
+            background-color: var(--white);
+            border: 1px solid #e2e8f0;
+            border-radius: 30px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .category-btn.active, .category-btn:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border-color: var(--primary-color);
+        }
+
+        .menu-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .menu-item {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .menu-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .menu-item-image {
+            height: 200px;
+            width: 100%;
+            background-color: #e2e8f0;
+            background-position: center;
+            background-size: cover;
+        }
+
+        .menu-item-content {
+            padding: 20px;
+        }
+
+        .menu-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .menu-item h4 {
+            margin-bottom: 0;
+        }
+
+        .price {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        /* Gallery Section */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery-item {
+            height: 250px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Contact Section */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .contact-item i {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            width: 24px;
+        }
+
+        .contact-details h4 {
+            margin-bottom: 5px;
+        }
+
+        .map-container {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            height: 450px;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #1a202c;
+            color: var(--white);
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h4 {
+            color: var(--white);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #a0aec0;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary-color);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: var(--white);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-icons a:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #2d3748;
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .about-content, .contact-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            section {
+                padding: 60px 0;
+            }
+            
+            .mobile-toggle {
+                display: block;
+            }
+            
+            nav {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background-color: var(--white);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+                padding: 20px;
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: var(--transition);
+            }
+            
+            nav.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+            
+            nav ul {
+                flex-direction: column;
+            }
+            
+            nav ul li {
+                margin: 0 0 15px 0;
+            }
+            
+            .hero h1 {
+                font-size: 2.3rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                text-align: center;
+            }
+            
+            .about-features {
+                grid-template-columns: 1fr;
+            }
+            
+            .menu-items {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Rating Badge */
+        .rating-badge {
+            display: inline-flex;
+            align-items: center;
+            background-color: #f6e05e;
+            color: #744210;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .rating-badge i {
+            margin-right: 5px;
+        }
+
+        /* Opening Hours */
+        .opening-hours {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-top: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <div class="logo-text">
+                    Jhanji <span>The Mongolian Kitchen</span>
+                </div>
+            </div>
+            
+            <div class="mobile-toggle" id="mobileToggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="#home" class="active">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#menu">Menu</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <div class="rating-badge">
+                    <i class="fas fa-star"></i> 4.8 Google Rating
+                </div>
+                <h1>Authentic Mongolian & Multi-Cuisine Dining in Assam</h1>
+                <p>Jhanji (The Mongolian Kitchen) offers flavorful dishes and quick bites in a casual dining setting, perfect for lunch, dinner, or solo dining. Open 24 hours with ample parking.</p>
+                
+                <div class="hero-highlights">
+                    <div class="highlight">
+                        <i class="fas fa-clock"></i>
+                        <span>Open 24 Hours</span>
+                    </div>
+                    <div class="highlight">
+                        <i class="fas fa-rupee-sign"></i>
+                        <span>₹200–400 per person</span>
+                    </div>
+                    <div class="highlight">
+                        <i class="fas fa-car"></i>
+                        <span>Ample Parking</span>
+                    </div>
+                    <div class="highlight">
+                        <i class="fas fa-users"></i>
+                        <span>Groups & Tourists Welcome</span>
+                    </div>
+                </div>
+                
+                <div class="cta-buttons">
+                    <a href="#menu" class="btn">View Our Menu</a>
+                    <a href="#contact" class="btn btn-secondary">Visit Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="container">
+            <h2 class="section-title">About Our Restaurant</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Jhanji (The Mongolian Kitchen) is a popular casual dining restaurant located in Jhanji, Assam, offering authentic Mongolian cuisine alongside a selection of multi-cuisine dishes. We pride ourselves on providing flavorful dishes and quick bites suitable for lunch and dinner.</p>
+                    <p>Our restaurant is a favorite among locals, groups, and tourists alike, offering a comfortable dining experience with table service and ample parking facilities. Whether you're dining solo or visiting with friends and family, we provide a welcoming atmosphere for everyone.</p>
+                    
+                    <div class="about-features">
+                        <div class="feature">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <h4>Service Options</h4>
+                                <p>Dine-in, Takeaway, Drive-through, Kerbside pickup</p>
+                            </div>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <h4>Atmosphere</h4>
+                                <p>Casual, Family-friendly, Good for groups & tourists</p>
+                            </div>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <h4>Amenities</h4>
+                                <p>Restroom available, Free parking, NFC mobile payments</p>
+                            </div>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <h4>Popular For</h4>
+                                <p>Lunch, Dinner, Solo dining, Quick bites, Small plates</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1559925393-8be0ec4767c8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80" alt="Restaurant interior with cozy seating">
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- Menu Section -->
+<section class="menu" id="menu">
+  <div class="container">
+    <h2 class="section-title">Our Menu</h2>
+
+    <div class="menu-categories">
+      <button class="category-btn active" data-category="all">All</button>
+      <button class="category-btn" data-category="main">Main Course</button>
+      <button class="category-btn" data-category="noodles">Noodles & Chowmein</button>
+      <button class="category-btn" data-category="rolls">Rolls & Momos</button>
+      <button class="category-btn" data-category="starters">Non-Veg Starters</button>
+    </div>
+
+    <div class="menu-items">
+
+      <!-- MAIN COURSE -->
+      <div class="menu-item" data-category="main">
+        <div class="menu-item-image" style="background-image:url('https://images.unsplash.com/photo-1604908177522-0407b5e8f7c4');"></div>
+        <div class="menu-item-content">
+          <div class="menu-item-header">
+            <h4>Assamese Veg Thali</h4>
+            <div class="price">₹120</div>
+          </div>
+          <p>Plain rice, mixed veg, dal, bhaji, pickle, salad & chutney.</p>
+        </div>
+      </div>
+
+      <div class="menu-item" data-category="main">
+        <div class="menu-item-image" style="background-image:url('https://images.unsplash.com/photo-1626777552726-4a6b54c97e46');"></div>
+        <div class="menu-item-content">
+          <div class="menu-item-header">
+            <h4>Assamese Non-Veg Thali (Chicken / Pork / Fish)</h4>
+            <div class="price">₹310</div>
+          </div>
+          <p>Rice with curry, dal, bhaji, pickle, salad & chutney.</p>
+        </div>
+      </div>
+
+      <div class="menu-item" data-category="main">
+        <div class="menu-item-image" style="background-image:url('https://images.unsplash.com/photo-1600628422019-91f61f8b2b3b');"></div>
+        <div class="menu-item-content">
+          <div class="menu-item-header">
+            <h4>Student’s Chicken / Pork Thali</h4>
+            <div class="price">₹99</div>
+          </div>
+          <p>Rice, dal & chicken or pork curry.</p>
+        </div>
+      </div>
+
+      <!-- NOODLES & CHOWMEIN -->
+      <div class="menu-item" data-category="noodles">
+        <div class="menu-item-image" style="background-image:url('https://images.unsplash.com/photo-1585032226651-759b368d7246');"></div>
+        <div class="menu-item-content">
+          <div class="menu-item-header">
+            <h4>Veg Hakka Noodles</h4>
+            <div class="price">₹89</div>
+          </div>
+          <p>Classic stir-fried noodles with vegetables.</p>
+        </div>
+      </div>
+
+      <div class="menu-item" data-category="noodles">
+        <div class="menu-item-image" style="background-image:url('https://images.unsplash.com/photo-1600628421055-4d6c7ecb60ad');"></div>
+        <div class="menu-item-content">
+          <div class="menu-item-header">
+            <h4>Chicken Hakka Noodles</h4>
+            <div class="price">₹110</div>
+          </div>
+          <p>Wok-tossed noodles with chicken & spices.</p>
+        </div>
+      </div>
+
+      <div class="menu-item" data-category="noodles">
+        <div class="menu-item-image" style="background-image:url('https://images.unsplash.com/photo-1626078436898-71dbf8b9e4b0');"></div>
+        <div class="menu-item-content">
+          <div class="menu-item-header">
+            <h4>Gravy Chowmein (Veg / Non-Veg)</h4>
+            <div class="price">₹120 / ₹150</div>
+          </div>
+          <p>Noodles served with rich gravy.</p>
+        </div>
+      </div>
+
+      <!-- ROLLS & MOMOS -->
+      <div class="menu-item" data-category="rolls">
+        <div class="menu-item-image" style="background-image:url('https://images.unsplash.com/photo-1606491956689-2ea866880c84');"></div>
+        <div class="menu-item-content">
+          <div class="menu-item-header">
+            <h4>Chicken Roll</h4>
+            <div class="price">₹100</div>
+          </div>
+          <p>Soft wrap filled with spiced chicken.</p>
+        </div>
+      </div>
+
+      <div class="menu-item" data-category="rolls">
+        <div class="menu-item-image" style="background-image:url('https://images.unsplash.com/photo-1626078436860-5b0b1db3f93a');"></div>
+        <div class="menu-item-content">
+          <div class="menu-item-header">
+            <h4>Paneer Roll</h4>
+            <div class="price">₹90</div>
+          </div>
+          <p>Grilled paneer wrapped with veggies.</p>
+        </div>
+      </div>
+
+      <div class="menu-item" data-category="rolls">
+        <div class="menu-item-image" style="background-image:url('https://images.unsplash.com/photo-1603894584373-5ac82b2ae398');"></div>
+        <div class="menu-item-content">
+          <div class="menu-item-header">
+            <h4>Chicken Momos</h4>
+            <div class="price">₹100</div>
+          </div>
+          <p>Steamed momos served with spicy chutney.</p>
+        </div>
+      </div>
+
+      <!-- NON-VEG STARTERS -->
+      <div class="menu-item" data-category="starters">
+        <div class="menu-item-image" style="background-image:url('https://images.unsplash.com/photo-1626078437020-3a74e2d5c3a1');"></div>
+        <div class="menu-item-content">
+          <div class="menu-item-header">
+            <h4>Chilli Chicken Dry</h4>
+            <div class="price">₹250</div>
+          </div>
+          <p>Crispy chicken tossed in spicy sauce.</p>
+        </div>
+      </div>
+
+      <div class="menu-item" data-category="starters">
+        <div class="menu-item-image" style="background-image:url('https://images.unsplash.com/photo-1604908554025-43f5c1d2a5b4');"></div>
+        <div class="menu-item-content">
+          <div class="menu-item-header">
+            <h4>Pork Dry Fry</h4>
+            <div class="price">₹250</div>
+          </div>
+          <p>Traditional spicy pork preparation.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <p style="text-align:center; margin-top:30px; color:#718096;">
+      * Menu items and prices may change
+    </p>
+  </div>
+</section>
+
+
+    <!-- Gallery Section -->
+    <section id="gallery">
+        <div class="container">
+            <h2 class="section-title">Restaurant Gallery</h2>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Restaurant interior">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1559925393-8be0ec4767c8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80" alt="Cozy dining area">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1365&q=80" alt="Delicious fried rice">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80" alt="Mongolian lamb dish">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Steamed momos">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container">
+            <h2 class="section-title">Visit Us Today</h2>
+            
+            <div class="contact-container">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div class="contact-details">
+                            <h4>Location</h4>
+                            <p>NH-37, near BPCL Fuel Station, Jhanji, Suramoni Gaon, Assam – 785683</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i class="fas fa-phone-alt"></i>
+                        <div class="contact-details">
+                            <h4>Contact Number</h4>
+                            <p><a href="tel:08822050674">088220 50674</a></p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i class="fas fa-clock"></i>
+                        <div class="contact-details">
+                            <h4>Opening Hours</h4>
+                            <p>Open 24 hours, 7 days a week</p>
+                            <div class="opening-hours">
+                                <i class="fas fa-door-open"></i>
+                                <span>Always Open!</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i class="fas fa-rupee-sign"></i>
+                        <div class="contact-details">
+                            <h4>Average Price</h4>
+                            <p>₹200–400 per person</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i class="fas fa-car"></i>
+                        <div class="contact-details">
+                            <h4>Parking</h4>
+                            <p>Free parking lot & street parking available</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i class="fas fa-credit-card"></i>
+                        <div class="contact-details">
+                            <h4>Payment Options</h4>
+                            <p>Cash, Cards, NFC mobile payments supported</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="map-container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3567.136229137819!2d94.2658592!3d26.5969192!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3746d8e9c9b3c5a5%3A0x57bde70f646c21ca!2sJhanji%20(The%20Mongolian%20Kitchen)!5e0!3m2!1sen!2sin!4v1688645678901!5m2!1sen!2sin" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>Jhanji (The Mongolian Kitchen)</h4>
+                    <p>Authentic Mongolian & multi-cuisine restaurant in Jhanji, Assam. Offering flavorful dishes and quick bites in a casual dining setting.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-x"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#menu">Our Menu</a></li>
+                        <li><a href="#gallery">Gallery</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Service Options</h4>
+                    <ul class="footer-links">
+                        <li>Dine-in</li>
+                        <li>Takeaway</li>
+                        <li>Drive-through</li>
+                        <li>Kerbside Pickup</li>
+                        <li>Table Service</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Contact Info</h4>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-map-marker-alt"></i> NH-37, near BPCL Fuel Station, Jhanji, Assam</li>
+                        <li><i class="fas fa-phone"></i> 088220 50674</li>
+                        <li><i class="fas fa-clock"></i> Open 24 hours</li>
+                        <li><i class="fas fa-car"></i> Ample parking available</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2026 Jhanji (The Mongolian Kitchen). All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Navigation Toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const mainNav = document.getElementById('mainNav');
+        
+        mobileToggle.addEventListener('click', () => {
+            mainNav.classList.toggle('active');
+            mobileToggle.innerHTML = mainNav.classList.contains('active') 
+                ? '<i class="fas fa-times"></i>' 
+                : '<i class="fas fa-bars"></i>';
+        });
+        
+        // Close mobile menu when clicking on a link
+        const navLinks = document.querySelectorAll('#mainNav a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mainNav.classList.remove('active');
+                mobileToggle.innerHTML = '<i class="fas fa-bars"></i>';
+            });
+        });
+        
+        // Menu Category Filtering
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const menuItems = document.querySelectorAll('.menu-item');
+        
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                btn.classList.add('active');
+                
+                const category = btn.getAttribute('data-category');
+                
+                // Filter menu items
+                menuItems.forEach(item => {
+                    if (category === 'all' || item.getAttribute('data-category') === category) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.backgroundColor = 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+            }
+        });
+        
+        // Active navigation link on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('nav a');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

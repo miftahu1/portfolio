@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jhanji (The Mongolian Kitchen) - Authentic Mongolian & Multi-Cuisine Restaurant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #c62828;
+            --primary-dark: #8e0000;
+            --secondary: #f9a825;
+            --accent: #2e7d32;
+            --light: #fff8f0;
+            --dark: #1a1a1a;
+            --gray: #5a5a5a;
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light);
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        section {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 3px;
+            background-color: var(--secondary);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        /* Header & Navigation */
+        header {
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            top: 0;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+        
+        .logo {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            line-height: 1.2;
+        }
+        
+        .logo span {
+            font-size: 0.9rem;
+            color: var(--gray);
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav li {
+            margin-left: 30px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        nav a:hover {
+            color: var(--primary);
+        }
+        
+        nav a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            bottom: -5px;
+            left: 0;
+            transition: var(--transition);
+        }
+        
+        nav a:hover:after {
+            width: 100%;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--primary);
+            cursor: pointer;
+        }
+        
+        .rating {
+            display: flex;
+            align-items: center;
+            background-color: var(--accent);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .rating i {
+            color: var(--secondary);
+            margin-right: 5px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80') no-repeat center center/cover;
+            color: white;
+            text-align: center;
+            padding: 180px 0 100px;
+            margin-top: 80px;
+        }
+        
+        .hero h2 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        .hero-badges {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 40px;
+        }
+        
+        .badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 30px;
+            backdrop-filter: blur(5px);
+        }
+        
+        /* Highlights Section */
+        .highlights {
+            background-color: white;
+        }
+        
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .highlight-card {
+            text-align: center;
+            padding: 30px 20px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .highlight-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .highlight-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .highlight-card h3 {
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        
+        .about-image {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .about-text h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+        
+        .about-text p {
+            margin-bottom: 20px;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .feature-item i {
+            color: var(--accent);
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        /* Menu Section */
+        .menu {
+            background-color: #f9f5f0;
+        }
+        
+        .menu-categories {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+        
+        .category-btn {
+            background-color: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 8px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        
+        .category-btn.active, .category-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .menu-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .menu-item {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .menu-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .menu-item-img {
+            height: 200px;
+            background-color: #ddd;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .menu-item-content {
+            padding: 20px;
+        }
+        
+        .menu-item-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .menu-item-name {
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+        
+        .menu-item-price {
+            color: var(--primary);
+            font-weight: 700;
+        }
+        
+        .menu-item-desc {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        /* Gallery Section */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .gallery-item {
+            height: 250px;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        /* Contact Section */
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+        
+        .contact-info h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .contact-details {
+            margin-bottom: 30px;
+        }
+        
+        .contact-item {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        
+        .contact-item i {
+            color: var(--primary);
+            margin-right: 15px;
+            font-size: 1.2rem;
+            width: 24px;
+        }
+        
+        .service-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .service-tag {
+            background-color: #f0f0f0;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .map-container {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            height: 450px;
+        }
+        
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column a {
+            color: #ccc;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-column a:hover {
+            color: var(--secondary);
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-icons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: var(--transition);
+        }
+        
+        .social-icons a:hover {
+            background-color: var(--primary);
+            transform: translateY(-5px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero h2 {
+                font-size: 2.8rem;
+            }
+            
+            .about-content, .contact-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .about-image {
+                order: -1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: var(--shadow);
+            }
+            
+            nav ul.active {
+                display: flex;
+            }
+            
+            nav li {
+                margin: 10px 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero {
+                padding: 150px 0 80px;
+            }
+            
+            .hero h2 {
+                font-size: 2.2rem;
+            }
+            
+            section {
+                padding: 60px 0;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+            
+            .hero-badges {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .menu-items {
+                grid-template-columns: 1fr;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <h1>Jhanji</h1>
+                <span>The Mongolian Kitchen</span>
+                <div class="rating">
+                    <i class="fas fa-star"></i> 4.8 Google Rating
+                </div>
+            </div>
+            
+            <nav>
+                <ul id="nav-menu">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#menu">Menu</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <button class="mobile-menu-btn" id="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h2>Authentic Mongolian Flavors in the Heart of Assam</h2>
+            <p>Experience the rich taste of Mongolia with our authentic dishes, crafted with traditional recipes and fresh local ingredients. Open 24 hours for your dining pleasure.</p>
+            <a href="#menu" class="btn">View Our Menu</a>
+            <a href="#contact" class="btn btn-secondary">Visit Us Today</a>
+            
+            <div class="hero-badges">
+                <div class="badge"><i class="fas fa-clock"></i> Open 24 Hours</div>
+                <div class="badge"><i class="fas fa-rupee-sign"></i> ₹200-400 per person</div>
+                <div class="badge"><i class="fas fa-car"></i> Ample Parking</div>
+                <div class="badge"><i class="fas fa-utensils"></i> Dine-in & Takeaway</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Highlights Section -->
+    <section class="highlights">
+        <div class="container">
+            <div class="section-title">
+                <h2>Why Choose Us</h2>
+                <p>Discover what makes Jhanji (The Mongolian Kitchen) a favorite among locals and tourists</p>
+            </div>
+            
+            <div class="highlights-grid">
+                <div class="highlight-card">
+                    <i class="fas fa-clock"></i>
+                    <h3>Open 24 Hours</h3>
+                    <p>Enjoy delicious Mongolian cuisine anytime, day or night. Perfect for late-night cravings or early morning meals.</p>
+                </div>
+                
+                <div class="highlight-card">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h3>Convenient Location</h3>
+                    <p>Located on NH-37 near BPCL Fuel Station, easily accessible for travelers and locals alike.</p>
+                </div>
+                
+                <div class="highlight-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Group Friendly</h3>
+                    <p>Spacious seating perfect for family gatherings, group dinners, or casual dining with friends.</p>
+                </div>
+                
+                <div class="highlight-card">
+                    <i class="fas fa-parking"></i>
+                    <h3>Ample Parking</h3>
+                    <p>Free parking lot and street parking available, ensuring a hassle-free visit for our customers.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Story</h2>
+                <p>Bringing authentic Mongolian flavors to Jhanji, Assam since 2015</p>
+            </div>
+            
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>A Taste of Mongolia in Assam</h3>
+                    <p>Jhanji (The Mongolian Kitchen) is a casual dining restaurant offering flavorful dishes and quick bites, suitable for lunch and dinner. We are popular for solo dining as well as group visits, and are frequently visited by tourists exploring the beautiful region of Assam.</p>
+                    <p>Our restaurant provides a comfortable dining experience with table service and ample parking facilities. Whether you're looking for a quick bite or a full meal, our diverse menu offers something for everyone.</p>
+                    
+                    <div class="features">
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Table Service</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Kid-Friendly</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Tourist-Friendly</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>NFC Payments</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Restaurant interior">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+<section class="menu" id="menu">
+  <div class="container">
+    <div class="section-title">
+      <h2>Our Menu</h2>
+      <p>Authentic local, Assamese & Indo-Chinese dishes</p>
+    </div>
+
+    <div class="menu-categories">
+      <button class="category-btn active" data-category="all">All Items</button>
+      <button class="category-btn" data-category="mongolian">Main Course</button>
+      <button class="category-btn" data-category="quick">Noodles, Rolls & Momos</button>
+      <button class="category-btn" data-category="drinks">Egg & Light Bites</button>
+    </div>
+
+    <div class="menu-items">
+
+      <!-- MAIN COURSE -->
+      <div class="menu-item" data-category="mongolian">
+        <div class="menu-item-img" style="background-image:url('https://images.unsplash.com/photo-1626777552726-4a6b54c97e46');"></div>
+        <div class="menu-item-content">
+          <div class="menu-item-header">
+            <div class="menu-item-name">Assamese Veg Thali</div>
+            <div class="menu-item-price">₹120</div>
+          </div>
+          <div class="menu-item-desc">
+            Rice, mixed veg, dal, bhaji, pickle, salad & chutney.
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-item" data-category="mongolian">
+        <div class="menu-item-img" style="background-image:url('https://images.unsplash.com/photo-1600628422019-91f61f8b2b3b');"></div>
+        <div class="menu-item-content">
+          <div class="menu-item-header">
+            <div class="menu-item-name">Assamese Non-Veg Thali (Chicken / Pork / Fish)</div>
+            <div class="menu-item-price">₹310</div>
+          </div>
+          <div class="menu-item-desc">
+            Rice with curry, dal, bhaji, salad & chutney.
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-item" data-category="mongolian">
+        <div class="menu-item-img" style="background-image:url('https://images.unsplash.com/photo-1604908177522-0407b5e8f7c4');"></div>
+        <div class="menu-item-content">
+          <div class="menu-item-header">
+            <div class="menu-item-name">Student’s Chicken / Pork Thali</div>
+            <div class="menu-item-price">₹99</div>
+          </div>
+          <div class="menu-item-desc">
+            Rice, dal & curry (student special).
+          </div>
+        </div>
+      </div>
+
+      <!-- NOODLES & CHOWMEIN -->
+      <div class="menu-item" data-category="quick">
+        <div class="menu-item-img" style="background-image:url('https://images.unsplash.com/photo-1585032226651-759b368d7246');"></div>
+        <div class="menu-item-content">
+          <div class="menu-item-header">
+            <div class="menu-item-name">Veg Hakka Noodles</div>
+            <div class="menu-item-price">₹89</div>
+          </div>
+          <div class="menu-item-desc">
+            Classic stir-fried noodles with vegetables.
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-item" data-category="quick">
+        <div class="menu-item-img" style="background-image:url('https://images.unsplash.com/photo-1600628421055-4d6c7ecb60ad');"></div>
+        <div class="menu-item-content">
+          <div class="menu-item-header">
+            <div class="menu-item-name">Chicken Hakka Noodles</div>
+            <div class="menu-item-price">₹110</div>
+          </div>
+          <div class="menu-item-desc">
+            Wok-tossed noodles with chicken.
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-item" data-category="quick">
+        <div class="menu-item-img" style="background-image:url('https://images.unsplash.com/photo-1626078436898-71dbf8b9e4b0');"></div>
+        <div class="menu-item-content">
+          <div class="menu-item-header">
+            <div class="menu-item-name">Gravy Chowmein (Veg / Non-Veg)</div>
+            <div class="menu-item-price">₹120 / ₹150</div>
+          </div>
+          <div class="menu-item-desc">
+            Chowmein served with rich gravy.
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-item" data-category="quick">
+        <div class="menu-item-img" style="background-image:url('https://images.unsplash.com/photo-1606491956689-2ea866880c84');"></div>
+        <div class="menu-item-content">
+          <div class="menu-item-header">
+            <div class="menu-item-name">Chicken / Egg Roll</div>
+            <div class="menu-item-price">₹100 / ₹90</div>
+          </div>
+          <div class="menu-item-desc">
+            Street-style rolls with spicy filling.
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-item" data-category="quick">
+        <div class="menu-item-img" style="background-image:url('https://images.unsplash.com/photo-1603894584373-5ac82b2ae398');"></div>
+        <div class="menu-item-content">
+          <div class="menu-item-header">
+            <div class="menu-item-name">Chicken Momos (Steamed / Fried)</div>
+            <div class="menu-item-price">₹100 / ₹130</div>
+          </div>
+          <div class="menu-item-desc">
+            Served hot with spicy chutney.
+          </div>
+        </div>
+      </div>
+
+      <!-- EGG & LIGHT ITEMS -->
+      <div class="menu-item" data-category="drinks">
+        <div class="menu-item-img" style="background-image:url('https://images.unsplash.com/photo-1604908554025-43f5c1d2a5b4');"></div>
+        <div class="menu-item-content">
+          <div class="menu-item-header">
+            <div class="menu-item-name">Egg Curry / Egg Omelette</div>
+            <div class="menu-item-price">₹70</div>
+          </div>
+          <div class="menu-item-desc">
+            Simple, comforting egg dishes.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <p style="text-align:center;margin-top:30px;color:#666;">
+      * Menu items and prices may change
+    </p>
+  </div>
+</section>
+
+
+    <!-- Gallery Section -->
+    <section class="gallery" id="gallery">
+        <div class="container">
+            <div class="section-title">
+                <h2>Gallery</h2>
+                <p>A glimpse of our delicious dishes and comfortable dining space</p>
+            </div>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Delicious food">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Restaurant dish">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Restaurant interior">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Chef preparing food">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="section-title">
+                <h2>Visit Us Today</h2>
+                <p>We're open 24 hours and ready to serve you delicious Mongolian cuisine</p>
+            </div>
+            
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Contact Information</h3>
+                    
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <strong>Address:</strong><br>
+                                NH-37, near BPCL Fuel Station,<br>
+                                Jhanji, Suramoni Gaon,<br>
+                                Assam – 785683
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <strong>Phone:</strong><br>
+                                088220 50674
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <strong>Opening Hours:</strong><br>
+                                24 hours, 7 days a week
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <i class="fas fa-rupee-sign"></i>
+                            <div>
+                                <strong>Average Cost:</strong><br>
+                                ₹200-400 per person
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3>Service Options</h3>
+                    <div class="service-options">
+                        <span class="service-tag">Kerbside Pickup</span>
+                        <span class="service-tag">Drive-through</span>
+                        <span class="service-tag">Takeaway</span>
+                        <span class="service-tag">Dine-in</span>
+                        <span class="service-tag">Table Service</span>
+                    </div>
+                </div>
+                
+                <div class="map-container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3567.356767799999!2d94.489538!3d26.500914!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x57bde70f646c21ca!2sJhanji+(The+Mongolian+Kitchen)!5e0!3m2!1sen!2sin!4v1563456789012!5m2!1sen!2sin" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Jhanji (The Mongolian Kitchen)</h3>
+                    <p>Bringing authentic Mongolian flavors to Jhanji, Assam since 2015. Open 24 hours for your dining pleasure.</p>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#menu">Menu</a></li>
+                        <li><a href="#gallery">Gallery</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Service Options</h3>
+                    <ul>
+                        <li>Dine-in</li>
+                        <li>Takeaway</li>
+                        <li>Drive-through</li>
+                        <li>Kerbside Pickup</li>
+                        <li>Table Service</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Popular For</h3>
+                    <ul>
+                        <li>Lunch</li>
+                        <li>Dinner</li>
+                        <li>Solo Dining</li>
+                        <li>Group Visits</li>
+                        <li>Tourist Visits</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Jhanji (The Mongolian Kitchen). All rights reserved. | Designed for the local community and tourists of Jhanji, Assam</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            mobileMenuBtn.innerHTML = navMenu.classList.contains('active') 
+                ? '<i class="fas fa-times"></i>' 
+                : '<i class="fas fa-bars"></i>';
+        });
+        
+        // Close mobile menu when clicking a link
+        const navLinks = document.querySelectorAll('nav a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            });
+        });
+        
+        // Menu category filtering
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const menuItems = document.querySelectorAll('.menu-item');
+        
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                
+                // Add active class to clicked button
+                btn.classList.add('active');
+                
+                // Get category from data attribute
+                const category = btn.getAttribute('data-category');
+                
+                // Show/hide menu items based on category
+                menuItems.forEach(item => {
+                    if (category === 'all' || item.getAttribute('data-category') === category) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Update copyright year
+        document.addEventListener('DOMContentLoaded', () => {
+            const year = new Date().getFullYear();
+            const copyrightElements = document.querySelectorAll('.copyright p');
+            copyrightElements.forEach(el => {
+                el.innerHTML = el.innerHTML.replace('2023', year);
+            });
+        });
+    </script>
+</body>
+</html>
