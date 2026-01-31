@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Varsity Cafe | Premium Café in Joysagar, Sibsagar</title>
+    <meta name="description" content="The Varsity Cafe - A premium yet cozy café in Joysagar Chariali, Sibsagar, Assam. Great coffee, wide tea selection, and casual dining atmosphere.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --deep-green: #0d1f0d;
+            --gold: #d4af37;
+            --light-gold: #f4e4a6;
+            --light-gray: #f5f5f5;
+            --medium-gray: #888;
+            --dark-gray: #222;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--black);
+            color: var(--light-gray);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2.5rem;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--gold);
+        }
+
+        h3 {
+            font-size: 1.8rem;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            color: #ddd;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 30px;
+            background-color: var(--gold);
+            color: var(--black);
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            background-color: var(--light-gold);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--gold);
+            color: var(--gold);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--gold);
+            color: var(--black);
+        }
+
+        .section-bg {
+            background-color: var(--deep-green);
+        }
+
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: rgba(10, 10, 10, 0.95);
+            padding: 20px 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            transition: var(--transition);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--light-gray);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: var(--light-gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--gold);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--gold);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            background: linear-gradient(rgba(10, 10, 10, 0.85), rgba(13, 31, 13, 0.8)), url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80') center/cover no-repeat;
+            padding-top: 100px;
+        }
+
+        .hero-content {
+            max-width: 700px;
+        }
+
+        .hero h1 {
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .services {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .service-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(212, 175, 55, 0.1);
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .service-item i {
+            color: var(--gold);
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-text h2 {
+            margin-bottom: 20px;
+        }
+
+        .about-highlights {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .highlight-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .highlight-icon {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(212, 175, 55, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            font-size: 1.2rem;
+        }
+
+        .about-image {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Menu Section */
+        .menu-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .menu-header h2 {
+            margin: 0 auto 10px;
+        }
+
+        .menu-header h2::after {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .menu-categories {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 50px;
+        }
+
+        .category-btn {
+            padding: 10px 25px;
+            background-color: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .category-btn.active, .category-btn:hover {
+            background-color: var(--gold);
+            color: var(--black);
+        }
+
+        .menu-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .menu-item {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 25px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            transition: var(--transition);
+        }
+
+        .menu-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            border-color: rgba(212, 175, 55, 0.3);
+        }
+
+        .menu-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .menu-item h3 {
+            margin-bottom: 0;
+        }
+
+        .price {
+            color: var(--gold);
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .menu-note {
+            text-align: center;
+            margin-top: 50px;
+            color: var(--medium-gray);
+            font-style: italic;
+        }
+
+        /* Gallery Section */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery-item {
+            border-radius: 8px;
+            overflow: hidden;
+            height: 250px;
+            position: relative;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Contact Section */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+        }
+
+        .contact-info h2 {
+            margin-bottom: 30px;
+        }
+
+        .contact-details {
+            margin-bottom: 40px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(212, 175, 55, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            color: var(--gold);
+            font-size: 1.2rem;
+        }
+
+        .contact-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .contact-links a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .contact-links a:hover {
+            color: var(--light-gold);
+        }
+
+        .map-container {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            height: 500px;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-gray);
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--gold);
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .footer-hours h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            h1 {
+                font-size: 2.8rem;
+            }
+            
+            h2 {
+                font-size: 2.2rem;
+            }
+            
+            .about-content, .contact-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                background-color: var(--black);
+                flex-direction: column;
+                align-items: center;
+                padding: 20px 0;
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: var(--transition);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            }
+            
+            .nav-links.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+            
+            .nav-links li {
+                margin: 15px 0;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .services {
+                justify-content: center;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+            
+            section {
+                padding: 60px 0;
+            }
+            
+            .about-highlights {
+                grid-template-columns: 1fr;
+            }
+            
+            .menu-items {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo">The Varsity<span>Cafe</span></a>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#menu">Menu</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Where Great Coffee Meets a Trendy Vibe</h1>
+                <p>The Varsity Cafe is a casual and trendy café in Joysagar Chariali, Sibsagar, Assam. Known for our great coffee and tea selection, we're the perfect spot to relax, work, or socialize.</p>
+                
+                <div class="hero-buttons">
+                    <a href="#menu" class="btn">View Menu</a>
+                    <a href="https://wa.me/7002688030?text=Hi!%20I'd%20like%20to%20place%20an%20order" target="_blank" class="btn btn-outline">Order on WhatsApp</a>
+                </div>
+                
+                <div class="services">
+                    <div class="service-item">
+                        <i class="fas fa-utensils"></i>
+                        <span>Dine-in</span>
+                    </div>
+                    <div class="service-item">
+                        <i class="fas fa-car"></i>
+                        <span>Drive-through</span>
+                    </div>
+                    <div class="service-item">
+                        <i class="fas fa-motorcycle"></i>
+                        <span>Delivery</span>
+                    </div>
+                    <div class="service-item">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span>Takeaway</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about section-bg" id="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>About Our Cafe</h2>
+                    <p>The Varsity Cafe is a premium yet cozy café located in the heart of Joysagar Chariali, Sibsagar, Assam. We've created a welcoming space that's perfect for students, groups, and casual dining.</p>
+                    <p>Our atmosphere is casual and trendy, making us a popular hangout spot for solo diners and groups alike. With free street parking available, we're easily accessible for everyone.</p>
+                    <p>We take pride in offering quality food and beverages with a warm and welcoming atmosphere, making us suitable for families and kids as well.</p>
+                    
+                    <div class="about-highlights">
+                        <div class="highlight-item">
+                            <div class="highlight-icon">
+                                <i class="fas fa-coffee"></i>
+                            </div>
+                            <div>
+                                <h4>Great Coffee</h4>
+                                <p>Premium quality coffee blends</p>
+                            </div>
+                        </div>
+                        <div class="highlight-item">
+                            <div class="highlight-icon">
+                                <i class="fas fa-mug-hot"></i>
+                            </div>
+                            <div>
+                                <h4>Wide Tea Selection</h4>
+                                <p>Various tea options available</p>
+                            </div>
+                        </div>
+                        <div class="highlight-item">
+                            <div class="highlight-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div>
+                                <h4>Open Daily</h4>
+                                <p>Closes at 9:00 PM</p>
+                            </div>
+                        </div>
+                        <div class="highlight-item">
+                            <div class="highlight-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div>
+                                <h4>Highly Rated</h4>
+                                <p>4.9★ Google Rating</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1559925393-8be0ec4767c8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80" alt="The Varsity Cafe interior">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu">
+        <div class="container">
+            <div class="menu-header">
+                <h2>Our Menu</h2>
+                <p>Discover our selection of delicious food and beverages</p>
+            </div>
+            
+            <div class="menu-categories">
+                <button class="category-btn active" data-category="all">All Items</button>
+                <button class="category-btn" data-category="starters">Starters</button>
+                <button class="category-btn" data-category="chowmein">Chowmein</button>
+                <button class="category-btn" data-category="rolls">Rolls</button>
+                <button class="category-btn" data-category="breakfast">Breakfast</button>
+                <button class="category-btn" data-category="rice">Rice & Dal</button>
+                <button class="category-btn" data-category="main">Main Course</button>
+                <button class="category-btn" data-category="drinks">Tea & Coffee</button>
+            </div>
+            
+            <div class="menu-items" id="menuItems">
+                <!-- Menu items will be loaded via JavaScript -->
+            </div>
+            
+            <p class="menu-note">Menu items and prices may change</p>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="section-bg" id="gallery">
+        <div class="container">
+            <h2 style="text-align: center;">Our Gallery</h2>
+            <p style="text-align: center; max-width: 600px; margin: 0 auto 50px;">Take a look at our café atmosphere, delicious food, and cozy ambience</p>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80" alt="Café interior">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Coffee preparation">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1398&q=80" alt="Food items">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1559925393-8be0ec4767c8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80" alt="Café seating area">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Plated dishes">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1467&q=80" alt="Coffee and pastries">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container">
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h2>Visit Us Today</h2>
+                    
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <h4>Location</h4>
+                                <p>College Chari Ali, Joysagar–Nazira Road,<br>Joysagar, Sibsagar, Assam – 785665</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div>
+                                <h4>Contact Number</h4>
+                                <p><a href="tel:07002688030" style="color: var(--gold); text-decoration: none;">070026 88030</a></p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div>
+                                <h4>Opening Hours</h4>
+                                <p>Open Daily<br>Closes at 9:00 PM</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div>
+                                <h4>Google Rating</h4>
+                                <p>4.9★ Excellent</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-links">
+                        <a href="https://wa.me/7002688030?text=Hi!%20I'd%20like%20to%20place%20an%20order" target="_blank" class="btn">
+                            <i class="fab fa-whatsapp"></i> Order on WhatsApp
+                        </a>
+                        <a href="https://www.instagram.com/the_varsity_cafe/" target="_blank" class="btn btn-outline">
+                            <i class="fab fa-instagram"></i> Follow on Instagram
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="map-container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3566.941395758842!2d94.6228847!3d26.956815!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x37473109b31a400f%3A0x36f4b7ef1ad0e23a!2sThe%20Varsity%20Cafe!5e0!3m2!1sen!2sin!4v1685538245673!5m2!1sen!2sin" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <a href="#" class="footer-logo">The Varsity Cafe</a>
+                    <p>A premium yet cozy café in Joysagar Chariali, Sibsagar, Assam. Great coffee, wide tea selection, and casual dining atmosphere.</p>
+                </div>
+                
+                <div>
+                    <h3>Service Options</h3>
+                    <ul style="list-style: none; color: #ddd;">
+                        <li>• Kerbside pickup</li>
+                        <li>• Delivery</li>
+                        <li>• Drive-through</li>
+                        <li>• Takeaway</li>
+                        <li>• Dine-in</li>
+                        <li>• Table service</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-hours">
+                    <h3>Opening Hours</h3>
+                    <p><strong>Open Daily</strong><br>Closes at 9:00 PM</p>
+                    <p>College Chari Ali, Joysagar–Nazira Road<br>Joysagar, Sibsagar, Assam – 785665</p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 The Varsity Cafe. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileMenuBtn.innerHTML = navLinks.classList.contains('active') 
+                ? '<i class="fas fa-times"></i>' 
+                : '<i class="fas fa-bars"></i>';
+        });
+        
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            });
+        });
+        
+        // Menu data
+        const menuData = [
+            { id: 1, name: "French Fries", category: "starters", price: "₹120" },
+            { id: 2, name: "Chilli Chicken", category: "starters", price: "₹180" },
+            { id: 3, name: "Veg Manchurian", category: "starters", price: "₹150" },
+            { id: 4, name: "Paneer Tikka", category: "starters", price: "₹170" },
+            { id: 5, name: "Veg Chowmein", category: "chowmein", price: "₹110" },
+            { id: 6, name: "Egg Chowmein", category: "chowmein", price: "₹130" },
+            { id: 7, name: "Chicken Chowmein", category: "chowmein", price: "₹150" },
+            { id: 8, name: "Veg Roll", category: "rolls", price: "₹70" },
+            { id: 9, name: "Egg Roll", category: "rolls", price: "₹90" },
+            { id: 10, name: "Chicken Roll", category: "rolls", price: "₹110" },
+            { id: 11, name: "Puri Sabzi", category: "breakfast", price: "₹80" },
+            { id: 12, name: "Aloo Paratha", category: "breakfast", price: "₹70" },
+            { id: 13, name: "Egg Toast", category: "breakfast", price: "₹60" },
+            { id: 14, name: "Plain Rice with Dal", category: "rice", price: "₹100" },
+            { id: 15, name: "Jeera Rice", category: "rice", price: "₹120" },
+            { id: 16, name: "Fried Rice", category: "rice", price: "₹130" },
+            { id: 17, name: "Chicken Curry with Rice", category: "main", price: "₹180" },
+            { id: 18, name: "Fish Curry with Rice", category: "main", price: "₹200" },
+            { id: 19, name: "Paneer Butter Masala", category: "main", price: "₹170" },
+            { id: 20, name: "Masala Tea", category: "drinks", price: "₹40" },
+            { id: 21, name: "Black Coffee", category: "drinks", price: "₹60" },
+            { id: 22, name: "Cappuccino", category: "drinks", price: "₹90" },
+            { id: 23, name: "Hot Chocolate", category: "drinks", price: "₹80" },
+            { id: 24, name: "Fresh Lime Soda", category: "drinks", price: "₹50" }
+        ];
+        
+        // Menu category buttons
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const menuItemsContainer = document.getElementById('menuItems');
+        
+        // Function to render menu items
+        function renderMenuItems(category = 'all') {
+            menuItemsContainer.innerHTML = '';
+            
+            const filteredItems = category === 'all' 
+                ? menuData 
+                : menuData.filter(item => item.category === category);
+            
+            filteredItems.forEach(item => {
+                const menuItemElement = document.createElement('div');
+                menuItemElement.className = 'menu-item';
+                menuItemElement.innerHTML = `
+                    <div class="menu-item-header">
+                        <h3>${item.name}</h3>
+                        <span class="price">${item.price}</span>
+                    </div>
+                    <p>Delicious ${item.category === 'drinks' ? 'beverage' : 'dish'} perfect for any time of day.</p>
+                `;
+                menuItemsContainer.appendChild(menuItemElement);
+            });
+        }
+        
+        // Initialize menu with all items
+        renderMenuItems();
+        
+        // Add event listeners to category buttons
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                btn.classList.add('active');
+                // Render items for selected category
+                const category = btn.getAttribute('data-category');
+                renderMenuItems(category);
+            });
+        });
+        
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.padding = '15px 0';
+                header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.3)';
+            } else {
+                header.style.padding = '20px 0';
+                header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.2)';
+            }
+        });
+    </script>
+</body>
+</html>
