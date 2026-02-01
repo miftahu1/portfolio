@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
 import AnimatedLogo from "@/components/ui/AnimatedLogo";
 
 const links = [
@@ -18,17 +17,21 @@ const AnimatedHamburger = ({ isOpen, onClick }: { isOpen: boolean, onClick: () =
   <button 
     onClick={onClick} 
     className="relative z-50 h-8 w-8 text-white transition-colors hover:text-white/80"
+    aria-label="Toggle menu"
   >
     <motion.div 
       animate={{ rotate: isOpen ? 45 : 0, y: isOpen ? 6 : 0 }}
+      transition={{ duration: 0.2 }}
       className="absolute top-2 left-1/2 h-0.5 w-6 -translate-x-1/2 bg-current"
     />
     <motion.div 
       animate={{ opacity: isOpen ? 0 : 1 }}
+      transition={{ duration: 0.2 }}
       className="absolute top-1/2 left-1/2 h-0.5 w-6 -translate-y-1/2 -translate-x-1/2 bg-current"
     />
     <motion.div 
       animate={{ rotate: isOpen ? -45 : 0, y: isOpen ? -6 : 0 }}
+      transition={{ duration: 0.2 }}
       className="absolute bottom-2 left-1/2 h-0.5 w-6 -translate-x-1/2 bg-current"
     />
   </button>
@@ -43,22 +46,35 @@ export default function Navbar() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [isOpen]);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
 
   return (
     <>
       <header
         className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 ${
           isScrolled || isOpen
-            ? "bg-background-primary/80 shadow-lg backdrop-blur-md"
+            ? "bg-background-primary/80 shadow-lg"
             : "bg-transparent"
         }`}
       >
         <nav className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-3">
+            <Link href="/" className="flex items-center gap-3" onClick={() => setIsOpen(false)}>
               <AnimatedLogo size={40} />
               <span className="text-xl font-bold text-white">Mifta.dev</span>
             </Link>
@@ -102,7 +118,7 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="fixed inset-0 z-30 bg-background-primary/95 backdrop-blur-lg md:hidden"
+            className="fixed inset-0 z-30 bg-background-primary/95 md:hidden"
           >
             <motion.div 
               initial={{ y: "-100%" }}

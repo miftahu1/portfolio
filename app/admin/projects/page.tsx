@@ -45,6 +45,28 @@ export default function AdminProjectsPage() {
 
   const handleDelete = async (project: Project) => {
     if (!confirm(`Delete project '"${project.title}"'?`)) return;
+
+    if (project.heroImageUrl) {
+      const match = project.heroImageUrl.match(/upload\/(?:v\d+\/)?(.*)(?:\.\w+)/);
+      const publicId = match ? match[1] : null;
+
+      if (publicId) {
+        try {
+          const res = await fetch('/api/delete-image', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ publicId }),
+          });
+          if (!res.ok) {
+            // Log error but don't block project deletion
+            console.error('Failed to delete image from Cloudinary', await res.json());
+          }
+        } catch (error) {
+          console.error('Error calling delete-image API', error);
+        }
+      }
+    }
+
     await deleteDoc(doc(db, 'projects', project.id));
     setProjects((prev) => prev.filter((p) => p.id !== project.id));
   };
@@ -179,7 +201,7 @@ function ProjectForm({ initial, onCancel, onSaved }: FormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
-    const payload = {
+    const { id, ...payload } = {
       ...state,
       tech:
         typeof state.tech === 'string'
@@ -196,8 +218,8 @@ function ProjectForm({ initial, onCancel, onSaved }: FormProps) {
       });
       onSaved({ ...(payload as Project), id: ref.id }, true);
     } else {
-      await updateDoc(doc(db, 'projects', state.id), payload);
-      onSaved(payload as Project, false);
+      await updateDoc(doc(db, 'projects', id), payload);
+      onSaved({ ...(payload as Project), id }, false);
     }
     setSaving(false);
   };

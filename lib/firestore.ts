@@ -20,9 +20,9 @@ export async function fetchProjects(onlyFeatured = false): Promise<Project[]> {
     : query(ref, orderBy("sortOrder", "asc"));
 
   const snap = await getDocs(q);
-  return snap.docs.map(
-    (d) => ({ id: d.id, ...(d.data() as Omit<Project, "id">) }) as Project
-  );
+  return snap.docs
+    .map((d) => ({ id: d.id, ...(d.data() as Omit<Project, "id">) }) as Project)
+    .filter((p) => p.id);
 }
 
 export async function fetchPosts(): Promise<Post[]> {
@@ -52,4 +52,3 @@ export async function createContact(
   };
   await addDoc(ref, payload);
 }
-

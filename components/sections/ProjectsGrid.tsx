@@ -18,8 +18,14 @@ export default function ProjectsGrid({ limit }: Props) {
 
   useEffect(() => {
     let mounted = true;
-    fetchProjects(false).then((data) => {
-      if (mounted) setProjects(limit ? data.slice(0, limit) : data);
+    // On homepage (limit is defined), fetch only featured projects.
+    // On projects page (limit is undefined), fetch all projects.
+    const fetchOnlyFeatured = !!limit;
+    fetchProjects(fetchOnlyFeatured).then((data) => {
+      if (mounted) {
+        const validProjects = data.filter(p => p.id);
+        setProjects(limit ? validProjects.slice(0, limit) : validProjects);
+      }
     });
     return () => {
       mounted = false;
@@ -62,14 +68,14 @@ export default function ProjectsGrid({ limit }: Props) {
           transition={{ staggerChildren: 0.1 }}
           className="grid gap-8 md:grid-cols-2 lg:grid-cols-3"
         >
-          {projects.map((p, i) => (
+          {projects.map((p) => (
             <motion.div
               key={p.id}
               variants={{
                 hidden: { opacity: 0, y: 30 },
                 visible: { opacity: 1, y: 0 },
               }}
-              transition={{ delay: i * 0.1, duration: 0.5, ease: "easeOut" }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
             >
               <ProjectCard project={p} />
             </motion.div>
