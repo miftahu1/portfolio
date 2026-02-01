@@ -15,25 +15,35 @@ const CONTACT_COLLECTION = "contactRequests";
 
 export async function fetchProjects(onlyFeatured = false): Promise<Project[]> {
   const ref = collection(db, PROJECTS_COLLECTION);
+
   const q = onlyFeatured
     ? query(ref, where("featured", "==", true), orderBy("sortOrder", "asc"))
-    : query(ref, orderBy("sortOrder", "asc"));
+    : query(ref);
 
   const snap = await getDocs(q);
-  return snap.docs
+  
+  // -- START DEBUGGING --
+  console.log("Raw data from Firestore:", snap.docs.map(d => ({ id: d.id, ...d.data() })));
+  // -- END DEBUGGING --
+
+  const projects = snap.docs
     .map((d) => ({ id: d.id, ...(d.data() as Omit<Project, "id">) }) as Project)
     .filter((p) => p.id);
+
+  return projects.sort((a, b) => {
+    const aSortOrder = a.sortOrder ?? 999;
+    const bSortOrder = b.sortOrder ?? 999;
+    return aSortOrder - bSortOrder;
+  });
 }
 
 export async function fetchPosts(): Promise<Post[]> {
   const ref = collection(db, POSTS_COLLECTION);
-  // First get all published posts
   const q = query(ref, where("published", "==", true));
   const snap = await getDocs(q);
   const posts = snap.docs.map(
     (d) => ({ id: d.id, ...(d.data() as Omit<Post, "id">) }) as Post
   );
-  // Sort by publishedAt in memory (handles missing publishedAt)
   return posts.sort((a, b) => {
     const aDate = a.publishedAt || a.createdAt || 0;
     const bDate = b.publishedAt || b.createdAt || 0;
