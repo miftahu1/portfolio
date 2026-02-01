@@ -1,0 +1,97 @@
+/* Import Playfair Display font */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
+
+/* Restaurant base styles */
+.restaurant-theme {
+  --color-emerald-50: #f0fdf4;
+  --color-emerald-100: #dcfce7;
+  --color-emerald-200: #bbf7d0;
+  --color-emerald-300: #86efac;
+  --color-emerald-400: #4ade80;
+  --color-emerald-500: #22c55e;
+  --color-emerald-600: #16a34a;
+  --color-emerald-700: #15803d;
+  --color-emerald-800: #166534;
+  --color-emerald-900: #14532d;
+  --color-amber-50: #fffbeb;
+  --color-amber-100: #fef3c7;
+  --color-amber-200: #fde68a;
+  --color-amber-300: #fcd34d;
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
+  --color-amber-600: #d97706;
+  --color-amber-700: #b45309;
+  --color-amber-800: #92400e;
+  --color-amber-900: #78350f;
+}
+
+/* Apply restaurant theme to the restaurant route only */
+body.restaurant-scrollbar {
+  background: var(--color-amber-50) !important;
+  color: #1f2937 !important;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Add padding for fixed header */
+.restaurant-theme {
+  scroll-padding-top: 80px;
+}
+
+/* Restaurant scrollbar */
+.restaurant-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.restaurant-scrollbar::-webkit-scrollbar-track {
+  background: var(--color-amber-100);
+}
+
+.restaurant-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-amber-600);
+  border-radius: 5px;
+}
+
+.restaurant-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-amber-700);
+}
+
+/* Font class for restaurant */
+.font-playfair {
+  font-family: 'Playfair Display', serif;
+}
+
+/* Restaurant-specific animations */
+@keyframes fadeInRestaurant {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeInRestaurant {
+  animation: fadeInRestaurant 0.5s ease-out;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Print styles for restaurant */
+@media print {
+  .restaurant-scrollbar .no-print {
+    display: none !important;
+  }
+}
+
+/* Reduced motion for restaurant */
+@media (prefers-reduced-motion: reduce) {
+  .restaurant-scrollbar *,
+  .restaurant-scrollbar *::before,
+  .restaurant-scrollbar *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
