@@ -21,11 +21,6 @@ export async function fetchProjects(onlyFeatured = false): Promise<Project[]> {
     : query(ref);
 
   const snap = await getDocs(q);
-  
-  // -- START DEBUGGING --
-  console.log("Raw data from Firestore:", snap.docs.map(d => ({ id: d.id, ...d.data() })));
-  // -- END DEBUGGING --
-
   const projects = snap.docs
     .map((d) => ({ id: d.id, ...(d.data() as Omit<Project, "id">) }) as Project)
     .filter((p) => p.id);

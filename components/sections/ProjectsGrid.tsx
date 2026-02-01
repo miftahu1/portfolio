@@ -18,15 +18,17 @@ export default function ProjectsGrid({ limit }: Props) {
 
   useEffect(() => {
     let mounted = true;
-    // On homepage (limit is defined), fetch only featured projects.
-    // On projects page (limit is undefined), fetch all projects.
     const fetchOnlyFeatured = !!limit;
+    
     fetchProjects(fetchOnlyFeatured).then((data) => {
       if (mounted) {
         const validProjects = data.filter(p => p.id);
-        setProjects(limit ? validProjects.slice(0, limit) : validProjects);
+        // Correctly apply the limit ONLY if it exists.
+        const finalProjects = limit ? validProjects.slice(0, limit) : validProjects;
+        setProjects(finalProjects);
       }
     });
+    
     return () => {
       mounted = false;
     };

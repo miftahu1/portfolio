@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Menu, X, MapPin, Phone } from 'lucide-react'
 
 export default function Header() {
@@ -50,9 +51,7 @@ export default function Header() {
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
           <Link href="/heritage-joysagar" className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-emerald-800 rounded-full flex items-center justify-center">
-              <span className="font-playfair text-xl font-bold text-amber-100">HJ</span>
-            </div>
+            <Image src="/heritage-joysagar/logo.png" alt="Heritage Joysagar Logo" width={48} height={48} className="rounded-full" />
             <div>
               <h1 className="font-playfair text-2xl font-bold text-emerald-900">Heritage Jaysagar</h1>
               <p className="text-xs text-emerald-700 flex items-center">

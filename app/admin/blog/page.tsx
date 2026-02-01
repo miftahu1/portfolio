@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState, useId } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   collection,
   addDoc,
@@ -20,6 +20,18 @@ export default function AdminBlogPage() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<Post | null>(null);
+  const newPostFormId = useId();
+
+  useEffect(() => {
+    if (editing) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [editing]);
 
   useEffect(() => {
     async function load() {
@@ -48,6 +60,21 @@ export default function AdminBlogPage() {
     await deleteDoc(doc(db, "posts", post.id));
     setPosts((prev) => prev.filter((p) => p.id !== post.id));
   };
+  
+  const handleNewPost = () => {
+    setEditing({
+      id: `new-${newPostFormId}`,
+      title: "",
+      slug: "",
+      excerpt: "",
+      contentMarkdown: "",
+      tags: [],
+      published: false,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      heroImageUrl: "",
+    });
+  };
 
   return (
     <div className="space-y-6">
@@ -68,20 +95,7 @@ export default function AdminBlogPage() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           className="rounded-xl bg-gradient-primary px-6 py-3 text-sm font-semibold text-white shadow-glow hover:shadow-glow-pink transition-all"
-          onClick={() =>
-            setEditing({
-              id: "",
-              title: "",
-              slug: "",
-              excerpt: "",
-              contentMarkdown: "",
-              tags: [],
-              published: false,
-              createdAt: Date.now(),
-              updatedAt: Date.now(),
-              heroImageUrl: "", // FIXED: Added default value
-            })
-          }
+          onClick={handleNewPost}
         >
           + New Post
         </motion.button>
@@ -148,13 +162,33 @@ export default function AdminBlogPage() {
         </div>
       )}
 
-      {editing && (
-        <PostForm
-          initial={editing}
-          onCancel={() => setEditing(null)}
-          onSaved={handleSaved}
-        />
-      )}
+      <AnimatePresence>
+        {editing && (
+          <motion.div
+            key={editing.id}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-start justify-center p-4 overflow-y-auto"
+            onMouseDown={() => setEditing(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0, y: 30 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 30 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+              className="relative max-w-3xl w-full my-8"
+              onMouseDown={(e) => e.stopPropagation()}
+            >
+              <PostForm 
+                initial={editing} 
+                onCancel={() => setEditing(null)} 
+                onSaved={handleSaved} 
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -166,7 +200,7 @@ type FormProps = {
 };
 
 function PostForm({ initial, onCancel, onSaved }: FormProps) {
-  const isNew = !initial.id;
+  const isNew = initial.id.startsWith('new-');
   const [state, setState] = useState<Post>(initial);
   const [saving, setSaving] = useState(false);
 
@@ -197,13 +231,15 @@ function PostForm({ initial, onCancel, onSaved }: FormProps) {
     };
 
     if (isNew) {
+      const { id, ...submitPayload } = payload;
       const ref = await addDoc(collection(db, "posts"), {
-        ...payload,
+        ...submitPayload,
         createdAt: now,
       });
-      onSaved({ ...(payload as Post), id: ref.id }, true);
+      onSaved({ ...submitPayload, id: ref.id } as Post, true);
     } else {
-      await updateDoc(doc(db, "posts", state.id), payload);
+      const { id, ...submitPayload } = payload;
+      await updateDoc(doc(db, "posts", id), submitPayload);
       onSaved(payload as Post, false);
     }
     setSaving(false);
@@ -211,12 +247,10 @@ function PostForm({ initial, onCancel, onSaved }: FormProps) {
 
   return (
     <motion.form
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
       onSubmit={handleSubmit}
       className="space-y-5 glass-strong rounded-2xl border border-white/20 p-6"
     >
-      <h3 className="font-display text-xl font-bold text-white mb-1">
+        <h3 className="font-display text-xl font-bold text-white mb-1">
         {isNew ? "Create New" : "Edit"} <span className="text-gradient bg-gradient-primary bg-clip-text text-transparent">Blog Post</span>
       </h3>
       <p className="text-sm text-white/70 mb-4">
@@ -283,7 +317,7 @@ function PostForm({ initial, onCancel, onSaved }: FormProps) {
         </div>
       </div>
       <ImageUpload
-        value={state.heroImageUrl || ""} // FIXED: Added default empty string
+        value={state.heroImageUrl || ""}
         onChange={(url) => setState((s) => ({ ...s, heroImageUrl: url }))}
         folder="blog"
         label="Cover Image"
