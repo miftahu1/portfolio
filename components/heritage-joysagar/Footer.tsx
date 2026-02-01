@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { 
   MapPin, 
   Phone, 
@@ -108,9 +109,7 @@ export default function Footer() {
           {/* Brand & Description */}
           <div>
             <div className="flex items-center space-x-3 mb-6">
-              <div className="w-12 h-12 bg-restaurant-amber-500 rounded-full flex items-center justify-center">
-                <span className="font-playfair text-xl font-bold text-restaurant-emerald-900">HJ</span>
-              </div>
+              <Image src="/heritage-joysagar/logo.png" alt="Heritage Joysagar Logo" width={48} height={48} className="rounded-full" />
               <div>
                 <h2 className="font-playfair text-2xl">Heritage Jaysagar</h2>
                 <p className="text-sm text-restaurant-amber-100">Since 2010</p>
