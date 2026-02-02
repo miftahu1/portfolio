@@ -5,6 +5,10 @@ import Footer from "@/components/layout/Footer";
 import PageTransition from "@/components/layout/PageTransition";
 
 export const metadata = {
+  metadataBase: new URL("https://www.miftahul.in"),
+  alternates: {
+    canonical: "/",
+  },
   title: "Miftahul Hussain - Full-Stack Web Developer Portfolio",
   description: "Professional portfolio of Miftahul Hussain, a full-stack web developer specializing in modern web technologies, clean design, and performance optimization.",
   keywords: ["web developer", "full-stack developer", "React", "Next.js", "TypeScript", "portfolio", "frontend developer"],
@@ -17,6 +21,7 @@ export const metadata = {
     title: "Miftahul Hussain - Full-Stack Developer",
     description: "Professional portfolio showcasing modern web development projects",
     type: "website",
+    url: "https://www.miftahul.in",
   },
   twitter: {
     card: "summary_large_image",
@@ -42,4 +47,3 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     </html>
   );
 }
-
