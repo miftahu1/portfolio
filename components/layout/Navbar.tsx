@@ -13,30 +13,6 @@ const links = [
   { href: '/contact', label: 'Contact' },
 ];
 
-const AnimatedHamburger = ({ isOpen, onClick }: { isOpen: boolean; onClick: () => void }) => (
-  <button
-    onClick={onClick}
-    className="relative z-50 h-8 w-8 text-white transition-colors hover:text-white/80"
-    aria-label="Toggle menu"
-  >
-    <motion.div
-      animate={{ rotate: isOpen ? 45 : 0, y: isOpen ? 6 : 0 }}
-      transition={{ duration: 0.2 }}
-      className="absolute top-2 left-1/2 h-0.5 w-6 -translate-x-1/2 bg-current"
-    />
-    <motion.div
-      animate={{ opacity: isOpen ? 0 : 1 }}
-      transition={{ duration: 0.2 }}
-      className="absolute top-1/2 left-1/2 h-0.5 w-6 -translate-y-1/2 -translate-x-1/2 bg-current"
-    />
-    <motion.div
-      animate={{ rotate: isOpen ? -45 : 0, y: isOpen ? -6 : 0 }}
-      transition={{ duration: 0.2 }}
-      className="absolute bottom-2 left-1/2 h-0.5 w-6 -translate-x-1/2 bg-current"
-    />
-  </button>
-);
-
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -103,9 +79,15 @@ export default function Navbar() {
             </div>
 
             {/* Mobile Menu Button */}
-            <div className="md:hidden">
-              <AnimatedHamburger isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
-            </div>
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="md:hidden relative z-50 w-10 h-10 flex flex-col justify-center items-center"
+              aria-label="Toggle menu"
+            >
+              <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${isOpen ? 'rotate-45 translate-y-1' : ''}`} />
+              <span className={`w-6 h-0.5 bg-white transition-all duration-300 mt-1.5 ${isOpen ? 'opacity-0' : ''}`} />
+              <span className={`w-6 h-0.5 bg-white transition-all duration-300 mt-1.5 ${isOpen ? '-rotate-45 -translate-y-1' : ''}`} />
+            </button>
           </div>
         </nav>
       </header>

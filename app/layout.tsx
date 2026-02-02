@@ -5,11 +5,23 @@ import Footer from "@/components/layout/Footer";
 import PageTransition from "@/components/layout/PageTransition";
 
 export const metadata = {
-  title: "Mifta.dev – Full-Stack Developer",
-  description: "Portfolio of Mifta, a full-stack developer and builder.",
+  title: "Miftahul Hussain - Full-Stack Web Developer Portfolio",
+  description: "Professional portfolio of Miftahul Hussain, a full-stack web developer specializing in modern web technologies, clean design, and performance optimization.",
+  keywords: ["web developer", "full-stack developer", "React", "Next.js", "TypeScript", "portfolio", "frontend developer"],
+  authors: [{ name: "Miftahul Hussain" }],
   icons: {
     icon: "/logo.png",
     apple: "/logo.png",
+  },
+  openGraph: {
+    title: "Miftahul Hussain - Full-Stack Developer",
+    description: "Professional portfolio showcasing modern web development projects",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Miftahul Hussain - Full-Stack Developer",
+    description: "Professional portfolio showcasing modern web development projects",
   },
 };
 

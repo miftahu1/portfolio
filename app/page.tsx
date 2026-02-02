@@ -1,14 +1,14 @@
 import Hero from "@/components/sections/Hero";
 import ProjectsGrid from "@/components/sections/ProjectsGrid";
-import BlogList from "@/components/sections/BlogList";
+import AboutSection from "@/components/sections/AboutSection";
 import ContactSection from "@/components/sections/ContactSection";
 
 export default function HomePage() {
   return (
     <>
       <Hero />
-      <ProjectsGrid limit={6} />
-      <BlogList limit={3} />
+      <AboutSection />
+      <ProjectsGrid limit={3} />
       <ContactSection />
     </>
   );

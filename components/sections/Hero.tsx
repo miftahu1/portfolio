@@ -1,177 +1,137 @@
-"use client";
+'use client';
 
 import AnimatedBackground from "@/components/ui/AnimatedBackground";
 import { motion } from "framer-motion";
 import MagneticButton from "@/components/ui/MagneticButton";
-import AnimatedLogo from "@/components/ui/AnimatedLogo";
 import Link from "next/link";
 import InfoCard from "@/components/ui/InfoCard";
 import { Code, Users, Award } from "lucide-react";
-
-const container = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.05,
-    },
-  },
-};
-
-const letter = {
-  hidden: { y: "150%", opacity: 0, rotateX: -90 },
-  visible: {
-    y: "0%",
-    opacity: 1,
-    rotateX: 0,
-    transition: {
-      duration: 0.8,
-      ease: "easeOut" as const, // FIXED: Changed from array to string with 'as const'
-    },
-  },
-};
+import { useState, useEffect } from "react";
+import Image from "next/image";
 
 export default function Hero() {
-  const title = "Mifta.dev".split("");
-  const subtitle = "Full-Stack Developer".split("");
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const title = "Mifta.dev";
+  const subtitle = "Full-Stack Developer";
 
   return (
-    <section className="relative pt-20 overflow-hidden min-h-screen flex items-center">
-      {/* Use AnimatedBackground as the main background */}
+    <section className="relative pt-16 md:pt-20 overflow-hidden min-h-[90vh] md:min-h-screen flex items-center">
       <AnimatedBackground />
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6">
-        {/* Hero Content */}
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16 py-16">
-          {/* Logo Section */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="lg:w-2/5 flex justify-center order-1"
-          >
-            <AnimatedLogo size={180} />
-          </motion.div>
-
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="flex flex-col items-center text-center lg:text-left lg:flex-row lg:items-start lg:justify-between gap-8 lg:gap-12 py-8 md:py-16">
           {/* Text Content */}
-          <div className="lg:w-3/5 space-y-8 order-2">
+          <div className="lg:w-3/5 space-y-6 md:space-y-8 order-2 lg:order-1">
             {/* Animated Title */}
-            <div className="space-y-4">
-              <motion.div
-                initial="hidden"
-                animate="visible"
-                variants={container}
-                className="inline-flex flex-wrap gap-2 text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight tracking-tight"
+            <div className="space-y-3 md:space-y-4">
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight"
               >
-                {title.map((char, index) => (
-                  <motion.span
-                    key={index}
-                    variants={letter}
-                    className="font-display inline-block"
-                    style={{ perspective: "1000px" }}
-                  >
-                    {char === " " ? (
-                      "\u00A0"
-                    ) : char === "." ? (
-                      <span className="text-gradient bg-gradient-primary bg-clip-text text-transparent">
-                        {char}
-                      </span>
-                    ) : (
-                      <span className="text-white drop-shadow-lg">{char}</span>
-                    )}
-                  </motion.span>
-                ))}
-              </motion.div>
+                <span className="text-white">Mifta.</span>
+                <span className="text-gradient bg-gradient-primary bg-clip-text text-transparent">dev</span>
+              </motion.h1>
 
-              <motion.div
-                initial="hidden"
-                animate="visible"
-                variants={container}
-                className="flex flex-wrap gap-1 text-lg md:text-xl lg:text-2xl xl:text-3xl font-medium"
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-medium text-gradient bg-gradient-primary bg-clip-text text-transparent"
               >
-                {subtitle.map((char, index) => (
-                  <motion.span
-                    key={index}
-                    variants={letter}
-                    className="text-gradient bg-gradient-primary bg-clip-text text-transparent"
-                  >
-                    {char === " " ? "\u00A0" : char}
-                  </motion.span>
-                ))}
-              </motion.div>
+                {subtitle}
+              </motion.h2>
             </div>
 
             {/* Description */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1, duration: 0.6, ease: "easeOut" }}
-              className="text-lg md:text-xl text-white/80 leading-relaxed max-w-2xl"
+              transition={{ delay: 0.4, duration: 0.6 }}
+              className="text-base md:text-lg text-white/80 leading-relaxed max-w-2xl mx-auto lg:mx-0"
             >
-              I craft <span className="text-gradient bg-gradient-primary bg-clip-text text-transparent font-semibold">beautiful, performant web experiences</span> with modern technologies and smooth animations. Let&apos;s build something extraordinary together.
+              I design and build clean, modern web experiences with a strong focus on performance, structure, and usability.
             </motion.p>
 
             {/* CTA Buttons */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.2, duration: 0.6, ease: "easeOut" }}
-              className="flex flex-wrap items-center gap-4 pt-2"
+              transition={{ delay: 0.6, duration: 0.6 }}
+              className="flex flex-col sm:flex-row items-center gap-3 md:gap-4 pt-2"
             >
-              <Link href="/projects">
-                <MagneticButton size="lg" className="px-8 py-4">
-                  View Work
+              <Link href="/projects" className="w-full sm:w-auto">
+                <MagneticButton size={isMobile ? "md" : "lg"} className="w-full sm:w-auto px-6 md:px-8 py-3 md:py-4">
+                  View Featured Projects
                 </MagneticButton>
               </Link>
-              <Link href="/contact">
+              <Link href="/contact" className="w-full sm:w-auto">
                 <MagneticButton 
                   variant="ghost" 
-                  size="lg"
-                  className="px-8 py-4 border-white/20 hover:bg-white/5"
+                  size={isMobile ? "md" : "lg"}
+                  className="w-full sm:w-auto px-6 md:px-8 py-3 md:py-4 border-white/20 hover:bg-white/5"
                 >
                   Contact Me
                 </MagneticButton>
               </Link>
             </motion.div>
           </div>
+
+          {/* Profile Image/Logo Placeholder */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" }}
+            className="lg:w-2/5 order-1 lg:order-2 flex justify-center"
+          >
+            <div className="relative w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72">
+              <div className="absolute inset-0 rounded-full bg-gradient-primary animate-pulse-slow opacity-20 blur-xl"></div>
+              <div className="absolute inset-4 rounded-full border-2 border-white/20"></div>
+              <div className="absolute inset-8 rounded-full bg-gradient-primary opacity-10"></div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Image 
+                  src="/logo.png"
+                  alt="Mifta.dev Logo"
+                  width={250}
+                  height={250}
+                  className="w-40 h-40 md:w-56 md:h-56 object-contain"
+                  priority
+                />
+              </div>
+            </div>
+          </motion.div>
         </div>
 
         {/* Info Cards */}
-        <div className="grid gap-6 md:grid-cols-3 mt-20 pt-12 border-t border-white/10">
+        <div className="grid gap-4 md:gap-6 md:grid-cols-3 mt-12 md:mt-20 pt-8 md:pt-12 border-t border-white/10">
           <InfoCard 
-            icon={<Code size={24} />} 
-            title="Core Technologies" 
-            description="TypeScript, React, Next.js, and Framer Motion for sleek, modern web apps."
-            delay={1.4}
+            icon={<Code size={20} className="md:w-6 md:h-6" />} 
+            title="Modern Tech Stack" 
+            description="TypeScript, React, Next.js, and cutting-edge tools for sleek web apps."
+            delay={0.8}
           />
           <InfoCard 
-            icon={<Users size={24} />} 
+            icon={<Users size={20} className="md:w-6 md:h-6" />} 
             title="User-Centric Design"
-            description="Crafting intuitive and engaging interfaces that prioritize user experience."
-            delay={1.5}
+            description="Crafting intuitive interfaces that prioritize seamless user experience."
+            delay={0.9}
           />
           <InfoCard 
-            icon={<Award size={24} />} 
-            title="Quality & Performance"
-            description="Building high-quality, performant websites that are optimized for success."
-            delay={1.6}
+            icon={<Award size={20} className="md:w-6 md:h-6" />} 
+            title="Performance Focus"
+            description="Building high-quality, optimized websites for success and speed."
+            delay={1.0}
           />
         </div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2, duration: 1, ease: "easeOut" }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden lg:block"
-        >
-          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center p-2">
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-              className="w-1 h-2 bg-white/50 rounded-full"
-            />
-          </div>
-        </motion.div>
       </div>
     </section>
   );

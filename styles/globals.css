@@ -16,15 +16,25 @@ body {
 
 body {
   background: 
-    radial-gradient(circle at 20% 50%, rgba(131, 56, 236, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(58, 134, 255, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 40% 20%, rgba(255, 0, 110, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 0% 100%, rgba(6, 255, 165, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 20% 50%, rgba(131, 56, 236, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(58, 134, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 40% 20%, rgba(255, 0, 110, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 0% 100%, rgba(6, 255, 165, 0.05) 0%, transparent 50%),
     #0A0A0F;
   background-attachment: fixed;
   min-height: 100vh;
 }
 
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  .glass {
+    backdrop-filter: blur(8px) !important;
+  }
+  
+  .glass-strong {
+    backdrop-filter: blur(12px) !important;
+  }
+}
 
 @layer utilities {
   .text-gradient {
@@ -39,28 +49,30 @@ body {
     @apply bg-white/10 backdrop-blur-lg border border-white/20;
   }
   
+  .glass-nav {
+    @apply bg-white/5 backdrop-blur-lg border-b border-white/10;
+  }
+  
+  .glass-menu {
+    @apply bg-white/5 backdrop-blur-lg border border-white/10;
+  }
+  
   .hover-lift {
     @apply transition-transform duration-300 hover:-translate-y-1;
   }
   
   .hover-glow {
-    @apply transition-shadow duration-300 hover:shadow-glow;
+    @apply transition-shadow duration-300 hover:shadow-glow-sm;
   }
-}
-
-/* Fix for logo positioning */
-.logo-container {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: flex-start !important;
-  gap: 12px !important;
-}
-
-/* Ensure the logo link is properly positioned */
-a[href="/"] {
-  display: flex !important;
-  align-items: center !important;
-  text-decoration: none !important;
+  
+  /* Performance optimizations */
+  .will-change-transform {
+    will-change: transform;
+  }
+  
+  .will-change-opacity {
+    will-change: opacity;
+  }
 }
 
 /* Smooth animations */
@@ -73,19 +85,41 @@ a[href="/"] {
   to { transform: rotate(360deg); }
 }
 
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
+.animate-pulse-slow {
+  animation: pulse 3s ease-in-out infinite;
 }
 
-@keyframes pulse-glow {
-  0%, 100% { opacity: 0.3; transform: scale(1); }
-  50% { opacity: 0.7; transform: scale(1.05); }
+@keyframes pulse {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.4; }
 }
 
 /* Enhanced glass effect */
 .glass {
-  background: rgba(15, 15, 35, 0.8) !important;
+  background: rgba(15, 15, 35, 0.7) !important;
   backdrop-filter: blur(12px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(12px) saturate(180%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Image optimization */
+img {
+  content-visibility: auto;
+}
+
+/* Touch-friendly buttons */
+@media (hover: none) and (pointer: coarse) {
+  button, a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Reduce motion preference */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
