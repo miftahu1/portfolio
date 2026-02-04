@@ -3,9 +3,10 @@ import type { ReactNode } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import PageTransition from "@/components/layout/PageTransition";
+import { Analytics } from "@vercel/analytics/next"
 
 export const metadata = {
-  metadataBase: new URL("https://www.miftahul.in"),
+  metadataBase: new URL("https://miftahul.in"),
   alternates: {
     canonical: "/",
   },
@@ -21,7 +22,7 @@ export const metadata = {
     title: "Miftahul Hussain - Full-Stack Developer",
     description: "Professional portfolio showcasing modern web development projects",
     type: "website",
-    url: "https://www.miftahul.in",
+    url: "https://miftahul.in",
   },
   twitter: {
     card: "summary_large_image",
@@ -32,8 +33,9 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark"> 
       <body className="bg-background text-white">
+        <Analytics />
         <div className="relative min-h-screen overflow-hidden">
           <Navbar />
           <PageTransition>

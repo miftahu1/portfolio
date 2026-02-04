@@ -1,7 +1,7 @@
 import { db } from "@/lib/firebase";
 import { collection, getDocs } from "firebase/firestore";
 
-const URL = "https://www.miftahul.in";
+const URL = "https://miftahul.in";
 
 export async function GET() {
   const postsCollection = collection(db, "posts");
