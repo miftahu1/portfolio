@@ -1,7 +1,7 @@
-import { getPublishedPosts } from "@/lib/firestore";
+import { fetchPosts } from "@/lib/firestore";
 
 export async function GET() {
-  const posts = await getPublishedPosts();
+  const posts = await fetchPosts();
 
   const body = `<?xml version="1.0"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
