@@ -34,7 +34,7 @@ export async function GET() {
       return `
         <url>
           <loc>https://miftahul.in/blog/${post.slug}</loc>
-          <lastmod>${new Date(post.updatedAt).toISOString()}</lastmod>
+          <lastmod>${new Date(post.updatedAt || post.createdAt || Date.now()).toISOString()}</lastmod>
           <changefreq>monthly</changefreq>
           <priority>0.6</priority>
         </url>
