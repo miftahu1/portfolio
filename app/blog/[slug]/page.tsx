@@ -9,8 +9,8 @@ import {
   getDocs,
 } from "firebase/firestore";
 import Image from "next/image";
-import { db } from "@/lib/firebase";
-import type { Post } from "@/lib/types";
+import { firestore } from "@/lib/firebase";
+import type { BlogPost } from "@/lib/types";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import Prose from "@/components/blog/Prose";
@@ -18,12 +18,12 @@ import Skeleton from "@/components/ui/Skeleton";
 
 export default function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
-  const [post, setPost] = useState<Post | null>(null);
+  const [post, setPost] = useState<BlogPost | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     async function load() {
-      const ref = collection(db, "posts");
+      const ref = collection(firestore, "posts");
       const q = query(ref, where("slug", "==", slug));
       const snap = await getDocs(q);
       if (snap.empty) {
@@ -31,7 +31,7 @@ export default function BlogPostPage() {
         return;
       }
       const d = snap.docs[0];
-      setPost({ id: d.id, ...(d.data() as Omit<Post, "id">) });
+      setPost({ id: d.id, ...(d.data() as Omit<BlogPost, "id">) });
     }
     load().catch(() => router.replace("/blog"));
   }, [slug, router]);

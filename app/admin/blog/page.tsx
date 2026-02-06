@@ -13,13 +13,13 @@ import {
   query,
 } from "firebase/firestore";
 import { firestore } from "@/lib/firebase";
-import type { Post } from "@/lib/types";
+import type { BlogPost } from "@/lib/types";
 import ImageUpload from "@/components/admin/ImageUpload";
 
 export default function AdminBlogPage() {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
-  const [editing, setEditing] = useState<Post | null>(null);
+  const [editing, setEditing] = useState<BlogPost | null>(null);
   const newPostFormId = useId();
 
   useEffect(() => {
@@ -40,7 +40,7 @@ export default function AdminBlogPage() {
       const snap = await getDocs(q);
       setPosts(
         snap.docs.map(
-          (d) => ({ id: d.id, ...(d.data() as Omit<Post, "id">) }) as Post,
+          (d) => ({ id: d.id, ...(d.data() as Omit<BlogPost, "id">) }) as BlogPost,
         ),
       );
       setLoading(false);
@@ -48,14 +48,14 @@ export default function AdminBlogPage() {
     load();
   }, []);
 
-  const handleSaved = (post: Post, isNew: boolean) => {
+  const handleSaved = (post: BlogPost, isNew: boolean) => {
     setPosts((prev) =>
       isNew ? [post, ...prev] : prev.map((p) => (p.id === post.id ? post : p)),
     );
     setEditing(null);
   };
 
-  const handleDelete = async (post: Post) => {
+  const handleDelete = async (post: BlogPost) => {
     if (!confirm(`Delete post "${post.title}"?`)) return;
     await deleteDoc(doc(firestore, "posts", post.id));
     setPosts((prev) => prev.filter((p) => p.id !== post.id));
@@ -194,14 +194,14 @@ export default function AdminBlogPage() {
 }
 
 type FormProps = {
-  initial: Post;
+  initial: BlogPost;
   onCancel: () => void;
-  onSaved: (p: Post, isNew: boolean) => void;
+  onSaved: (p: BlogPost, isNew: boolean) => void;
 };
 
 function PostForm({ initial, onCancel, onSaved }: FormProps) {
   const isNew = initial.id.startsWith('new-');
-  const [state, setState] = useState<Post>(initial);
+  const [state, setState] = useState<BlogPost>(initial);
   const [saving, setSaving] = useState(false);
 
   const handleChange = (
@@ -236,11 +236,11 @@ function PostForm({ initial, onCancel, onSaved }: FormProps) {
         ...submitPayload,
         createdAt: now,
       });
-      onSaved({ ...submitPayload, id: ref.id } as Post, true);
+      onSaved({ ...submitPayload, id: ref.id } as BlogPost, true);
     } else {
       const { id, ...submitPayload } = payload;
       await updateDoc(doc(firestore, "posts", id), submitPayload);
-      onSaved(payload as Post, false);
+      onSaved(payload as BlogPost, false);
     }
     setSaving(false);
   };
