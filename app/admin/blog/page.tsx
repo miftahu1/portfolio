@@ -12,7 +12,7 @@ import {
   orderBy,
   query,
 } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { firestore } from "@/lib/firebase";
 import type { Post } from "@/lib/types";
 import ImageUpload from "@/components/admin/ImageUpload";
 
@@ -35,7 +35,7 @@ export default function AdminBlogPage() {
 
   useEffect(() => {
     async function load() {
-      const ref = collection(db, "posts");
+      const ref = collection(firestore, "posts");
       const q = query(ref, orderBy("createdAt", "desc"));
       const snap = await getDocs(q);
       setPosts(
@@ -57,7 +57,7 @@ export default function AdminBlogPage() {
 
   const handleDelete = async (post: Post) => {
     if (!confirm(`Delete post "${post.title}"?`)) return;
-    await deleteDoc(doc(db, "posts", post.id));
+    await deleteDoc(doc(firestore, "posts", post.id));
     setPosts((prev) => prev.filter((p) => p.id !== post.id));
   };
   
@@ -232,14 +232,14 @@ function PostForm({ initial, onCancel, onSaved }: FormProps) {
 
     if (isNew) {
       const { id, ...submitPayload } = payload;
-      const ref = await addDoc(collection(db, "posts"), {
+      const ref = await addDoc(collection(firestore, "posts"), {
         ...submitPayload,
         createdAt: now,
       });
       onSaved({ ...submitPayload, id: ref.id } as Post, true);
     } else {
       const { id, ...submitPayload } = payload;
-      await updateDoc(doc(db, "posts", id), submitPayload);
+      await updateDoc(doc(firestore, "posts", id), submitPayload);
       onSaved(payload as Post, false);
     }
     setSaving(false);

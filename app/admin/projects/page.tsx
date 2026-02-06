@@ -12,7 +12,7 @@ import {
   query,
 } from 'firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
-import { db } from '@/lib/firebase';
+import { firestore } from '@/lib/firebase';
 import type { Project } from '@/lib/types';
 import ImageUpload from '@/components/admin/ImageUpload';
 
@@ -35,7 +35,7 @@ export default function AdminProjectsPage() {
 
   useEffect(() => {
     async function load() {
-      const ref = collection(db, 'projects');
+      const ref = collection(firestore, 'projects');
       const q = query(ref, orderBy('sortOrder', 'asc'));
       const snap = await getDocs(q);
       setProjects(
@@ -60,7 +60,7 @@ export default function AdminProjectsPage() {
 
     // Simplified for brevity, image deletion logic is omitted
 
-    await deleteDoc(doc(db, 'projects', project.id));
+    await deleteDoc(doc(firestore, 'projects', project.id));
     setProjects((prev) => prev.filter((p) => p.id !== project.id));
   };
 
@@ -230,14 +230,14 @@ function ProjectForm({ initial, onCancel, onSaved }: FormProps) {
 
     if (isNew) {
       const { id, ...submitPayload } = payload;
-      const ref = await addDoc(collection(db, 'projects'), {
+      const ref = await addDoc(collection(firestore, 'projects'), {
         ...submitPayload,
         createdAt: Date.now(),
       });
       onSaved({ ...submitPayload, id: ref.id } as Project, true);
     } else {
       const { id, ...submitPayload } = payload;
-      await updateDoc(doc(db, 'projects', id), submitPayload);
+      await updateDoc(doc(firestore, 'projects', id), submitPayload);
       onSaved(payload as Project, false);
     }
     setSaving(false);

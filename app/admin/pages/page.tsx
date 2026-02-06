@@ -14,7 +14,7 @@ export default function AdminPages() {
   }, []);
 
   const fetchPages = async () => {
-    const res = await fetch('/api/pages');
+    const res = await fetch('/api/pages', { cache: 'no-store' });
     const data = await res.json();
     setPages(data.files);
   };
@@ -43,7 +43,7 @@ export default function AdminPages() {
     setIsNewPage(false);
     setEditing(true);
     setPageName(page.replace('.html', ''));
-    fetch(`/api/pages?fileName=${page}`)
+    fetch(`/api/pages?fileName=${page}`, { cache: 'no-store' })
       .then((res) => res.json())
       .then((data) => {
         setPageCode(data.content);
@@ -58,13 +58,15 @@ export default function AdminPages() {
   };
 
   const handleDelete = async (fileName: string) => {
-    if (confirm(`Are you sure you want to delete ${fileName}?`)) {
+    if (window.confirm(`Are you sure you want to delete ${fileName}?`)) {
       const res = await fetch(`/api/pages?fileName=${fileName}`, {
         method: 'DELETE',
       });
 
       if (res.ok) {
         fetchPages();
+      } else {
+        alert('Failed to delete page.');
       }
     }
   };

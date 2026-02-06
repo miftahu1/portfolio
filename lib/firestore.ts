@@ -6,7 +6,7 @@ import {
   orderBy,
   addDoc,
 } from "firebase/firestore";
-import { db } from "./firebase";
+import { firestore } from "./firebase";
 import type { Project, Post, ContactRequest } from "./types";
 
 const PROJECTS_COLLECTION = "projects";
@@ -14,7 +14,7 @@ const POSTS_COLLECTION = "posts";
 const CONTACT_COLLECTION = "contactRequests";
 
 export async function fetchProjects(onlyFeatured = false): Promise<Project[]> {
-  const ref = collection(db, PROJECTS_COLLECTION);
+  const ref = collection(firestore, PROJECTS_COLLECTION);
 
   const q = onlyFeatured
     ? query(ref, where("featured", "==", true), orderBy("sortOrder", "asc"))
@@ -33,7 +33,7 @@ export async function fetchProjects(onlyFeatured = false): Promise<Project[]> {
 }
 
 export async function fetchPosts(): Promise<Post[]> {
-  const ref = collection(db, POSTS_COLLECTION);
+  const ref = collection(firestore, POSTS_COLLECTION);
   const q = query(ref, where("published", "==", true));
   const snap = await getDocs(q);
   const posts = snap.docs.map(
@@ -49,7 +49,7 @@ export async function fetchPosts(): Promise<Post[]> {
 export async function createContact(
   req: Omit<ContactRequest, "id" | "createdAt" | "read">,
 ) {
-  const ref = collection(db, CONTACT_COLLECTION);
+  const ref = collection(firestore, CONTACT_COLLECTION);
   const payload: Omit<ContactRequest, "id"> = {
     ...req,
     read: false,

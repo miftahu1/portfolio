@@ -10,14 +10,14 @@ import {
   updateDoc,
   doc,
 } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { firestore } from "@/lib/firebase";
 import type { ContactRequest } from "@/lib/types";
 
 export default function AdminRequestsPage() {
   const [requests, setRequests] = useState<ContactRequest[]>([]);
 
   useEffect(() => {
-    const ref = collection(db, "contactRequests");
+    const ref = collection(firestore, "contactRequests");
     const q = query(ref, orderBy("createdAt", "desc"));
     const unsub = onSnapshot(q, (snap) => {
       setRequests(
@@ -31,7 +31,7 @@ export default function AdminRequestsPage() {
   }, []);
 
   const markRead = async (req: ContactRequest) => {
-    await updateDoc(doc(db, "contactRequests", req.id), { read: true });
+    await updateDoc(doc(firestore, "contactRequests", req.id), { read: true });
   };
 
   const unreadCount = requests.filter((r) => !r.read).length;

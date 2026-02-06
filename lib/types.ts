@@ -1,42 +1,40 @@
-export type Project = {
-  id: string;
-  title: string;
-  slug: string;
-  excerpt: string;
-  description: string;
-  tech: string[];
-  role?: string;
-  heroImageUrl?: string;
-  repoUrl?: string;
-  liveUrl?: string;
-  sortOrder: number;
-  featured: boolean;
-  createdAt: number;
-  updatedAt: number;
-};
+import { Timestamp } from 'firebase/firestore';
 
-export type Post = {
-  id: string;
-  title: string;
-  slug: string;
-  excerpt: string;
-  contentMarkdown: string;
-  tags: string[];
-  published: boolean;
-  publishedAt?: number;
-  createdAt: number;
-  updatedAt: number;
-  seoDescription?: string;
-  heroImageUrl?: string;
-};
-
-export type ContactRequest = {
+export interface Project {
   id: string;
   name: string;
-  email: string;
-  budget?: string;
-  message: string;
-  createdAt: number;
-  read: boolean;
-};
+  description: string;
+  image: string;
+  url: string;
+  github: string;
+}
 
+export interface BlogPost {
+  id: string;
+  slug: string;
+  title: string;
+  content: string;
+  createdAt: Timestamp;
+}
+
+export interface ContactRequest {
+    id: string;
+    name: string;
+    email: string;
+    message: string;
+    createdAt: Timestamp;
+}
+
+export interface Page {
+    id: string;
+    title: string;
+    content: string;
+}
+
+export interface Comment {
+    id: string;
+    name: string;
+    stars: number;
+    text: string;
+    createdAt: Timestamp;
+}
