@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import type { Post } from "@/lib/types";
+import type { BlogPost } from "@/lib/types";
 import { fetchPosts } from "@/lib/firestore";
 import BlogCard from "@/components/blog/BlogCard";
 import Skeleton from "@/components/ui/Skeleton";
@@ -10,7 +10,7 @@ import Skeleton from "@/components/ui/Skeleton";
 type Props = { limit?: number };
 
 export default function BlogList({ limit }: Props) {
-  const [posts, setPosts] = useState<Post[] | null>(null);
+  const [posts, setPosts] = useState<BlogPost[] | null>(null);
 
   useEffect(() => {
     let mounted = true;

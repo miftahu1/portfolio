@@ -1,7 +1,4 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { notFound } from "next/navigation";
 import {
   collection,
   query,
@@ -14,38 +11,29 @@ import type { BlogPost } from "@/lib/types";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import Prose from "@/components/blog/Prose";
-import Skeleton from "@/components/ui/Skeleton";
 
-export default function BlogPostPage() {
-  const { slug } = useParams<{ slug: string }>();
-  const [post, setPost] = useState<BlogPost | null>(null);
-  const router = useRouter();
+// This is now a Server Component
+export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+  const { slug } = params;
 
-  useEffect(() => {
-    async function load() {
-      const ref = collection(firestore, "posts");
-      const q = query(ref, where("slug", "==", slug));
-      const snap = await getDocs(q);
-      if (snap.empty) {
-        router.replace("/blog");
-        return;
-      }
-      const d = snap.docs[0];
-      setPost({ id: d.id, ...(d.data() as Omit<BlogPost, "id">) });
-    }
-    load().catch(() => router.replace("/blog"));
-  }, [slug, router]);
+  // Fetch data on the server
+  const ref = collection(firestore, "posts");
+  const q = query(ref, where("slug", "==", slug));
+  const snap = await getDocs(q);
 
-  if (!post) {
-    return <Skeleton className="mt-10 h-40 rounded-xl" />;
+  // If no post is found, render a 404 page
+  if (snap.empty) {
+    notFound();
   }
 
+  const postDoc = snap.docs[0];
+  const post = { id: postDoc.id, ...postDoc.data() } as BlogPost;
+
   const date =
-    post.publishedAt && new Date(post.publishedAt).toLocaleDateString();
+    post.publishedAt && post.publishedAt.toDate().toLocaleDateString();
 
   // Custom components for ReactMarkdown
   const components = {
-    // Handle images with Next.js Image component
     img: ({ node, ...props }: any) => {
       const { src, alt } = props;
       return (
@@ -71,12 +59,11 @@ export default function BlogPostPage() {
         <h1 className="font-display text-2xl md:text-3xl">{post.title}</h1>
         {date && (
           <p className="text-xs text-muted">
-            {date} · {post.tags.join(" / ")}
+            {date} · {Array.isArray(post.tags) ? post.tags.join(" / ") : ''}
           </p>
         )}
       </header>
       
-      {/* Hero Image if exists */}
       {post.heroImageUrl && (
         <div className="relative w-full h-64 mb-8 rounded-2xl overflow-hidden">
           <Image

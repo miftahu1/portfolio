@@ -10,6 +10,7 @@ import {
   getDocs,
   orderBy,
   query,
+  Timestamp,
 } from 'firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { firestore } from '@/lib/firebase';
@@ -56,7 +57,7 @@ export default function AdminProjectsPage() {
   };
 
   const handleDelete = async (project: Project) => {
-    if (!confirm(`Delete project '"${project.title}"'?`)) return;
+    if (!confirm(`Delete project '"${project.name}"'?`)) return;
 
     // Simplified for brevity, image deletion logic is omitted
 
@@ -67,18 +68,20 @@ export default function AdminProjectsPage() {
   const handleNewProject = () => {
     const nextSortOrder =
       projects.length > 0 ? Math.max(...projects.map((p) => p.sortOrder)) + 1 : 1;
+    const now = Timestamp.now();
 
     setEditing({
       id: `new-${newProjectFormId}`,
-      title: '',
+      name: '',
       slug: '',
       excerpt: '',
       description: '',
       tech: [],
       sortOrder: nextSortOrder,
       featured: false,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
+      heroImageUrl: '',
+      createdAt: now,
+      updatedAt: now,
     });
   };
 
@@ -125,7 +128,7 @@ export default function AdminProjectsPage() {
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
-                  <h3 className="font-bold text-white text-lg mb-1">{p.title}</h3>
+                  <h3 className="font-bold text-white text-lg mb-1">{p.name}</h3>
                   <p className="text-sm text-white/60 font-mono">{p.slug}</p>
                   {p.featured && (
                     <span className="inline-block mt-2 rounded-full bg-gradient-primary px-2 py-1 text-[10px] font-semibold text-white">
@@ -218,6 +221,7 @@ function ProjectForm({ initial, onCancel, onSaved }: FormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
+    const now = Timestamp.now();
     const payload = {
       ...state,
       tech:
@@ -225,14 +229,14 @@ function ProjectForm({ initial, onCancel, onSaved }: FormProps) {
           ? (state.tech as unknown as string).split(',').map((t) => t.trim())
           : state.tech,
       sortOrder: Number(state.sortOrder) || 0,
-      updatedAt: Date.now(),
+      updatedAt: now,
     };
 
     if (isNew) {
       const { id, ...submitPayload } = payload;
       const ref = await addDoc(collection(firestore, 'projects'), {
         ...submitPayload,
-        createdAt: Date.now(),
+        createdAt: now,
       });
       onSaved({ ...submitPayload, id: ref.id } as Project, true);
     } else {
@@ -258,13 +262,13 @@ function ProjectForm({ initial, onCancel, onSaved }: FormProps) {
         Fill in the details below to {isNew ? 'create' : 'update'} your project
       </p>
       <div className="grid gap-4 md:grid-cols-2">
-        <Field label="Title">
+        <Field label="Name">
           <input
-            name="title"
-            value={state.title}
+            name="name"
+            value={state.name}
             onChange={handleChange}
             className="w-full rounded-xl glass border border-white/20 px-4 py-3 text-sm text-white placeholder-white/40 outline-none transition-all focus:border-accent-purple focus:shadow-glow-pink"
-            placeholder="Project Title"
+            placeholder="Project Name"
           />
         </Field>
         <Field label="Slug">

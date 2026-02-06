@@ -11,6 +11,7 @@ import {
   getDocs,
   orderBy,
   query,
+  Timestamp,
 } from "firebase/firestore";
 import { firestore } from "@/lib/firebase";
 import type { BlogPost } from "@/lib/types";
@@ -62,6 +63,7 @@ export default function AdminBlogPage() {
   };
   
   const handleNewPost = () => {
+    const now = Timestamp.now();
     setEditing({
       id: `new-${newPostFormId}`,
       title: "",
@@ -70,8 +72,8 @@ export default function AdminBlogPage() {
       contentMarkdown: "",
       tags: [],
       published: false,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
+      createdAt: now,
+      updatedAt: now,
       heroImageUrl: "",
     });
   };
@@ -219,7 +221,7 @@ function PostForm({ initial, onCancel, onSaved }: FormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
-    const now = Date.now();
+    const now = Timestamp.now();
     const payload = {
       ...state,
       tags:

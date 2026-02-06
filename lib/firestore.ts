@@ -5,9 +5,10 @@ import {
   where,
   orderBy,
   addDoc,
+  Timestamp,
 } from "firebase/firestore";
 import { firestore } from "./firebase";
-import type { Project, Post, ContactRequest } from "./types";
+import type { Project, BlogPost, ContactRequest } from "./types";
 
 const PROJECTS_COLLECTION = "projects";
 const POSTS_COLLECTION = "posts";
@@ -32,17 +33,21 @@ export async function fetchProjects(onlyFeatured = false): Promise<Project[]> {
   });
 }
 
-export async function fetchPosts(): Promise<Post[]> {
+export async function fetchPosts(): Promise<BlogPost[]> {
   const ref = collection(firestore, POSTS_COLLECTION);
   const q = query(ref, where("published", "==", true));
   const snap = await getDocs(q);
   const posts = snap.docs.map(
-    (d) => ({ id: d.id, ...(d.data() as Omit<Post, "id">) }) as Post
+    (d) => ({ id: d.id, ...(d.data() as Omit<BlogPost, "id">) }) as BlogPost
   );
   return posts.sort((a, b) => {
-    const aDate = a.publishedAt || a.createdAt || 0;
-    const bDate = b.publishedAt || b.createdAt || 0;
-    return bDate - aDate;
+    const aDate = a.publishedAt || a.createdAt;
+    const bDate = b.publishedAt || b.createdAt;
+    
+    if (aDate && bDate) {
+        return bDate.toMillis() - aDate.toMillis();
+    }
+    return 0
   });
 }
 
@@ -53,7 +58,7 @@ export async function createContact(
   const payload: Omit<ContactRequest, "id"> = {
     ...req,
     read: false,
-    createdAt: Date.now(),
+    createdAt: Timestamp.now(),
   };
   await addDoc(ref, payload);
 }

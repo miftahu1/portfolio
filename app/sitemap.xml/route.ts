@@ -1,4 +1,5 @@
 import { fetchPosts } from "@/lib/firestore";
+import { Timestamp } from 'firebase/firestore';
 
 export async function GET() {
   const posts = await fetchPosts();
@@ -31,10 +32,27 @@ export async function GET() {
   </url>
   ${posts
     .map((post) => {
+      const lastMod = post.updatedAt || post.createdAt;
+      let lastModDate;
+
+      if (lastMod && typeof lastMod.toDate === 'function') {
+        lastModDate = lastMod.toDate();
+      } else if (lastMod && lastMod.seconds !== undefined) {
+        lastModDate = new Timestamp(lastMod.seconds, lastMod.nanoseconds).toDate();
+      } else if (lastMod) {
+        lastModDate = new Date(lastMod as any);
+      } else {
+        lastModDate = new Date();
+      }
+
+      if (isNaN(lastModDate.getTime())) {
+        lastModDate = new Date();
+      }
+
       return `
         <url>
           <loc>https://miftahul.in/blog/${post.slug}</loc>
-          <lastmod>${new Date(post.updatedAt || post.createdAt || Date.now()).toISOString()}</lastmod>
+          <lastmod>${lastModDate.toISOString()}</lastmod>
           <changefreq>monthly</changefreq>
           <priority>0.6</priority>
         </url>

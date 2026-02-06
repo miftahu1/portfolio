@@ -94,7 +94,7 @@ export default function AdminRequestsPage() {
                   </div>
                   <p className="text-sm text-accent-purple font-medium mb-1">{r.email}</p>
                   <p className="text-xs text-white/60">
-                    {new Date(r.createdAt).toLocaleString()}
+                    {r.createdAt.toDate().toLocaleString()}
                   </p>
                   {r.budget && (
                     <div className="mt-2 inline-block rounded-full glass border border-white/20 px-3 py-1 text-xs font-medium text-white/80">

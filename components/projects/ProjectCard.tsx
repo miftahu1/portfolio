@@ -33,7 +33,7 @@ export default function ProjectCard({ project }: Props) {
       <div className="relative aspect-[16/9] w-full overflow-hidden">
         <Image
           src={project.heroImageUrl || "/placeholder.png"}
-          alt={project.title}
+          alt={project.name}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -45,7 +45,7 @@ export default function ProjectCard({ project }: Props) {
           rel="noopener noreferrer" 
           className="absolute inset-0"
         >
-          <span className="sr-only">View project: {project.title}</span>
+          <span className="sr-only">View project: {project.name}</span>
         </Link>
       </div>
       
@@ -57,7 +57,7 @@ export default function ProjectCard({ project }: Props) {
             rel="noopener noreferrer" 
             className="transition-colors duration-300 hover:text-accent-purple focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-purple rounded-sm"
           >
-            {project.title}
+            {project.name}
           </Link>
         </h3>
         <p className="text-white/70 flex-1 mb-4 leading-relaxed">

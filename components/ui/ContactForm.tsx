@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { createContact } from "@/lib/firestore";
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { createContact } from '@/lib/firestore';
 
 type FormState = {
   name: string;
@@ -13,10 +13,10 @@ type FormState = {
 
 export default function ContactForm() {
   const [form, setForm] = useState<FormState>({
-    name: "",
-    email: "",
-    budget: "",
-    message: "",
+    name: '',
+    email: '',
+    budget: '',
+    message: '',
   });
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
@@ -34,22 +34,25 @@ export default function ContactForm() {
     setError(null);
 
     if (!form.name || !form.email || !form.message) {
-      setError("Name, email, and message are required.");
+      setError('Name, email, and message are required.');
       return;
     }
 
     setLoading(true);
     try {
+      const budgetString = form.budget.replace(/[^0-9]/g, '');
+      const budget = budgetString ? parseInt(budgetString, 10) : undefined;
+
       await createContact({
         name: form.name.trim(),
         email: form.email.trim(),
-        budget: form.budget.trim(),
+        budget,
         message: form.message.trim(),
       });
       setSent(true);
-      setForm({ name: "", email: "", budget: "", message: "" });
+      setForm({ name: '', email: '', budget: '', message: '' });
     } catch {
-      setError("Something went wrong. Please try again.");
+      setError('Something went wrong. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -65,7 +68,7 @@ export default function ContactForm() {
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          transition={{ type: "spring", stiffness: 200, damping: 15 }}
+          transition={{ type: 'spring', stiffness: 200, damping: 15 }}
           className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-primary flex items-center justify-center"
         >
           <span className="text-2xl">✓</span>
@@ -96,7 +99,7 @@ export default function ContactForm() {
           <input
             id="name"
             name="name"
-            onFocus={() => setFocused("name")}
+            onFocus={() => setFocused('name')}
             onBlur={() => setFocused(null)}
             className="w-full rounded-xl glass border border-white/20 px-4 py-3 text-sm text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-accent-purple focus:shadow-glow-pink"
             value={form.name}
@@ -104,12 +107,12 @@ export default function ContactForm() {
             placeholder="Your name"
             required
           />
-          {focused === "name" && (
+          {focused === 'name' && (
             <motion.div
               layoutId="inputFocus"
               className="absolute inset-0 rounded-xl border-2 border-accent-purple pointer-events-none"
               initial={false}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             />
           )}
         </motion.div>
@@ -127,7 +130,7 @@ export default function ContactForm() {
             id="email"
             name="email"
             type="email"
-            onFocus={() => setFocused("email")}
+            onFocus={() => setFocused('email')}
             onBlur={() => setFocused(null)}
             className="w-full rounded-xl glass border border-white/20 px-4 py-3 text-sm text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-accent-blue focus:shadow-glow-blue"
             value={form.email}
@@ -135,12 +138,12 @@ export default function ContactForm() {
             placeholder="your@email.com"
             required
           />
-          {focused === "email" && (
+          {focused === 'email' && (
             <motion.div
               layoutId="inputFocus"
               className="absolute inset-0 rounded-xl border-2 border-accent-blue pointer-events-none"
               initial={false}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             />
           )}
         </motion.div>
@@ -157,19 +160,19 @@ export default function ContactForm() {
           <input
             id="budget"
             name="budget"
-            onFocus={() => setFocused("budget")}
+            onFocus={() => setFocused('budget')}
             onBlur={() => setFocused(null)}
             className="w-full rounded-xl glass border border-white/20 px-4 py-3 text-sm text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-accent-cyan focus:shadow-glow-cyan"
             value={form.budget}
             onChange={handleChange}
             placeholder="e.g. $3k–$8k"
           />
-          {focused === "budget" && (
+          {focused === 'budget' && (
             <motion.div
               layoutId="inputFocus"
               className="absolute inset-0 rounded-xl border-2 border-accent-cyan pointer-events-none"
               initial={false}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             />
           )}
         </motion.div>
@@ -187,7 +190,7 @@ export default function ContactForm() {
             id="message"
             name="message"
             rows={5}
-            onFocus={() => setFocused("message")}
+            onFocus={() => setFocused('message')}
             onBlur={() => setFocused(null)}
             className="w-full resize-none rounded-xl glass border border-white/20 px-4 py-3 text-sm text-white placeholder-white/40 outline-none transition-all duration-300 focus:border-accent-yellow focus:shadow-glow"
             value={form.message}
@@ -195,12 +198,12 @@ export default function ContactForm() {
             placeholder="Tell me about your project..."
             required
           />
-          {focused === "message" && (
+          {focused === 'message' && (
             <motion.div
               layoutId="inputFocus"
               className="absolute inset-0 rounded-xl border-2 border-accent-yellow pointer-events-none"
               initial={false}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             />
           )}
         </motion.div>
@@ -230,16 +233,15 @@ export default function ContactForm() {
           <span className="flex items-center justify-center gap-2">
             <motion.span
               animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
               className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
             />
             Sending...
           </span>
         ) : (
-          "Send Message"
+          'Send Message'
         )}
       </motion.button>
     </motion.form>
   );
 }
-

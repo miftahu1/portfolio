@@ -3,11 +3,11 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import type { Post } from "@/lib/types";
+import type { BlogPost } from "@/lib/types";
 
-export default function BlogCard({ post }: { post: Post }) {
+export default function BlogCard({ post }: { post: BlogPost }) {
   const date =
-    post.publishedAt && new Date(post.publishedAt).toLocaleDateString();
+    post.publishedAt && post.publishedAt.toDate().toLocaleDateString();
 
   return (
     <motion.article
