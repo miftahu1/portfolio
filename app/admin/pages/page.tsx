@@ -1,13 +1,14 @@
-'use client';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import type { Page } from '@/lib/types';
 
 export default function AdminPages() {
-  const [pages, setPages] = useState<string[]>([]);
+  const [pages, setPages] = useState<Page[]>([]);
   const [pageName, setPageName] = useState('');
   const [pageCode, setPageCode] = useState('');
   const [editing, setEditing] = useState(false);
   const [isNewPage, setIsNewPage] = useState(false);
+  const [editingPage, setEditingPage] = useState<Page | null>(null);
 
   useEffect(() => {
     fetchPages();
@@ -36,30 +37,32 @@ export default function AdminPages() {
       setPageCode('');
       setEditing(false);
       setIsNewPage(false);
+      setEditingPage(null);
+    } else {
+      alert('Failed to save page.');
     }
   };
 
-  const handleEdit = (page: string) => {
+  const handleEdit = (page: Page) => {
     setIsNewPage(false);
     setEditing(true);
-    setPageName(page.replace('.html', ''));
-    fetch(`/api/pages?fileName=${page}`, { cache: 'no-store' })
-      .then((res) => res.json())
-      .then((data) => {
-        setPageCode(data.content);
-      });
+    setEditingPage(page);
+    setPageName(page.title);
+    setPageCode(page.content);
   };
 
   const handleAddNew = () => {
     setIsNewPage(true);
     setEditing(true);
+    setEditingPage(null);
     setPageName('');
     setPageCode('');
   };
 
-  const handleDelete = async (fileName: string) => {
-    if (window.confirm(`Are you sure you want to delete ${fileName}?`)) {
-      const res = await fetch(`/api/pages?fileName=${fileName}`, {
+  const handleDelete = async (id: string) => {
+    const page = pages.find(p => p.id === id);
+    if (page && window.confirm(`Are you sure you want to delete ${page.title}?`)) {
+      const res = await fetch(`/api/pages?fileName=${page.title}.html`, {
         method: 'DELETE',
       });
 
@@ -101,7 +104,7 @@ export default function AdminPages() {
           >
             <div className="space-y-4">
               <h4 className="font-display text-lg font-bold text-white">
-                {isNewPage ? 'Add New Page' : `Editing: ${pageName}.html`}
+                {isNewPage ? 'Add New Page' : `Editing: ${editingPage?.title}.html`}
               </h4>
               <input
                 type="text"
@@ -141,25 +144,25 @@ export default function AdminPages() {
       </AnimatePresence>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {pages.map((page: string) => (
+        {pages.map((page) => (
           <motion.div
-            key={page}
+            key={page.id}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: pages.indexOf(page) * 0.05 }}
             className="glass rounded-xl border border-white/10 p-4 flex flex-col justify-between"
           >
             <a
-              href={`/demo/${page}`}
+              href={`/demo/${page.title}.html`}
               target="_blank"
               rel="noreferrer"
               className="font-semibold text-white hover:text-accent-cyan transition-colors truncate"
             >
-              {page}
+              {page.title}.html
             </a>
             <div className="flex gap-2 mt-4">
               <motion.button
-                onClick={() => handleCopyLink(page)}
+                onClick={() => handleCopyLink(`${page.title}.html`)}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 className="flex-1 rounded-lg bg-black/30 text-white/70 hover:text-white px-3 py-1 text-xs"
@@ -175,7 +178,7 @@ export default function AdminPages() {
                 Edit
               </motion.button>
               <motion.button
-                onClick={() => handleDelete(page)}
+                onClick={() => handleDelete(page.id)}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 className="flex-1 rounded-lg bg-red-500/50 text-white/70 hover:text-white hover:bg-red-500/80 px-3 py-1 text-xs"

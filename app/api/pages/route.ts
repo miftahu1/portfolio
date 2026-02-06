@@ -1,66 +1,57 @@
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs/promises";
-import path from "path";
-
-const demoDir = path.join(process.cwd(), "public", "demo");
+import { fetchPages, fetchPage, createPage, deletePage } from "@/lib/firestore";
 
 async function handler(req: NextRequest) {
   const { method } = req;
-  const fileName = req.nextUrl.searchParams.get("fileName");
+  const id = req.nextUrl.searchParams.get("id");
 
   try {
-    await fs.mkdir(demoDir, { recursive: true });
-
     switch (method) {
       case "GET":
-        if (fileName) {
-          const filePath = path.join(demoDir, fileName);
-          const content = await fs.readFile(filePath, "utf-8");
-          return NextResponse.json({ content });
+        if (id) {
+          const page = await fetchPage(id);
+          if (page) {
+            return NextResponse.json(page);
+          } else {
+            return NextResponse.json({ message: "Page not found" }, { status: 404 });
+          }
         } else {
-          const files = await fs.readdir(demoDir);
-          return NextResponse.json({ files });
+          const pages = await fetchPages();
+          return NextResponse.json({ files: pages.map(p => ({...p, fileName: p.title + ".html"})) });
         }
 
       case "POST":
-        const { fileName: newFileName, content } = await req.json();
-        if (!newFileName || !content) {
-            return NextResponse.json({ message: 'Bad Request' }, { status: 400 });
+        const { fileName, content } = await req.json();
+        if (!fileName || !content) {
+          return NextResponse.json({ message: "Bad Request" }, { status: 400 });
         }
-        const filePath = path.join(demoDir, newFileName);
-        await fs.writeFile(filePath, content);
+        const title = fileName.replace(/\.html$/, "");
+        await createPage({ title, content });
         return NextResponse.json({ message: "Page saved" });
 
       case "DELETE":
-        if (!fileName) {
-             return NextResponse.json({ message: 'Bad Request' }, { status: 400 });
-        }
-        
-        // Basic filename validation
-        if (fileName.includes('/') || fileName.includes('..')) {
-            return NextResponse.json({ message: 'Invalid file name' }, { status: 400 });
+        const fileNameToDelete = req.nextUrl.searchParams.get("fileName");
+        if (!fileNameToDelete) {
+          return NextResponse.json({ message: "Bad Request" }, { status: 400 });
         }
 
-        const deletePath = path.join(demoDir, fileName);
-        try {
-            await fs.unlink(deletePath);
-            return NextResponse.json({ message: "Page deleted" });
-        } catch (error: any) {
-            if (error.code === 'ENOENT') {
-                return NextResponse.json({ message: 'File not found' }, { status: 404 });
-            }
-            // For other errors, let the outer handler create a 500 response
-            throw error;
+        const pages = await fetchPages();
+        const pageToDelete = pages.find(p => p.title + ".html" === fileNameToDelete);
+
+        if (pageToDelete) {
+          await deletePage(pageToDelete.id);
+          return NextResponse.json({ message: "Page deleted" });
+        } else {
+          return NextResponse.json({ message: "Page not found" }, { status: 404 });
         }
 
       default:
         return NextResponse.json({ message: "Method not allowed" }, { status: 405 });
     }
-  } catch (error: any) {
+  } catch (error) {
     console.error(error);
-    const message = error instanceof Error ? error.message : "An unknown error occurred";
     return NextResponse.json(
-      { message: "Internal Server Error", error: message },
+      { message: "Internal Server Error" },
       { status: 500 }
     );
   }
