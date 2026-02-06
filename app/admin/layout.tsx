@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import type { ReactNode } from "react";
-import type { User } from "firebase/auth";
-import { subscribeToAuth, login, logout } from "@/lib/auth";
-import Skeleton from "@/components/ui/Skeleton";
+import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import type { ReactNode } from 'react';
+import type { User } from 'firebase/auth';
+import { subscribeToAuth, login, logout } from '@/lib/auth';
+import Skeleton from '@/components/ui/Skeleton';
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null | undefined>(undefined);
@@ -13,7 +13,20 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const unsub = subscribeToAuth((u) => {
-      setUser(u ?? null);
+      if (u && u.metadata.lastSignInTime) {
+        const lastSignInTime = new Date(u.metadata.lastSignInTime).getTime();
+        const now = new Date().getTime();
+        const sevenDaysInMillis = 7 * 24 * 60 * 60 * 1000;
+
+        if (now - lastSignInTime > sevenDaysInMillis) {
+          logout();
+          setUser(null);
+        } else {
+          setUser(u);
+        }
+      } else {
+        setUser(u ?? null);
+      }
     });
     return () => unsub();
   }, []);
@@ -68,8 +81,8 @@ type LoginProps = {
 };
 
 function AdminLogin({ error, onError }: LoginProps) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -79,7 +92,7 @@ function AdminLogin({ error, onError }: LoginProps) {
     try {
       await login(email.trim(), password);
     } catch {
-      onError("Invalid credentials.");
+      onError('Invalid credentials.');
     } finally {
       setLoading(false);
     }
@@ -149,13 +162,13 @@ function AdminLogin({ error, onError }: LoginProps) {
               <span className="flex items-center justify-center gap-2">
                 <motion.span
                   animate={{ rotate: 360 }}
-                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                  transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
                   className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
                 />
                 Signing in...
               </span>
             ) : (
-              "Sign in"
+              'Sign in'
             )}
           </motion.button>
         </form>
@@ -163,4 +176,3 @@ function AdminLogin({ error, onError }: LoginProps) {
     </div>
   );
 }
-
