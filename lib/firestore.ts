@@ -92,3 +92,14 @@ export async function deletePage(id: string) {
   const ref = doc(firestore, PAGES_COLLECTION, id);
   await deleteDoc(ref);
 }
+
+export async function fetchPageByTitle(title: string): Promise<Page | null> {
+    const ref = collection(firestore, PAGES_COLLECTION);
+    const q = query(ref, where("title", "==", title));
+    const snap = await getDocs(q);
+    if (snap.empty) {
+        return null;
+    }
+    const doc = snap.docs[0];
+    return { id: doc.id, ...(doc.data() as Omit<Page, "id">) } as Page;
+}
