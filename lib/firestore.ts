@@ -1,18 +1,22 @@
 import {
   collection,
   getDocs,
+  getDoc,
+  doc,
   query,
   where,
   orderBy,
   addDoc,
+  deleteDoc,
   Timestamp,
 } from "firebase/firestore";
 import { firestore } from "./firebase";
-import type { Project, BlogPost, ContactRequest } from "./types";
+import type { Project, BlogPost, ContactRequest, Page } from "./types";
 
 const PROJECTS_COLLECTION = "projects";
 const POSTS_COLLECTION = "posts";
 const CONTACT_COLLECTION = "contactRequests";
+const PAGES_COLLECTION = "pages";
 
 export async function fetchProjects(onlyFeatured = false): Promise<Project[]> {
   const ref = collection(firestore, PROJECTS_COLLECTION);
@@ -61,4 +65,30 @@ export async function createContact(
     createdAt: Timestamp.now(),
   };
   await addDoc(ref, payload);
+}
+
+export async function fetchPages(): Promise<Page[]> {
+  const ref = collection(firestore, PAGES_COLLECTION);
+  const snap = await getDocs(ref);
+  return snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<Page, "id">) }) as Page);
+}
+
+export async function fetchPage(id: string): Promise<Page | null> {
+    const docRef = doc(firestore, PAGES_COLLECTION, id);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+        return { id: docSnap.id, ...(docSnap.data() as Omit<Page, "id">) } as Page;
+    }
+    return null;
+}
+
+
+export async function createPage(page: Omit<Page, "id">) {
+  const ref = collection(firestore, PAGES_COLLECTION);
+  await addDoc(ref, page);
+}
+
+export async function deletePage(id: string) {
+  const ref = doc(firestore, PAGES_COLLECTION, id);
+  await deleteDoc(ref);
 }
