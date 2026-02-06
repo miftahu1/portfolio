@@ -35,17 +35,32 @@ async function handler(req: NextRequest) {
         if (!fileName) {
              return NextResponse.json({ message: 'Bad Request' }, { status: 400 });
         }
+        
+        // Basic filename validation
+        if (fileName.includes('/') || fileName.includes('..')) {
+            return NextResponse.json({ message: 'Invalid file name' }, { status: 400 });
+        }
+
         const deletePath = path.join(demoDir, fileName);
-        await fs.unlink(deletePath);
-        return NextResponse.json({ message: "Page deleted" });
+        try {
+            await fs.unlink(deletePath);
+            return NextResponse.json({ message: "Page deleted" });
+        } catch (error: any) {
+            if (error.code === 'ENOENT') {
+                return NextResponse.json({ message: 'File not found' }, { status: 404 });
+            }
+            // For other errors, let the outer handler create a 500 response
+            throw error;
+        }
 
       default:
         return NextResponse.json({ message: "Method not allowed" }, { status: 405 });
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
+    const message = error instanceof Error ? error.message : "An unknown error occurred";
     return NextResponse.json(
-      { message: "Internal Server Error" },
+      { message: "Internal Server Error", error: message },
       { status: 500 }
     );
   }
