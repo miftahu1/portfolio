@@ -12,6 +12,39 @@ import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import Prose from "@/components/blog/Prose";
 import { getFormattedDate } from "@/lib/utils";
+import { Metadata } from "next";
+
+// Generate metadata for this page
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const { slug } = params;
+  const ref = collection(firestore, "posts");
+  const q = query(ref, where("slug", "==", slug));
+  const snap = await getDocs(q);
+
+  if (snap.empty) {
+    return {}; // Should be handled by notFound() in the component, but good practice
+  }
+
+  const post = snap.docs[0].data() as BlogPost;
+
+  return {
+    title: `${post.title} | Miftahul's Blog`,
+    description: post.summary || "A blog post by Miftahul Hussain.",
+    openGraph: {
+      title: post.title,
+      description: post.summary || "",
+      type: "article",
+      url: `https://miftahul.in/blog/${slug}`,
+      images: post.heroImageUrl ? [{ url: post.heroImageUrl }] : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.summary || "",
+      images: post.heroImageUrl ? [post.heroImageUrl] : [],
+    },
+  };
+}
 
 // This is now a Server Component
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
