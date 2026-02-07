@@ -29,10 +29,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
   return {
     title: `${post.title} | Miftahul's Blog`,
-    description: post.summary || "A blog post by Miftahul Hussain.",
+    description: post.excerpt || "A blog post by Miftahul Hussain.",
     openGraph: {
       title: post.title,
-      description: post.summary || "",
+      description: post.excerpt || "",
       type: "article",
       url: `https://miftahul.in/blog/${slug}`,
       images: post.heroImageUrl ? [{ url: post.heroImageUrl }] : [],
@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     twitter: {
       card: "summary_large_image",
       title: post.title,
-      description: post.summary || "",
+      description: post.excerpt || "",
       images: post.heroImageUrl ? [post.heroImageUrl] : [],
     },
   };
@@ -65,6 +65,30 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
   const date = getFormattedDate(post.publishedAt);
 
+  // Structured data for the blog post
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    image: post.heroImageUrl || undefined,
+    author: {
+      '@type': 'Person',
+      name: 'Miftahul Hussain',
+      url: 'https://miftahul.in',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Miftahul Hussain',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://miftahul.in/logo.png',
+      },
+    },
+    datePublished: post.publishedAt ? new Date(post.publishedAt.seconds * 1000).toISOString() : undefined,
+    dateModified: post.updatedAt ? new Date(post.updatedAt.seconds * 1000).toISOString() : undefined,
+    description: post.excerpt,
+  };
+
   // Custom components for ReactMarkdown
   const components = {
     img: ({ node, ...props }: any) => {
@@ -85,6 +109,10 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
   return (
     <article className="mt-4">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <header className="mb-8 space-y-2">
         <p className="text-xs uppercase tracking-[0.18em] text-accent">
           Writing

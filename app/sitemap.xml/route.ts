@@ -13,6 +13,12 @@ export async function GET() {
     <priority>1</priority>
   </url>
   <url>
+    <loc>https://miftahul.in/about</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://miftahul.in/projects</loc>
     <lastmod>${new Date().toISOString()}</lastmod>
     <changefreq>daily</changefreq>
