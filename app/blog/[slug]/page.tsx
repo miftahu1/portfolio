@@ -11,6 +11,7 @@ import type { BlogPost } from "@/lib/types";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import Prose from "@/components/blog/Prose";
+import { getFormattedDate } from "@/lib/utils";
 
 // This is now a Server Component
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
@@ -29,8 +30,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
   const postDoc = snap.docs[0];
   const post = { id: postDoc.id, ...postDoc.data() } as BlogPost;
 
-  const date =
-    post.publishedAt && post.publishedAt.toDate().toLocaleDateString();
+  const date = getFormattedDate(post.publishedAt);
 
   // Custom components for ReactMarkdown
   const components = {

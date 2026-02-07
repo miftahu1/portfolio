@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore";
 import { firestore } from "@/lib/firebase";
 import type { ContactRequest } from "@/lib/types";
+import { getFormattedDateTime } from "@/lib/utils";
 
 export default function AdminRequestsPage() {
   const [requests, setRequests] = useState<ContactRequest[]>([]);
@@ -94,7 +95,7 @@ export default function AdminRequestsPage() {
                   </div>
                   <p className="text-sm text-accent-purple font-medium mb-1">{r.email}</p>
                   <p className="text-xs text-white/60">
-                    {r.createdAt.toDate().toLocaleString()}
+                    {getFormattedDateTime(r.createdAt)}
                   </p>
                   {r.budget && (
                     <div className="mt-2 inline-block rounded-full glass border border-white/20 px-3 py-1 text-xs font-medium text-white/80">
@@ -125,4 +126,3 @@ export default function AdminRequestsPage() {
     </div>
   );
 }
-

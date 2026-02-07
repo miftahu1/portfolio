@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import AnimatedLogo from '@/components/ui/AnimatedLogo';
 
 const links = [
   { href: '/', label: 'Home' },
@@ -49,7 +48,6 @@ export default function Navbar() {
         <nav className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center gap-3" onClick={() => setIsOpen(false)}>
-              <AnimatedLogo size={40} />
               <span className="font-display text-2xl font-bold text-white text-gradient bg-gradient-primary bg-clip-text text-transparent">
                 Mifta.dev
               </span>
