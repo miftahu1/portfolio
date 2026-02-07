@@ -4,10 +4,10 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import type { BlogPost } from "@/lib/types";
+import { getFormattedDate } from "@/lib/utils";
 
 export default function BlogCard({ post }: { post: BlogPost }) {
-  const date =
-    post.publishedAt && post.publishedAt.toDate().toLocaleDateString();
+  const date = getFormattedDate(post.publishedAt);
 
   return (
     <motion.article
@@ -56,4 +56,3 @@ export default function BlogCard({ post }: { post: BlogPost }) {
     </motion.article>
   );
 }
-
