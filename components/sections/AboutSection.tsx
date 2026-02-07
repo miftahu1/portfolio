@@ -7,8 +7,9 @@ export default function AboutSection() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    setIsMobile(window.innerWidth < 768);
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    const checkIsMobile = () => window.innerWidth < 768;
+    setIsMobile(checkIsMobile());
+    const handleResize = () => setIsMobile(checkIsMobile());
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -21,7 +22,7 @@ export default function AboutSection() {
   };
 
   return (
-    <section id="about" className="py-16 md:py-24 relative">
+    <section id="about" className="py-12 md:py-24 relative">
       <div className="absolute inset-0 bg-gradient-mesh opacity-10 -z-10" />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -29,23 +30,23 @@ export default function AboutSection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-12 md:mb-16"
+          className="text-center mb-10 md:mb-16"
         >
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-3">
             About <span className="text-gradient bg-gradient-primary bg-clip-text text-transparent">Me</span>
           </h2>
-          <div className="w-24 h-1 bg-gradient-primary mx-auto mb-6 rounded-full"></div>
+          <div className="w-20 h-1 bg-gradient-primary mx-auto mb-4 rounded-full"></div>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-8 md:gap-12">
+        <div className="grid lg:grid-cols-2 gap-6 md:gap-10">
           {/* About Text */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0, x: isMobile ? 0 : -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             className="space-y-6"
           >
-            <div className="glass rounded-2xl p-6 md:p-8">
+            <div className="glass rounded-xl p-6 md:p-8">
               <h3 className="text-xl md:text-2xl font-bold text-white mb-4">
                 Professional Journey
               </h3>
@@ -58,22 +59,22 @@ export default function AboutSection() {
             </div>
 
             {/* Experience */}
-            <div className="glass rounded-2xl p-6 md:p-8">
+            <div className="glass rounded-xl p-6 md:p-8">
               <h3 className="text-xl md:text-2xl font-bold text-white mb-4">
                 Experience
               </h3>
               <div className="space-y-4">
                 <div className="border-l-2 border-accent-purple pl-4">
                   <h4 className="font-semibold text-white">Freelance Web Developer</h4>
-                  <p className="text-sm text-accent-purple mb-2">2024 - Present</p>
+                  <p className="text-sm text-accent-purple mb-1">2024 - Present</p>
                   <p className="text-white/70 text-sm">
-                    Built and delivered production websites for clients, handling UI design, development, optimization, and deployment with real requirements and constraints.
+                    Built and delivered production websites for clients, handling UI design, development, optimization, and deployment.
                   </p>
                 </div>
                 
                 <div className="border-l-2 border-accent-blue pl-4">
                   <h4 className="font-semibold text-white">Education</h4>
-                  <p className="text-sm text-accent-blue mb-2">Senior Secondary</p>
+                  <p className="text-sm text-accent-blue mb-1">Senior Secondary</p>
                   <p className="text-white/70 text-sm">
                     Focused on Computer Science and Software Development fundamentals.
                   </p>
@@ -84,17 +85,17 @@ export default function AboutSection() {
 
           {/* Skills Grid */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, x: isMobile ? 0 : 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             className="space-y-6"
           >
-            {Object.entries(skills).map(([category, items], idx) => (
-              <div key={category} className="glass rounded-2xl p-6 md:p-8">
+            {Object.entries(skills).map(([category, items]) => (
+              <div key={category} className="glass rounded-xl p-6 md:p-8">
                 <h3 className="text-xl md:text-2xl font-bold text-white mb-4 capitalize">
                   {category.replace(/([A-Z])/g, ' $1')}
                 </h3>
-                <div className="flex flex-wrap gap-2 md:gap-3">
+                <div className="flex flex-wrap gap-2">
                   {items.map((skill, i) => (
                     <motion.span
                       key={i}
@@ -103,7 +104,7 @@ export default function AboutSection() {
                       viewport={{ once: true }}
                       transition={{ delay: i * 0.05 }}
                       whileHover={{ scale: 1.05, y: -2 }}
-                      className="px-3 md:px-4 py-2 bg-white/5 border border-white/10 rounded-full text-sm md:text-base text-white/90 hover:bg-white/10 transition-all cursor-default"
+                      className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-sm text-white/90 hover:bg-white/10 transition-all cursor-default"
                     >
                       {skill}
                     </motion.span>

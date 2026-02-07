@@ -15,15 +15,20 @@ type Props = {
 
 export default function ProjectsGrid({ limit }: Props) {
   const [projects, setProjects] = useState<Project[] | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    const checkIsMobile = () => window.innerWidth < 768;
+    setIsMobile(checkIsMobile());
+    const handleResize = () => setIsMobile(checkIsMobile());
+    window.addEventListener('resize', handleResize);
+
     let mounted = true;
     const fetchOnlyFeatured = !!limit;
     
     fetchProjects(fetchOnlyFeatured).then((data) => {
       if (mounted) {
         const validProjects = data.filter(p => p.id);
-        // Correctly apply the limit ONLY if it exists.
         const finalProjects = limit ? validProjects.slice(0, limit) : validProjects;
         setProjects(finalProjects);
       }
@@ -31,16 +36,17 @@ export default function ProjectsGrid({ limit }: Props) {
     
     return () => {
       mounted = false;
+      window.removeEventListener('resize', handleResize);
     };
   }, [limit]);
 
   return (
-    <section className="py-16 md:py-24">
+    <section className="py-12 md:py-24">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="mb-10 flex items-center justify-between"
+        className="mb-8 md:mb-12 flex items-center justify-between"
       >
         <div className="flex-1">
           <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-3">
@@ -57,7 +63,7 @@ export default function ProjectsGrid({ limit }: Props) {
       </motion.div>
 
       {!projects ? (
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 md:gap-8 md:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: limit ?? 6 }).map((_, i) => (
             <Skeleton key={i} className="aspect-[4/3] rounded-2xl" />
           ))}
@@ -68,7 +74,7 @@ export default function ProjectsGrid({ limit }: Props) {
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
           transition={{ staggerChildren: 0.1 }}
-          className="grid gap-8 md:grid-cols-2 lg:grid-cols-3"
+          className="grid gap-6 md:gap-8 md:grid-cols-2 lg:grid-cols-3"
         >
           {projects.map((p) => (
             <motion.div
@@ -91,10 +97,10 @@ export default function ProjectsGrid({ limit }: Props) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ delay: 0.3 }}
-          className="mt-16 text-center"
+          className="mt-12 md:mt-16 text-center"
         >
           <Link href="/projects">
-            <MagneticButton size="lg" className="px-10 py-5 text-lg">
+            <MagneticButton size={isMobile ? "md" : "lg"} className="px-8 py-4 text-base">
               Explore All Projects
             </MagneticButton>
           </Link>

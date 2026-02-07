@@ -2,25 +2,36 @@
 
 import { motion } from "framer-motion";
 import ContactForm from "@/components/ui/ContactForm";
+import { useEffect, useState } from "react";
 
 export default function ContactSection() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIsMobile = () => window.innerWidth < 768;
+    setIsMobile(checkIsMobile());
+    const handleResize = () => setIsMobile(checkIsMobile());
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
-    <section id="contact" className="mt-32 relative">
-      <div className="absolute inset-0 bg-gradient-mesh opacity-30 rounded-3xl blur-3xl -z-10" />
+    <section id="contact" className="my-16 md:my-24 relative">
+      <div className="absolute inset-0 bg-gradient-mesh opacity-20 rounded-3xl blur-2xl -z-10" />
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="grid gap-12 md:grid-cols-[1fr_1.2fr] items-start"
+        className="grid gap-8 md:gap-12 md:grid-cols-[1fr_1.2fr] items-start"
       >
         <div className="space-y-6">
           <div>
             <motion.h2
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, x: isMobile ? 0 : -20, y: isMobile ? 20 : 0 }}
+              whileInView={{ opacity: 1, x: 0, y: 0 }}
               viewport={{ once: true }}
-              className="font-display text-4xl md:text-5xl font-bold text-white mb-4"
+              className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4"
             >
               Let&apos;s build something{" "}
               <span className="text-gradient bg-gradient-primary bg-clip-text text-transparent">
@@ -28,11 +39,11 @@ export default function ContactSection() {
               </span>
             </motion.h2>
             <motion.p
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, x: isMobile ? 0 : -20, y: isMobile ? 20 : 0 }}
+              whileInView={{ opacity: 1, x: 0, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="text-lg text-white/80 leading-relaxed"
+              className="text-base md:text-lg text-white/80 leading-relaxed"
             >
               Tell me about your vision, the challenges you&apos;re facing, and
               what success looks like. I&apos;ll respond with a thoughtful,
@@ -44,7 +55,7 @@ export default function ContactSection() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="flex flex-wrap gap-3"
+            className="flex flex-wrap gap-2 md:gap-3"
           >
             {[
               { icon: "💬", text: "Quick Response" },
@@ -58,19 +69,19 @@ export default function ContactSection() {
                 viewport={{ once: true }}
                 transition={{ delay: 0.3 + idx * 0.1 }}
                 whileHover={{ scale: 1.05 }}
-                className="glass rounded-xl border border-white/10 px-4 py-2 text-sm text-white/80"
+                className="glass rounded-lg border border-white/10 px-3 py-1.5 text-sm text-white/80"
               >
-                <span className="mr-2">{item.icon}</span>
+                <span className="mr-1.5">{item.icon}</span>
                 {item.text}
               </motion.div>
             ))}
           </motion.div>
         </div>
         <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, x: isMobile ? 0 : 20, y: isMobile ? 20 : 0 }}
+          whileInView={{ opacity: 1, x: 0, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: isMobile ? 0.3 : 0.2 }}
         >
           <ContactForm />
         </motion.div>
@@ -78,4 +89,3 @@ export default function ContactSection() {
     </section>
   );
 }
-

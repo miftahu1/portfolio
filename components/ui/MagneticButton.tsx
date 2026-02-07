@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useMotionValue, useSpring } from "framer-motion";
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import { useEffect, useState, type ButtonHTMLAttributes, type ReactNode } from "react";
 
 type Props = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onAnimationStart' | 'onDragStart' | 'onDragEnd' | 'onDrag'> & {
   children: ReactNode;
@@ -16,12 +16,27 @@ export default function MagneticButton({
   className = "",
   ...props
 }: Props) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIsMobile = () => window.innerWidth < 768;
+    setIsMobile(checkIsMobile());
+    
+    const handleResize = () => {
+      setIsMobile(checkIsMobile());
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const springX = useSpring(x, { stiffness: 400, damping: 25 });
   const springY = useSpring(y, { stiffness: 400, damping: 25 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (isMobile) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const relX = e.clientX - rect.left - rect.width / 2;
     const relY = e.clientY - rect.top - rect.height / 2;
@@ -30,6 +45,7 @@ export default function MagneticButton({
   };
 
   const handleMouseLeave = () => {
+    if (isMobile) return;
     x.set(0);
     y.set(0);
   };
@@ -52,15 +68,15 @@ export default function MagneticButton({
       style={{ x: springX, y: springY }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      whileTap={{ scale: 0.95 }}
-      whileHover={{ 
+      whileTap={{ scale: isMobile ? 1 : 0.95 }}
+      whileHover={isMobile ? {} : {
         scale: 1.05,
         transition: { type: "spring", stiffness: 400, damping: 20 }
       }}
       className={`${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`}
       {...props}
     >
-      {variant === "primary" && (
+      {variant === "primary" && !isMobile && (
         <motion.div
           className="absolute inset-0 bg-gradient-to-r from-accent-pink via-accent-purple to-accent-blue opacity-0 group-hover:opacity-100 transition-opacity duration-300"
           animate={{
