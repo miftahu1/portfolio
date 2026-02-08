@@ -1,3 +1,4 @@
+
 import { Timestamp } from 'firebase/firestore';
 
 export interface Project {
@@ -29,6 +30,8 @@ export interface BlogPost {
   publishedAt?: Timestamp | null;
   heroImageUrl: string;
   seoDescription?: string;
+  likes: number;
+  dislikes: number;
 }
 
 export interface ContactRequest {

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -45,12 +45,24 @@ export default function BlogCard({ post }: { post: BlogPost }) {
           <p className="text-sm text-white/70 leading-relaxed line-clamp-3 flex-1">
             {post.excerpt}
           </p>
-          <motion.div
-            className="mt-4 flex items-center gap-2 text-sm font-medium text-gradient bg-gradient-primary bg-clip-text text-transparent"
-            whileHover={{ x: 5 }}
-          >
-            Read more →
-          </motion.div>
+          <div className="flex items-center justify-between mt-4">
+            <motion.div
+              className="flex items-center gap-2 text-sm font-medium text-gradient bg-gradient-primary bg-clip-text text-transparent"
+              whileHover={{ x: 5 }}
+            >
+              Read more →
+            </motion.div>
+            <div className="flex items-center gap-4 text-white/70">
+              <div className="flex items-center gap-1">
+                <span>👍</span>
+                <span>{post.likes}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <span>👎</span>
+                <span>{post.dislikes}</span>
+              </div>
+            </div>
+          </div>
         </div>
       </Link>
     </motion.article>

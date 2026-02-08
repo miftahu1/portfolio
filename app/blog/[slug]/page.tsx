@@ -5,14 +5,10 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
-import Image from "next/image";
 import { firestore } from "@/lib/firebase";
 import type { BlogPost } from "@/lib/types";
-import ReactMarkdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
-import Prose from "@/components/blog/Prose";
-import { getFormattedDate } from "@/lib/utils";
 import { Metadata } from "next";
+import BlogPostClientPage from "./BlogPostClientPage";
 
 // Generate metadata for this page
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
@@ -22,7 +18,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const snap = await getDocs(q);
 
   if (snap.empty) {
-    return {}; // Should be handled by notFound() in the component, but good practice
+    return {};
   }
 
   const post = snap.docs[0].data() as BlogPost;
@@ -46,7 +42,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-// This is now a Server Component
+// This is the main Server Component for the page
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
   const { slug } = params;
 
@@ -61,90 +57,25 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
   }
 
   const postDoc = snap.docs[0];
-  const post = { id: postDoc.id, ...postDoc.data() } as BlogPost;
+  const postData = postDoc.data();
 
-  const date = getFormattedDate(post.publishedAt);
-
-  // Structured data for the blog post
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: post.title,
-    image: post.heroImageUrl || undefined,
-    author: {
-      '@type': 'Person',
-      name: 'Miftahul Hussain',
-      url: 'https://miftahul.in',
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Miftahul Hussain',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://miftahul.in/logo.png',
-      },
-    },
-    datePublished: post.publishedAt ? new Date(post.publishedAt.seconds * 1000).toISOString() : undefined,
-    dateModified: post.updatedAt ? new Date(post.updatedAt.seconds * 1000).toISOString() : undefined,
-    description: post.excerpt,
+  // Create the complete BlogPost object, providing default values for likes/dislikes
+  const post: BlogPost = {
+    id: postDoc.id,
+    slug: postData.slug,
+    title: postData.title,
+    excerpt: postData.excerpt,
+    contentMarkdown: postData.contentMarkdown,
+    tags: postData.tags,
+    published: postData.published,
+    createdAt: postData.createdAt,
+    updatedAt: postData.updatedAt,
+    publishedAt: postData.publishedAt || null,
+    heroImageUrl: postData.heroImageUrl,
+    seoDescription: postData.seoDescription || '',
+    likes: postData.likes || 0,
+    dislikes: postData.dislikes || 0,
   };
 
-  // Custom components for ReactMarkdown
-  const components = {
-    img: ({ node, ...props }: any) => {
-      const { src, alt } = props;
-      return (
-        <div className="relative w-full my-6 h-[400px] rounded-xl overflow-hidden">
-          <Image
-            src={src || ""}
-            alt={alt || "Blog image"}
-            fill
-            sizes="(max-width: 768px) 100vw, 80vw"
-            className="object-cover"
-          />
-        </div>
-      );
-    },
-  };
-
-  return (
-    <article className="mt-4">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <header className="mb-8 space-y-2">
-        <p className="text-xs uppercase tracking-[0.18em] text-accent">
-          Writing
-        </p>
-        <h1 className="font-display text-2xl md:text-3xl">{post.title}</h1>
-        {date && (
-          <p className="text-xs text-muted">
-            {date} · {Array.isArray(post.tags) ? post.tags.join(" / ") : ''}
-          </p>
-        )}
-      </header>
-      
-      {post.heroImageUrl && (
-        <div className="relative w-full h-64 mb-8 rounded-2xl overflow-hidden">
-          <Image
-            src={post.heroImageUrl}
-            alt={post.title}
-            fill
-            sizes="(max-width: 768px) 100vw, 80vw"
-            className="object-cover"
-          />
-        </div>
-      )}
-      
-      <Prose>
-        <ReactMarkdown 
-          rehypePlugins={[rehypeRaw]}
-          components={components}
-        >
-          {post.contentMarkdown}
-        </ReactMarkdown>
-      </Prose>
-    </article>
-  );
+  return <BlogPostClientPage post={post} />;
 }

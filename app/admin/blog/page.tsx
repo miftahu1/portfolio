@@ -75,6 +75,8 @@ export default function AdminBlogPage() {
       createdAt: now,
       updatedAt: now,
       heroImageUrl: "",
+      likes: 0,
+      dislikes: 0,
     });
   };
 

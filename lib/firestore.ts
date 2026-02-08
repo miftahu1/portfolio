@@ -9,6 +9,8 @@ import {
   addDoc,
   deleteDoc,
   Timestamp,
+  updateDoc,
+  increment,
 } from "firebase/firestore";
 import { firestore } from "./firebase";
 import type { Project, BlogPost, ContactRequest, Page } from "./types";
@@ -41,17 +43,52 @@ export async function fetchPosts(): Promise<BlogPost[]> {
   const ref = collection(firestore, POSTS_COLLECTION);
   const q = query(ref, where("published", "==", true));
   const snap = await getDocs(q);
-  const posts = snap.docs.map(
-    (d) => ({ id: d.id, ...(d.data() as Omit<BlogPost, "id">) }) as BlogPost
-  );
+  const posts = snap.docs.map((d) => {
+    const data = d.data();
+    return {
+      id: d.id,
+      ...(data as Omit<BlogPost, "id">),
+      likes: data.likes || 0,
+      dislikes: data.dislikes || 0,
+    } as BlogPost;
+  });
+
   return posts.sort((a, b) => {
     const aDate = a.publishedAt || a.createdAt;
     const bDate = b.publishedAt || b.createdAt;
-    
+
     if (aDate && bDate) {
-        return bDate.toMillis() - aDate.toMillis();
+      return bDate.toMillis() - aDate.toMillis();
     }
-    return 0
+    return 0;
+  });
+}
+
+export async function likePost(postId: string): Promise<void> {
+  const postRef = doc(firestore, POSTS_COLLECTION, postId);
+  await updateDoc(postRef, {
+    likes: increment(1),
+  });
+}
+
+export async function dislikePost(postId: string): Promise<void> {
+  const postRef = doc(firestore, POSTS_COLLECTION, postId);
+  await updateDoc(postRef, {
+    dislikes: increment(1),
+  });
+}
+
+export async function undoLikePost(postId: string): Promise<void> {
+  const postRef = doc(firestore, POSTS_COLLECTION, postId);
+  await updateDoc(postRef, {
+    likes: increment(-1),
+  });
+}
+
+export async function undoDislikePost(postId: string): Promise<void> {
+  const postRef = doc(firestore, POSTS_COLLECTION, postId);
+  await updateDoc(postRef, {
+    dislikes: increment(-1),
   });
 }
 
