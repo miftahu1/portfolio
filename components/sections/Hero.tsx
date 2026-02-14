@@ -22,7 +22,7 @@ export default function Hero() {
     {
       lines: [
         "> whoami",
-        "mifta.dev",
+        "Miftahul Hussain",
         "> skills --list",
         "  • React/Next.js",
         "  • TypeScript",
@@ -116,7 +116,7 @@ export default function Hero() {
   const subtitle = "Full-Stack Developer";
 
   return (
-    <section className="relative pt-20 md:pt-24 overflow-hidden min-h-[90vh] flex items-center">
+    <section className="relative pt-0 md:pt-16 overflow-hidden min-h-[90vh] flex items-center">
       <AnimatedBackground />
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6">
