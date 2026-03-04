@@ -15,7 +15,7 @@ import {
 } from "firebase/firestore";
 import { firestore } from "@/lib/firebase";
 import type { BlogPost } from "@/lib/types";
-import ImageUpload from "@/components/admin/ImageUpload";
+import LegacyImageUpload from "@/components/admin/LegacyImageUpload";
 
 export default function AdminBlogPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -228,7 +228,8 @@ function PostForm({ initial, onCancel, onSaved }: FormProps) {
       ...state,
       tags:
         typeof state.tags === "string"
-          ? (state.tags as unknown as string).split(",").map((t) => t.trim())
+          ? (state.tags as unknown as string).split(",
+").map((t) => t.trim())
           : state.tags,
       updatedAt: now,
       publishedAt: state.published ? state.publishedAt ?? now : null,
@@ -320,7 +321,7 @@ function PostForm({ initial, onCancel, onSaved }: FormProps) {
           </label>
         </div>
       </div>
-      <ImageUpload
+      <LegacyImageUpload
         value={state.heroImageUrl || ""}
         onChange={(url) => setState((s) => ({ ...s, heroImageUrl: url }))}
         folder="blog"
