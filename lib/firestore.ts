@@ -13,12 +13,13 @@ import {
   increment,
 } from "firebase/firestore";
 import { firestore } from "./firebase";
-import type { Project, BlogPost, ContactRequest, Page } from "./types";
+import type { Project, BlogPost, ContactRequest, Page, Photo } from "./types";
 
 const PROJECTS_COLLECTION = "projects";
 const POSTS_COLLECTION = "posts";
 const CONTACT_COLLECTION = "contactRequests";
 const PAGES_COLLECTION = "pages";
+const PHOTOS_COLLECTION = "photos";
 
 export async function fetchProjects(onlyFeatured = false): Promise<Project[]> {
   const ref = collection(firestore, PROJECTS_COLLECTION);
@@ -139,4 +140,39 @@ export async function fetchPageByTitle(title: string): Promise<Page | null> {
     }
     const doc = snap.docs[0];
     return { id: doc.id, ...(doc.data() as Omit<Page, "id">) } as Page;
+}
+
+export async function fetchPhotos(onlyFeatured = false): Promise<Photo[]> {
+  const ref = collection(firestore, PHOTOS_COLLECTION);
+  const q = onlyFeatured
+    ? query(ref, where("featured", "==", true), orderBy("createdAt", "desc"))
+    : query(ref, orderBy("createdAt", "desc"));
+
+  const snap = await getDocs(q);
+  return snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<Photo, "id">) }) as Photo);
+}
+
+export async function createPhoto(publicId: string, title?: string, description?: string): Promise<Photo> {
+  const ref = collection(firestore, PHOTOS_COLLECTION);
+  const now = Timestamp.now();
+  const payload: Omit<Photo, "id"> = {
+    publicId,
+    featured: false,
+    title: title || '',
+    description: description || '',
+    createdAt: now,
+    updatedAt: now,
+  };
+  const docRef = await addDoc(ref, payload);
+  return { id: docRef.id, ...payload };
+}
+
+export async function deletePhoto(id: string): Promise<void> {
+  const ref = doc(firestore, PHOTOS_COLLECTION, id);
+  await deleteDoc(ref);
+}
+
+export async function updatePhoto(id: string, data: Partial<Omit<Photo, 'id' | 'createdAt'>>): Promise<void> {
+  const ref = doc(firestore, PHOTOS_COLLECTION, id);
+  await updateDoc(ref, { ...data, updatedAt: Timestamp.now() });
 }

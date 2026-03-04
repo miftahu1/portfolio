@@ -7,6 +7,7 @@ import CommentList from "@/components/sections/CommentList";
 import { Suspense } from "react";
 import Skeleton from "@/components/ui/Skeleton";
 import PostsGrid from "@/components/sections/PostsGrid";
+import FeaturedPhotos from "@/components/sections/FeaturedPhotos";
 
 export default function HomePage() {
   return (
@@ -14,6 +15,7 @@ export default function HomePage() {
       <Hero />
       <AboutSection />
       <ProjectsGrid limit={3} />
+      <FeaturedPhotos />
       <PostsGrid limit={3} />
       <div className="space-y-12">
         <h2 className="font-display text-3xl font-bold text-center text-white">Feedbacks</h2>

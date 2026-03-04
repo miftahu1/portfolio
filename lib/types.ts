@@ -62,6 +62,8 @@ export interface Photo {
   id: string;
   publicId: string;
   featured: boolean;
+  title?: string;
+  description?: string;
   createdAt: Timestamp;
   updatedAt: Timestamp;
 }

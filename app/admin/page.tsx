@@ -33,7 +33,12 @@ const AdminComments = dynamic(() => import('./comments/page'), {
     ssr: false,
 });
 
-type TabId = 'projects' | 'blog' | 'requests' | 'pages' | 'comments';
+const AdminPhotos = dynamic(() => import('./photos/page'), {
+  loading: () => <Skeleton className="h-96 rounded-2xl" />,
+  ssr: false,
+});
+
+type TabId = 'projects' | 'blog' | 'requests' | 'pages' | 'comments' | 'photos';
 
 interface Tab {
     id: TabId;
@@ -97,6 +102,12 @@ export default function AdminDashboardPage() {
       label: 'Demo Pages',
       icon: '📄',
       color: 'from-accent-yellow to-accent-red',
+    },
+    {
+      id: 'photos',
+      label: 'Photos',
+      icon: '📷',
+      color: 'from-red-500 to-yellow-500',
     },
   ];
 
@@ -170,6 +181,7 @@ export default function AdminDashboardPage() {
             {activeTab === 'blog' && isAdmin && <AdminBlog />}
             {activeTab === 'requests' && isAdmin && <AdminRequests />}
             {activeTab === 'comments' && isAdmin && <AdminComments />}
+            {activeTab === 'photos' && isAdmin && <AdminPhotos />}
             {activeTab === 'pages' && <AdminPages />}
           </Suspense>
         </motion.div>
