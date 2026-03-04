@@ -18,7 +18,7 @@ export default function PhotosPage() {
       <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
         {photos.map(photo => (
           <div key={photo.id} className="break-inside-avoid">
-            <img src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/w_800/v1/${photo.publicId}`} alt="" className="w-full h-auto rounded-lg shadow-lg" />
+            <img src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/w_800/v1/${photo.publicId}`} alt={photo.title || ''} className="w-full h-auto rounded-lg shadow-lg" />
           </div>
         ))}
       </div>

@@ -142,11 +142,20 @@ export async function fetchPageByTitle(title: string): Promise<Page | null> {
     return { id: doc.id, ...(doc.data() as Omit<Page, "id">) } as Page;
 }
 
+/*
+ * To query for featured photos, you need to create a composite index in Firestore.
+ * Go to your Firestore console, then Indexes > Composite > Add Index.
+ * Collection ID: photos
+ * Fields to index:
+ *   - featured (Ascending)
+ *   - updatedAt (Descending)
+ * Query scopes: Collection
+ */
 export async function fetchPhotos(onlyFeatured = false): Promise<Photo[]> {
   const ref = collection(firestore, PHOTOS_COLLECTION);
   const q = onlyFeatured
-    ? query(ref, where("featured", "==", true), orderBy("createdAt", "desc"))
-    : query(ref, orderBy("createdAt", "desc"));
+    ? query(ref, where("featured", "==", true), orderBy("updatedAt", "desc"))
+    : query(ref, orderBy("updatedAt", "desc"));
 
   const snap = await getDocs(q);
   return snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<Photo, "id">) }) as Photo);
