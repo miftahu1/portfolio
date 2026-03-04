@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Photo } from '@/lib/types';
 import ImageUpload from '@/components/admin/ImageUpload';
 import PhotoEditor from '@/components/admin/PhotoEditor';
-import { IconStar, IconPencil } from '@tabler/icons-react';
+import { IconStar, IconPencil, IconFilter, IconSortAscending } from '@tabler/icons-react';
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 
@@ -78,20 +78,22 @@ export default function PhotosAdminPage() {
   }));
 
   return (
-    <div className="min-h-screen text-white p-8 bg-gradient-to-br from-gray-900 to-gray-800">
+    <div className="min-h-screen text-white p-4 sm:p-8 bg-gray-900">
       <div className="max-w-7xl mx-auto">
-        <header className="flex justify-between items-center mb-12">
-            <h1 className="text-5xl font-bold tracking-tighter">Photo Management</h1>
-            <div className="flex items-center gap-4">
-                <div className="relative">
-                    <select id="filter" value={filter} onChange={e => setFilter(e.target.value)} className="bg-gray-800/50 border border-gray-700 text-white rounded-lg px-4 py-2 appearance-none focus:outline-none focus:ring-2 focus:ring-accent-purple transition-all">
+        <header className="flex flex-col sm:flex-row justify-between items-center mb-8 sm:mb-12">
+            <h1 className="text-4xl sm:text-5xl font-bold tracking-tighter mb-4 sm:mb-0">Photo Management</h1>
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+                <div className="relative flex items-center">
+                    <IconFilter size={20} className="absolute left-3 text-gray-400"/>
+                    <select id="filter" value={filter} onChange={e => setFilter(e.target.value)} className="bg-gray-800 border border-gray-700 text-white rounded-lg pl-10 pr-4 py-2 appearance-none focus:outline-none focus:ring-2 focus:ring-accent-purple transition-all">
                         <option value="all">All</option>
                         <option value="featured">Featured</option>
                         <option value="unfeatured">Unfeatured</option>
                     </select>
                 </div>
-                <div className="relative">
-                    <select id="sort" value={sort} onChange={e => setSort(e.target.value)} className="bg-gray-800/50 border border-gray-700 text-white rounded-lg px-4 py-2 appearance-none focus:outline-none focus:ring-2 focus:ring-accent-purple transition-all">
+                <div className="relative flex items-center">
+                    <IconSortAscending size={20} className="absolute left-3 text-gray-400"/>
+                    <select id="sort" value={sort} onChange={e => setSort(e.target.value)} className="bg-gray-800 border border-gray-700 text-white rounded-lg pl-10 pr-4 py-2 appearance-none focus:outline-none focus:ring-2 focus:ring-accent-purple transition-all">
                         <option value="newest">Newest</option>
                         <option value="oldest">Oldest</option>
                     </select>
@@ -99,31 +101,34 @@ export default function PhotosAdminPage() {
             </div>
         </header>
         
-        <div className="glass rounded-xl p-8 mb-12 border border-gray-700/50 shadow-lg">
-          <h2 className="text-3xl font-semibold mb-6 tracking-tight">Upload New Photo</h2>
+        <div className="bg-gray-800 rounded-xl p-4 sm:p-8 mb-8 sm:mb-12 shadow-lg">
+          <h2 className="text-2xl sm:text-3xl font-semibold mb-6 tracking-tight text-center">Upload New Photo</h2>
           <ImageUpload onUpload={handleUpload} />
         </div>
 
         <main>
-          <div className="masonry-gallery">
-            {filteredPhotos.map((photo, index) => (
-              <div key={photo.id} className="break-inside-avoid mb-6 relative group cursor-pointer overflow-hidden rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 ease-in-out">
-                <img src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/c_fill,w_500,h_500/v1/${photo.publicId}`} alt={photo.title || ''} className="w-full h-auto object-cover" onClick={() => setLightboxIndex(index)} />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent p-6 flex flex-col justify-end opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <h3 className="text-white text-xl font-bold drop-shadow-lg">{photo.title || 'Untitled'}</h3>
-                  <p className="text-gray-300 text-sm drop-shadow-md">{photo.description || 'No description'}</p>
-                   <button onClick={(e) => { e.stopPropagation(); setEditingPhoto(photo); }} className="absolute top-3 left-3 bg-gray-800/50 text-white p-2 rounded-full backdrop-blur-sm shadow-lg hover:bg-accent-blue transition-colors">
-                       <IconPencil size={20} />
-                   </button>
-                </div>
-                {photo.featured && (
-                    <div className="absolute top-3 right-3 bg-accent-blue/80 text-white p-2 rounded-full backdrop-blur-sm shadow-lg">
-                        <IconStar size={20} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                {filteredPhotos.map((photo, index) => (
+                <div key={photo.id} className="bg-gray-800 rounded-xl overflow-hidden shadow-lg group">
+                    <div className="relative cursor-pointer" onClick={() => setLightboxIndex(index)}>
+                        <img src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/c_fill,w_400,h_400/v1/${photo.publicId}`} alt={photo.title || ''} className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-110" />
+                        {photo.featured && (
+                            <div className="absolute top-2 right-2 bg-accent-blue/80 text-white p-1.5 rounded-full backdrop-blur-sm">
+                                <IconStar size={16} />
+                            </div>
+                        )}
                     </div>
-                )}
-              </div>
-            ))}
-          </div>
+                    <div className="p-4">
+                        <h3 className="text-lg font-semibold truncate">{photo.title || 'Untitled'}</h3>
+                        <p className="text-gray-400 text-sm truncate h-10">{photo.description || 'No description'}</p>
+                        <button onClick={() => setEditingPhoto(photo)} className="w-full mt-4 bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-md transition-colors flex items-center justify-center gap-2">
+                            <IconPencil size={16} />
+                            Edit
+                        </button>
+                    </div>
+                </div>
+                ))}
+            </div>
         </main>
 
         {editingPhoto && <PhotoEditor photo={editingPhoto} onClose={() => setEditingPhoto(null)} onSave={handleSave} onDelete={handleDelete} />}
