@@ -52,20 +52,20 @@ export default function PhotosPage() {
   };
 
   return (
-    <div className="bg-gray-900 min-h-screen text-white">
+    <div className="min-h-screen text-white">
         <PageHeader 
             title="Photo Gallery" 
             description="A collection of my work. Click on any image to view it in fullscreen."
         />
         
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
             {loading ? (
                 <div className="flex justify-center items-center h-96">
                     <IconLoader size={56} className="animate-spin text-accent-purple" />
                 </div>
             ) : photos.length > 0 ? (
                 <motion.div 
-                    className="columns-2 md:columns-3 lg:columns-4 gap-3"
+                    className="columns-2 md:columns-3 lg:columns-4 gap-4"
                     initial="hidden"
                     animate="visible"
                     transition={{ staggerChildren: 0.05 }}
@@ -73,7 +73,7 @@ export default function PhotosPage() {
                     {photos.map((photo, index) => (
                         <motion.div 
                             key={photo.id} 
-                            className="break-inside-avoid mb-3 rounded-lg overflow-hidden group relative cursor-pointer shadow-lg hover:shadow-accent-purple/20 transition-all duration-300"
+                            className="break-inside-avoid mb-4 rounded-lg overflow-hidden group relative cursor-pointer shadow-lg hover:shadow-accent-purple/20 transition-all duration-300"
                             onClick={() => handleOpen(index)}
                             variants={photoVariants}
                             layout
@@ -96,9 +96,9 @@ export default function PhotosPage() {
                 </motion.div>
             ) : (
                 <div className="text-center py-20">
-                    <IconPhoto size={64} className="mx-auto text-gray-600"/>
-                    <p className="mt-4 text-xl text-gray-500">The gallery is currently empty.</p>
-                    <p className="text-sm text-gray-400">Check back later for more photos.</p>
+                    <IconPhoto size={64} className="mx-auto text-gray-500"/>
+                    <p className="mt-4 text-xl text-gray-400">The gallery is currently empty.</p>
+                    <p className="text-sm text-gray-300">Check back later for more photos.</p>
                 </div>
             )}
         </div>
