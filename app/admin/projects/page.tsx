@@ -15,7 +15,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { firestore } from '@/lib/firebase';
 import type { Project } from '@/lib/types';
-import ImageUpload from '@/components/admin/ImageUpload';
+import LegacyImageUpload from '@/components/admin/LegacyImageUpload';
 
 export default function AdminProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -340,7 +340,7 @@ function ProjectForm({ initial, onCancel, onSaved }: FormProps) {
           </label>
         </div>
       </div>
-      <ImageUpload
+      <LegacyImageUpload
         value={state.heroImageUrl ?? ''}
         onChange={(url) => setState((s) => ({ ...s, heroImageUrl: url }))}
         folder="projects"
