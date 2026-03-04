@@ -57,3 +57,11 @@ export interface Comment {
     text: string;
     createdAt: Timestamp;
 }
+
+export interface Photo {
+  id: string;
+  publicId: string;
+  featured: boolean;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+}
