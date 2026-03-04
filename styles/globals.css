@@ -116,3 +116,26 @@ img {
     transition-duration: 0.01ms !important;
   }
 }
+
+@layer utilities {
+    .masonry-gallery {
+        column-count: 5;
+        column-gap: 1.5rem;
+    }
+    
+    @media (max-width: 1280px) {
+        .masonry-gallery { column-count: 4; }
+    }
+    
+    @media (max-width: 1024px) {
+        .masonry-gallery { column-count: 3; }
+    }
+
+    @media (max-width: 768px) {
+        .masonry-gallery { column-count: 2; }
+    }
+
+    @media (max-width: 640px) {
+        .masonry-gallery { column-count: 1; }
+    }
+}
