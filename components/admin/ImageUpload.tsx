@@ -80,12 +80,25 @@ export default function ImageUpload({ onUpload }: ImageUploadProps) {
     });
   };
 
-  const handleUpload = async () => {
-    if (!croppedImageUrl) return;
+  const handleUpload = async (skipCrop = false) => {
     setIsLoading(true);
+    let file;
 
-    const blob = await fetch(croppedImageUrl).then(r => r.blob());
-    const file = new File([blob], 'upload.jpg', { type: 'image/jpeg' });
+    if (skipCrop) {
+        if (!imgSrc) {
+            setIsLoading(false);
+            return;
+        }
+        const blob = await fetch(imgSrc).then(r => r.blob());
+        file = new File([blob], 'upload.jpg', { type: 'image/jpeg' });
+    } else {
+        if (!croppedImageUrl) {
+            setIsLoading(false);
+            return;
+        }
+        const blob = await fetch(croppedImageUrl).then(r => r.blob());
+        file = new File([blob], 'upload.jpg', { type: 'image/jpeg' });
+    }
 
     const formData = new FormData();
     formData.append('file', file);
@@ -134,6 +147,11 @@ export default function ImageUpload({ onUpload }: ImageUploadProps) {
                 <ReactCrop crop={crop} onChange={c => setCrop(c)} onComplete={makeClientCrop} aspect={1}>
                     <img ref={imgRef} src={imgSrc} style={{ maxHeight: '70vh' }}/>
                 </ReactCrop>
+                <div className="mt-4 flex justify-end">
+                    <button onClick={() => handleUpload(true)} disabled={isLoading} className="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-md transition-colors disabled:opacity-50">
+                        {isLoading ? 'Uploading...' : 'Skip and Upload'}
+                    </button>
+                </div>
               </div>
               {croppedImageUrl && (
                 <div className='bg-gray-700 p-4 rounded-lg'>
@@ -145,8 +163,8 @@ export default function ImageUpload({ onUpload }: ImageUploadProps) {
                         <button onClick={handleCancel} disabled={isLoading} className="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-md transition-colors disabled:opacity-50">
                             Cancel
                         </button>
-                        <button onClick={handleUpload} disabled={isLoading} className="bg-accent-blue hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md transition-colors disabled:opacity-50">
-                            {isLoading ? 'Uploading...' : 'Upload Image'}
+                        <button onClick={() => handleUpload()} disabled={isLoading} className="bg-accent-blue hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md transition-colors disabled:opacity-50">
+                            {isLoading ? 'Uploading...' : 'Upload Cropped Image'}
                         </button>
                     </div>
                 </div>
