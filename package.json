@@ -24,7 +24,8 @@
     "react-image-crop": "^11.0.10",
     "react-markdown": "^10.1.0",
     "rehype-raw": "^7.0.0",
-    "tailwind-merge": "^3.4.0"
+    "tailwind-merge": "^3.4.0",
+    "yet-another-react-lightbox": "^3.29.1"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

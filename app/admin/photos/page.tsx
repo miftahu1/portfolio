@@ -4,7 +4,9 @@ import { useState, useEffect } from 'react';
 import { Photo } from '@/lib/types';
 import ImageUpload from '@/components/admin/ImageUpload';
 import PhotoEditor from '@/components/admin/PhotoEditor';
-import { IconStar, IconX } from '@tabler/icons-react';
+import { IconStar, IconPencil } from '@tabler/icons-react';
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
 
 export default function PhotosAdminPage() {
   const [photos, setPhotos] = useState<Photo[]>([]);
@@ -12,6 +14,7 @@ export default function PhotosAdminPage() {
   const [filter, setFilter] = useState('all');
   const [sort, setSort] = useState('newest');
   const [editingPhoto, setEditingPhoto] = useState<Photo | null>(null);
+  const [lightboxIndex, setLightboxIndex] = useState(-1);
 
   useEffect(() => {
     fetch('/api/photos')
@@ -69,6 +72,10 @@ export default function PhotosAdminPage() {
         setEditingPhoto(null);
       });
   };
+  
+  const slides = filteredPhotos.map(photo => ({
+      src: `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/v1/${photo.publicId}`
+  }));
 
   return (
     <div className="min-h-screen text-white p-8 bg-gradient-to-br from-gray-900 to-gray-800">
@@ -99,12 +106,15 @@ export default function PhotosAdminPage() {
 
         <main>
           <div className="masonry-gallery">
-            {filteredPhotos.map(photo => (
-              <div key={photo.id} className="break-inside-avoid mb-6 relative group cursor-pointer overflow-hidden rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 ease-in-out" onClick={() => setEditingPhoto(photo)}>
-                <img src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/c_fill,w_500,h_500/v1/${photo.publicId}`} alt={photo.title || ''} className="w-full h-auto object-cover" />
+            {filteredPhotos.map((photo, index) => (
+              <div key={photo.id} className="break-inside-avoid mb-6 relative group cursor-pointer overflow-hidden rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 ease-in-out">
+                <img src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/c_fill,w_500,h_500/v1/${photo.publicId}`} alt={photo.title || ''} className="w-full h-auto object-cover" onClick={() => setLightboxIndex(index)} />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent p-6 flex flex-col justify-end opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <h3 className="text-white text-xl font-bold drop-shadow-lg">{photo.title || 'Untitled'}</h3>
                   <p className="text-gray-300 text-sm drop-shadow-md">{photo.description || 'No description'}</p>
+                   <button onClick={(e) => { e.stopPropagation(); setEditingPhoto(photo); }} className="absolute top-3 left-3 bg-gray-800/50 text-white p-2 rounded-full backdrop-blur-sm shadow-lg hover:bg-accent-blue transition-colors">
+                       <IconPencil size={20} />
+                   </button>
                 </div>
                 {photo.featured && (
                     <div className="absolute top-3 right-3 bg-accent-blue/80 text-white p-2 rounded-full backdrop-blur-sm shadow-lg">
@@ -117,33 +127,14 @@ export default function PhotosAdminPage() {
         </main>
 
         {editingPhoto && <PhotoEditor photo={editingPhoto} onClose={() => setEditingPhoto(null)} onSave={handleSave} onDelete={handleDelete} />}
+        
+        <Lightbox
+            open={lightboxIndex >= 0}
+            index={lightboxIndex}
+            close={() => setLightboxIndex(-1)}
+            slides={slides}
+        />
       </div>
     </div>
   );
 }
-
-// Add this to your globals.css for the masonry layout
-/*
-@layer utilities {
-    .masonry-gallery {
-        column-count: 5; // Adjust column count for different screen sizes
-        column-gap: 1.5rem;
-    }
-    
-    @media (max-width: 1280px) {
-        .masonry-gallery { column-count: 4; }
-    }
-    
-    @media (max-width: 1024px) {
-        .masonry-gallery { column-count: 3; }
-    }
-
-    @media (max-width: 768px) {
-        .masonry-gallery { column-count: 2; }
-    }
-
-    @media (max-width: 640px) {
-        .masonry-gallery { column-count: 1; }
-    }
-}
-*/
