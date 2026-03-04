@@ -1,99 +1,97 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { fetchPhotos } from '@/lib/firestore';
 import { Photo } from '@/lib/types';
 import Link from 'next/link';
-import { IconLoader, IconArrowRight } from '@tabler/icons-react';
-import { useMedia } from 'react-use';
-
-// A more dynamic masonry-like layout for featured photos
-const getLayout = (photos: Photo[], isMobile: boolean) => {
-    if (isMobile) {
-        return photos.map(photo => ({ ...photo, colSpan: 1, rowSpan: 1 }));
-    }
-
-    if (photos.length === 0) return [];
-    
-    const layouts = [
-        [2, 1, 1, 1, 1, 2, 1, 1],
-        [1, 2, 1, 1, 2, 1, 1, 1],
-        [1, 1, 2, 1, 1, 1, 2, 1]
-    ];
-
-    const selectedLayout = layouts[photos.length % layouts.length];
-
-    return photos.map((photo, index) => {
-        const layoutSize = selectedLayout[index % selectedLayout.length];
-        return {
-            ...photo,
-            colSpan: layoutSize,
-            rowSpan: layoutSize,
-        };
-    });
-}
+import Image from 'next/image';
+import { IconArrowRight } from '@tabler/icons-react';
+import Skeleton from '@/components/ui/Skeleton';
 
 export default function FeaturedPhotos() {
-  const [photos, setPhotos] = useState<Photo[]>([]);
-  const [loading, setLoading] = useState(true);
-  const isMobile = useMedia('(max-width: 768px)', false);
+  const [photos, setPhotos] = useState<Photo[] | null>(null);
 
   useEffect(() => {
-    fetch('/api/photos?featured=true&limit=8')
-      .then(res => res.ok ? res.json() : Promise.reject('Failed to fetch'))
-      .then(data => {
-        setPhotos(data);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error(error);
-        setLoading(false);
-      });
+    fetchPhotos(true).then(setPhotos);
   }, []);
 
-  const photoLayout = getLayout(photos, isMobile);
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
 
   return (
-    <section className="bg-gray-900 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-                <h2 className="text-lg font-semibold text-accent-purple tracking-wider uppercase">My Work</h2>
-                <p className="mt-2 text-4xl font-extrabold text-white sm:text-5xl">Featured Photos</p>
-                <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-400">A curated selection of my proudest moments behind the lens.</p>
+    <section className="py-12 md:py-24">
+      <div className="container mx-auto px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          className="mb-8 md:mb-12 flex items-center justify-between"
+        >
+            <div className="flex-1">
+                <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-3">
+                    <span className="text-gradient bg-gradient-primary bg-clip-text text-transparent">
+                        Featured Photos
+                    </span>
+                </h2>
+                <p className="text-base text-white/70 max-w-lg">
+                    A selection of my favorite shots. Each photo has a story to tell.
+                </p>
             </div>
+            <Link href="/photos" className="hidden md:inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors">
+                <span>View All</span>
+                <IconArrowRight size={20} />
+            </Link>
+        </motion.div>
 
-            {loading ? (
-                <div className="flex justify-center items-center h-96">
-                    <IconLoader size={56} className="animate-spin text-accent-purple" />
-                </div>
-            ) : photos.length > 0 ? (
-                <div className="grid grid-flow-dense auto-rows-fr grid-cols-2 md:grid-cols-4 gap-4">
-                    {photoLayout.map(photo => (
-                        <Link href="/photos" key={photo.id} className="group relative overflow-hidden rounded-2xl shadow-lg transform transition-transform duration-300 hover:scale-105" style={{ gridColumn: `span ${photo.colSpan}`, gridRow: `span ${photo.rowSpan}`}}>
-                            <img 
-                                src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/c_fill,g_auto,w_800/v1/${photo.publicId}`}
-                                alt={photo.title || 'Featured photo'}
-                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/10 transition-opacity duration-300 group-hover:from-black/80">
-                                <div className="absolute bottom-0 left-0 p-4">
-                                    <h3 className="text-white text-lg font-bold drop-shadow-md">{photo.title}</h3>
-                                    <p className="text-gray-300 text-sm drop-shadow-md max-w-xs">{photo.description}</p>
-                                </div>
-                            </div>
-                        </Link>
-                    ))}
-                </div>
-            ) : (
-                <p className="text-center text-gray-500 mt-12">No featured photos yet.</p>
-            )}
-            
-            <div className="text-center mt-12">
-                <Link href="/photos" className="inline-flex items-center gap-2 bg-accent-purple text-white font-bold py-3 px-8 rounded-lg hover:bg-purple-600 transition-all duration-300 transform hover:scale-105 shadow-lg">
-                    <span>View Full Gallery</span>
-                    <IconArrowRight size={20} />
-                </Link>
+        {!photos ? (
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-3">
+                <Skeleton className="aspect-video rounded-lg" />
+                <Skeleton className="aspect-video rounded-lg" />
+                <Skeleton className="aspect-video rounded-lg" />
+                <Skeleton className="aspect-video rounded-lg" />
             </div>
+        ) : (
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ staggerChildren: 0.1 }}
+              className="columns-2 md:columns-3 lg:columns-4 gap-3"
+            >
+              {photos.map((photo, i) => (
+                <motion.div
+                  key={photo.id}
+                  variants={cardVariants}
+                  className="break-inside-avoid mb-3 group relative rounded-lg overflow-hidden"
+                >
+                    <Image
+                        src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/w_800/v1/${photo.publicId}`}
+                        alt={photo.title || 'Featured photo'}
+                        width={800}
+                        height={600}
+                        className="w-full h-auto transition-transform duration-300 ease-in-out group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"/>
+                    <div className="absolute bottom-0 left-0 p-4">
+                        <h3 className="text-white font-bold text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-4 group-hover:translate-y-0">{photo.title}</h3>
+                    </div>
+                    <Link href="/photos" className="absolute inset-0">
+                        <span className="sr-only">View {photo.title} in photos gallery</span>
+                    </Link>
+                </motion.div>
+              ))}
+            </motion.div>
+        )}
+        <div className="mt-8 text-center md:hidden">
+            <Link href="/photos" className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors">
+                <span>View All Photos</span>
+                <IconArrowRight size={20} />
+            </Link>
         </div>
+      </div>
     </section>
   );
 }
