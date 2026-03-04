@@ -130,14 +130,14 @@ export default function ImageUpload({ onUpload }: ImageUploadProps) {
       {imgSrc && (
           <div className='grid grid-cols-1 md:grid-cols-2 gap-8 items-start'>
               <div className='bg-gray-700 p-4 rounded-lg'>
-                <h3 class="text-xl font-semibold mb-4">Crop Image</h3>
+                <h3 className="text-xl font-semibold mb-4">Crop Image</h3>
                 <ReactCrop crop={crop} onChange={c => setCrop(c)} onComplete={makeClientCrop} aspect={1}>
                     <img ref={imgRef} src={imgSrc} style={{ maxHeight: '70vh' }}/>
                 </ReactCrop>
               </div>
               {croppedImageUrl && (
                 <div className='bg-gray-700 p-4 rounded-lg'>
-                    <h3 class="text-xl font-semibold mb-4">Preview</h3>
+                    <h3 className="text-xl font-semibold mb-4">Preview</h3>
                     <div className="flex justify-center">
                         <img alt="Crop preview" src={croppedImageUrl} className="rounded-lg shadow-md"/>
                     </div>
