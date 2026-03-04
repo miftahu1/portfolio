@@ -2,9 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import { Photo } from '@/lib/types';
-import Lightbox from "yet-another-react-lightbox";
+import Lightbox, { type Slide } from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import { IconLoader } from '@tabler/icons-react';
+
+// Define a custom slide type to include our properties
+type CustomSlide = Slide & {
+    title?: string;
+    description?: string;
+};
 
 export default function PhotosPage() {
   const [photos, setPhotos] = useState<Photo[]>([]);
@@ -31,7 +37,7 @@ export default function PhotosPage() {
     setOpen(true);
   };
 
-  const slides = photos.map(photo => ({
+  const slides: CustomSlide[] = photos.map(photo => ({
     src: `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/w_1600/v1/${photo.publicId}`,
     title: photo.title,
     description: photo.description,
@@ -65,27 +71,30 @@ export default function PhotosPage() {
         slides={slides}
         index={currentIndex}
         render={{ 
-            slide: ({ slide, rect }) => (
-                <div style={{ position: "relative", width: "100%", height: "100%" }}>
-                    <img 
-                        alt={slide.title || ''}
-                        src={slide.src}
-                        style={{ 
-                            width: "100%", 
-                            height: "100%", 
-                            objectFit: "contain" 
-                        }}
-                    />
-                    {(slide.title || slide.description) && (
-                        <div 
-                            className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent text-white"
-                        >
-                            {slide.title && <h2 className="text-lg font-bold">{slide.title}</h2>}
-                            {slide.description && <p>{slide.description}</p>}
-                        </div>
-                    )}
-                </div>
-            )
+            slide: ({ slide, rect }) => {
+                const customSlide = slide as CustomSlide;
+                return (
+                    <div style={{ position: "relative", width: "100%", height: "100%" }}>
+                        <img 
+                            alt={customSlide.title || ''}
+                            src={customSlide.src}
+                            style={{ 
+                                width: "100%", 
+                                height: "100%", 
+                                objectFit: "contain" 
+                            }}
+                        />
+                        {(customSlide.title || customSlide.description) && (
+                            <div 
+                                className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent text-white"
+                            >
+                                {customSlide.title && <h2 className="text-lg font-bold">{customSlide.title}</h2>}
+                                {customSlide.description && <p>{customSlide.description}</p>}
+                            </div>
+                        )}
+                    </div>
+                )
+            }
         }}
       />
     </div>
