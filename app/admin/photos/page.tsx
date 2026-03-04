@@ -70,43 +70,48 @@ export default function PhotosAdminPage() {
   };
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Manage Photos</h1>
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-2">Upload New Photo</h2>
-        <ImageUpload onUpload={handleUpload} />
-      </div>
-      <div>
-        <h2 className="text-xl font-semibold mb-2">Uploaded Photos</h2>
-        <div className="flex mb-4">
-          <div className="mr-4">
-            <label htmlFor="filter" className="mr-2">Filter:</label>
-            <select id="filter" value={filter} onChange={e => setFilter(e.target.value)} className="bg-gray-700 text-white rounded px-3 py-1">
-              <option value="all">All</option>
-              <option value="featured">Featured</option>
-              <option value="unfeatured">Unfeatured</option>
-            </select>
-          </div>
-          <div>
-            <label htmlFor="sort" className="mr-2">Sort:</label>
-            <select id="sort" value={sort} onChange={e => setSort(e.target.value)} className="bg-gray-700 text-white rounded px-3 py-1">
-              <option value="newest">Newest</option>
-              <option value="oldest">Oldest</option>
-            </select>
-          </div>
+    <div className="bg-gray-900 min-h-screen text-white p-8">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-4xl font-bold mb-8">Manage Photos</h1>
+        <div className="bg-gray-800 rounded-lg p-8 mb-8">
+          <h2 className="text-2xl font-semibold mb-4">Upload New Photo</h2>
+          <ImageUpload onUpload={handleUpload} />
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          {filteredPhotos.map(photo => (
-            <div key={photo.id} className="relative group cursor-pointer" onClick={() => setEditingPhoto(photo)}>
-              <img src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/c_thumb,w_200,g_face/v1/${photo.publicId}`} alt={photo.title || ''} className="w-full h-auto rounded-lg" />
-              <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                <h3 className="text-white text-sm font-semibold">{photo.title}</h3>
+        <div>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-semibold">Uploaded Photos</h2>
+            <div className="flex items-center">
+              <div className="mr-4">
+                <label htmlFor="filter" className="mr-2 text-gray-400">Filter:</label>
+                <select id="filter" value={filter} onChange={e => setFilter(e.target.value)} className="bg-gray-700 text-white rounded px-4 py-2">
+                  <option value="all">All</option>
+                  <option value="featured">Featured</option>
+                  <option value="unfeatured">Unfeatured</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="sort" className="mr-2 text-gray-400">Sort:</label>
+                <select id="sort" value={sort} onChange={e => setSort(e.target.value)} className="bg-gray-700 text-white rounded px-4 py-2">
+                  <option value="newest">Newest</option>
+                  <option value="oldest">Oldest</option>
+                </select>
               </div>
             </div>
-          ))}
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            {filteredPhotos.map(photo => (
+              <div key={photo.id} className="relative group cursor-pointer transform hover:scale-105 transition-transform duration-300" onClick={() => setEditingPhoto(photo)}>
+                <img src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/c_thumb,w_400,h_400,g_face/v1/${photo.publicId}`} alt={photo.title || ''} className="w-full h-auto rounded-lg shadow-lg" />
+                <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg">
+                  <h3 className="text-white text-lg font-bold text-center mx-2">{photo.title}</h3>
+                  {photo.featured && <span className="text-xs bg-accent-blue text-white px-2 py-1 rounded-full absolute top-2 right-2">Featured</span>}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
+        {editingPhoto && <PhotoEditor photo={editingPhoto} onClose={() => setEditingPhoto(null)} onSave={handleSave} onDelete={handleDelete} />}
       </div>
-      <PhotoEditor photo={editingPhoto} onClose={() => setEditingPhoto(null)} onSave={handleSave} />
     </div>
   );
 }
