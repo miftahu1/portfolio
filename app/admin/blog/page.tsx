@@ -228,8 +228,7 @@ function PostForm({ initial, onCancel, onSaved }: FormProps) {
       ...state,
       tags:
         typeof state.tags === "string"
-          ? (state.tags as unknown as string).split(",
-").map((t) => t.trim())
+          ? (state.tags as unknown as string).split(",").map((t) => t.trim())
           : state.tags,
       updatedAt: now,
       publishedAt: state.published ? state.publishedAt ?? now : null,
