@@ -4,13 +4,13 @@ A premium, production-grade personal portfolio website built with Next.js, TypeS
 
 ## Features
 
-- 🎨 **Cinematic Dark Theme** - Minimal, high-contrast design with neon violet accent
-- ✨ **Motion-First Design** - Smooth animations powered by Framer Motion
-- 📱 **Fully Responsive** - Mobile-first approach
-- 🔐 **Admin Dashboard** - Protected content management system
-- 📝 **Blog System** - Markdown-based blog with Firestore
-- 🖼️ **Image Upload** - Upload images directly to the repository
-- 🚀 **Production Ready** - Optimized for Vercel deployment
+-  **Cinematic Dark Theme** - Minimal, high-contrast design with neon violet accent
+-  **Motion-First Design** - Smooth animations powered by Framer Motion
+-  **Fully Responsive** - Mobile-first approach
+-  **Admin Dashboard** - Protected content management system
+-  **Blog System** - Markdown-based blog with Firestore
+-  **Image Upload** - Upload images directly to the repository
+-  **Production Ready** - Optimized for Vercel deployment
 
 ## Tech Stack
 
