@@ -6,7 +6,7 @@ export const metadata = {
 
 export default function ProjectsPage() {
   return (
-    <div className="py-16 md:py-24">
+    <div className="pb-16">
       <ProjectsGrid />
     </div>
   );

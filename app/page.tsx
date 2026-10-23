@@ -20,13 +20,20 @@ export default function HomePage() {
       <ProjectsGrid limit={3} />
       <FeaturedPhotos />
       <PostsGrid limit={3} />
-      <div className="space-y-12 py-12 md:py-24">
-        <SectionHeading title="Feedbacks" className="!mb-0 md:!mb-0" />
-        <CommentForm />
-        <Suspense fallback={<Skeleton className="h-48 rounded-2xl" />}>
+      <section className="py-12 md:py-24">
+        <SectionHeading
+          title="Feedbacks"
+          description="Kind words, honest notes, anything in between."
+        />
+        <div className="grid items-start gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="lg:sticky lg:top-24">
+            <CommentForm />
+          </div>
+          <Suspense fallback={<Skeleton className="h-48 rounded-[28px]" />}>
             <CommentList />
-        </Suspense>
-      </div>
+          </Suspense>
+        </div>
+      </section>
       <ContactSection />
     </>
   );

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   motion,
+  useAnimationFrame,
   useMotionValue,
   useReducedMotion,
   useSpring,
@@ -12,13 +13,18 @@ import {
 import Tilt from "@/components/ui/Tilt";
 
 const TECH = [
-  { label: "Next.js", bg: "#D4FF3A", fg: "#0B0B14" },
-  { label: "React", bg: "#FF3D8B", fg: "#0B0B14" },
-  { label: "TypeScript", bg: "#FFC83D", fg: "#0B0B14" },
-  { label: "Tailwind", bg: "#F4F1FF", fg: "#0B0B14" },
-  { label: "Firebase", bg: "#8B5CFF", fg: "#F4F1FF" },
-  { label: "Node.js", bg: "#0B0B14", fg: "#D4FF3A" },
-  { label: "Framer Motion", bg: "#2CF0C8", fg: "#0B0B14" },
+  "Next.js", "React", "TypeScript", "Tailwind CSS", "Firebase", "Node.js", "Framer Motion",
+  "JavaScript", "HTML", "CSS", "Python", "C++", "Git & GitHub", "Vercel",
+];
+
+const TAG_COLORS = [
+  { bg: "#D4FF3A", fg: "#0B0B14" },
+  { bg: "#FF3D8B", fg: "#0B0B14" },
+  { bg: "#FFC83D", fg: "#0B0B14" },
+  { bg: "#F4F1FF", fg: "#0B0B14" },
+  { bg: "#8B5CFF", fg: "#F4F1FF" },
+  { bg: "#0B0B14", fg: "#D4FF3A" },
+  { bg: "#2CF0C8", fg: "#0B0B14" },
 ];
 
 const TILE = "rounded-[28px] border-2 border-ink shadow-[6px_6px_0_0_rgba(244,241,255,0.2)]";
@@ -37,69 +43,136 @@ function Reveal({ children, className = "", delay = 0 }: { children: ReactNode; 
   );
 }
 
-/* ---------- Modern tech stack: a 3D ring of the real stack ---------- */
-function OrbitTile() {
+/* ---------- Modern tech stack: a sphere of the real stack you can steer ---------- */
+function fibonacciSphere(i: number, n: number) {
+  const y = 1 - (i / (n - 1)) * 2;
+  const r = Math.sqrt(1 - y * y);
+  const theta = Math.PI * (3 - Math.sqrt(5)) * i;
+  return { x: Math.cos(theta) * r, y, z: Math.sin(theta) * r };
+}
+
+type TagProps = {
+  label: string;
+  index: number;
+  total: number;
+  ax: MotionValue<number>;
+  ay: MotionValue<number>;
+  rx: MotionValue<number>;
+  ry: MotionValue<number>;
+};
+
+function SphereTag({ label, index, total, ax, ay, rx, ry }: TagProps) {
+  const base = fibonacciSphere(index, total);
+  const color = TAG_COLORS[index % TAG_COLORS.length];
+
+  // Rotate the point around X then Y, then project to the screen with depth
+  const p = useTransform([ax, ay, rx, ry], (l: number[]) => {
+    const [a, b, RX, RY] = l;
+    const cosY = Math.cos(b);
+    const sinY = Math.sin(b);
+    const cosX = Math.cos(a);
+    const sinX = Math.sin(a);
+    const x1 = base.x * cosY + base.z * sinY;
+    const z1 = -base.x * sinY + base.z * cosY;
+    const y2 = base.y * cosX - z1 * sinX;
+    const z2 = base.y * sinX + z1 * cosX;
+    const depth = (z2 + 1) / 2;
+    return { x: x1 * RX, y: y2 * RY, s: 0.62 + 0.55 * depth, o: 0.3 + 0.7 * depth, z: Math.round(depth * 10) };
+  });
+  const x = useTransform(p, (v) => v.x);
+  const y = useTransform(p, (v) => v.y);
+  const scale = useTransform(p, (v) => v.s);
+  const opacity = useTransform(p, (v) => v.o);
+  const zIndex = useTransform(p, (v) => v.z);
+
+  return (
+    <motion.div className="absolute left-1/2 top-1/2 h-0 w-0" style={{ x, y, scale, opacity, zIndex }}>
+      <div
+        className="-translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-full border-2 border-ink px-4 py-1.5 font-display text-base font-extrabold shadow-[3px_3px_0_0_#0B0B14] md:text-lg"
+        style={{ background: color.bg, color: color.fg }}
+      >
+        {label}
+      </div>
+    </motion.div>
+  );
+}
+
+function TechSphere() {
   const reduce = useReducedMotion();
-  const px = useMotionValue(0);
-  const py = useMotionValue(0);
-  const sx = useSpring(px, { stiffness: 80, damping: 16 });
-  const sy = useSpring(py, { stiffness: 80, damping: 16 });
-  const rotY = useTransform(sx, [-0.5, 0.5], [-28, 28]);
-  const rotX = useTransform(sy, [-0.5, 0.5], [20, -20]);
+  const boxRef = useRef<HTMLDivElement>(null);
+  const ax = useMotionValue(0.3);
+  const ay = useMotionValue(0.6);
+  const rx = useMotionValue(150);
+  const ry = useMotionValue(120);
+  const target = useRef({ vx: 0, vy: 0 });
+  const visible = useRef(true);
+
+  useEffect(() => {
+    const el = boxRef.current;
+    if (!el) return;
+    const measure = () => {
+      rx.set(Math.max(60, el.clientWidth / 2 - 84));
+      ry.set(Math.max(50, el.clientHeight / 2 - 34));
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    const io = new IntersectionObserver(([entry]) => {
+      visible.current = entry.isIntersecting;
+    });
+    io.observe(el);
+    return () => {
+      ro.disconnect();
+      io.disconnect();
+    };
+  }, [rx, ry]);
+
+  useAnimationFrame((_, delta) => {
+    if (reduce || !visible.current) return;
+    const dt = Math.min(delta, 50) / 1000;
+    ay.set(ay.get() + (0.35 + target.current.vy) * dt);
+    ax.set(ax.get() + ((0.3 - ax.get()) * 1.5 + target.current.vx) * dt);
+  });
 
   const onMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (reduce || e.pointerType === "touch") return;
     const r = e.currentTarget.getBoundingClientRect();
-    px.set((e.clientX - r.left) / r.width - 0.5);
-    py.set((e.clientY - r.top) / r.height - 0.5);
+    const nx = ((e.clientX - r.left) / r.width - 0.5) * 2;
+    const ny = ((e.clientY - r.top) / r.height - 0.5) * 2;
+    target.current = { vy: nx * 1.3, vx: -ny * 0.9 };
   };
   const onLeave = () => {
-    px.set(0);
-    py.set(0);
+    target.current = { vx: 0, vy: 0 };
   };
 
   return (
     <div
+      ref={boxRef}
       onPointerMove={onMove}
       onPointerLeave={onLeave}
-      className={`relative flex h-full min-h-[30rem] flex-col justify-between overflow-hidden bg-electric p-6 text-bone md:p-10 ${TILE}`}
+      className="relative mt-4 min-h-[20rem] flex-1"
+      aria-hidden="true"
     >
+      <div className="absolute left-1/2 top-1/2 z-[5] flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-bone/30 bg-ink font-display text-5xl font-extrabold text-lime">
+        M
+      </div>
+      {TECH.map((label, i) => (
+        <SphereTag key={label} label={label} index={i} total={TECH.length} ax={ax} ay={ay} rx={rx} ry={ry} />
+      ))}
+    </div>
+  );
+}
+
+function OrbitTile() {
+  return (
+    <div className={`relative flex h-full min-h-[30rem] flex-col overflow-hidden bg-electric p-6 text-bone md:p-10 ${TILE}`}>
       <div>
         <h3 className="font-display text-4xl font-extrabold leading-[1] tracking-tight md:text-6xl">Modern tech stack.</h3>
         <p className="mt-4 max-w-[40ch] text-base text-bone/85 md:text-lg">
           TypeScript, React, Next.js, and cutting-edge tools for sleek web apps.
         </p>
       </div>
-
-      <div className="relative mt-6 h-72 w-full md:h-[22rem]" style={{ perspective: 1100 }} aria-hidden="true">
-        <motion.div
-          style={reduce ? undefined : { rotateX: rotX, rotateY: rotY, transformStyle: "preserve-3d" }}
-          className="absolute inset-0"
-        >
-          <div className="absolute left-1/2 top-1/2 flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-bone/30 bg-ink font-display text-5xl font-extrabold text-lime">
-            M
-          </div>
-          <div
-            className="orbit-ring absolute left-1/2 top-1/2"
-            style={{ transformStyle: "preserve-3d", "--r": "clamp(7.5rem, 17vw, 13rem)" } as React.CSSProperties}
-          >
-            {TECH.map((t, i) => (
-              <div
-                key={t.label}
-                className="absolute left-0 top-0 whitespace-nowrap rounded-full border-2 border-ink px-5 py-2 font-display text-base font-extrabold shadow-[3px_3px_0_0_#0B0B14] md:text-xl"
-                style={{
-                  background: t.bg,
-                  color: t.fg,
-                  backfaceVisibility: "hidden",
-                  transform: `translate(-50%, -50%) rotateY(${(360 / TECH.length) * i}deg) translateZ(var(--r))`,
-                }}
-              >
-                {t.label}
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      </div>
+      <TechSphere />
     </div>
   );
 }

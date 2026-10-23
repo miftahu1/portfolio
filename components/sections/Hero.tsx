@@ -8,6 +8,7 @@ import {
   useReducedMotion,
   useScroll,
   useSpring,
+  useTime,
   useTransform,
   type MotionValue,
 } from "framer-motion";
@@ -31,28 +32,78 @@ type LetterProps = {
   index: number;
   mx: MotionValue<number>;
   my: MotionValue<number>;
+  reduce: boolean;
+  activeRef: React.MutableRefObject<boolean>;
 };
 
-/** A letter that jumps and tilts away as the pointer gets close. */
-function DodgeLetter({ char, color, index, mx, my }: LetterProps) {
+type LetterState = { k: number; dx: number; dy: number };
+
+const NAVY = "#1B14A8";
+
+/**
+ * One block letter. The pointer is the light source: the extrusion always points
+ * away from it and grows as it gets close, while the glyph jumps, tilts, widens
+ * and gets heavier. With no pointer (touch, or idle) a slow wave rolls through.
+ */
+function DodgeLetter({ char, color, index, mx, my, reduce, activeRef }: LetterProps) {
   const ref = useRef<HTMLSpanElement>(null);
-  const influence = useTransform([mx, my], (latest: number[]) => {
+  const time = useTime();
+  const last = useRef<LetterState>({ k: 0, dx: 0.7, dy: 0.7 });
+
+  const state = useTransform([mx, my, time], (latest: number[]): LetterState => {
+    if (reduce || !activeRef.current) return last.current;
+    const [px, py, t] = latest;
+    const idle = 0.3 * (0.5 + 0.5 * Math.sin(t / 650 - index * 0.9));
+    let next: LetterState = { k: idle, dx: 0.7, dy: 0.7 };
     const el = ref.current;
-    if (!el) return 0;
-    const r = el.getBoundingClientRect();
-    const d = Math.hypot(latest[0] - (r.left + r.width / 2), latest[1] - (r.top + r.height / 2));
-    return Math.max(0, 1 - d / 280);
+    if (el && px > -1000) {
+      const r = el.getBoundingClientRect();
+      const ddx = r.left + r.width / 2 - px;
+      const ddy = r.top + r.height / 2 - py;
+      const d = Math.hypot(ddx, ddy) || 1;
+      next = { k: Math.max(idle, Math.max(0, 1 - d / 300)), dx: ddx / d, dy: ddy / d };
+    }
+    last.current = next;
+    return next;
   });
-  const spring = useSpring(influence, { stiffness: 220, damping: 14 });
-  const y = useTransform(spring, [0, 1], [0, -34]);
-  const rotate = useTransform(spring, [0, 1], [0, index % 2 ? 9 : -9]);
-  const scale = useTransform(spring, [0, 1], [1, 1.14]);
+
+  const k = useSpring(useTransform(state, (s) => s.k), { stiffness: 220, damping: 14 });
+  const dx = useSpring(useTransform(state, (s) => s.dx), { stiffness: 120, damping: 20 });
+  const dy = useSpring(useTransform(state, (s) => s.dy), { stiffness: 120, damping: 20 });
+
+  const y = useTransform(k, [0, 1], [0, -30]);
+  const rotate = useTransform(k, [0, 1], [0, index % 2 ? 8 : -8]);
+  const scale = useTransform(k, [0, 1], [1, 1.1]);
+  const variation = useTransform(
+    k,
+    (v) => `"wdth" ${Math.round(78 + v * 14)}, "wght" ${Math.round(720 + v * 80)}`
+  );
+  const shadow = useTransform([k, dx, dy], (l: number[]) => {
+    const [kk, ddx, ddy] = l;
+    const step = 2.2 + kk * 1.2;
+    const layers: string[] = [];
+    for (let i = 1; i <= 20; i++) {
+      layers.push(
+        `${(ddx * i * step).toFixed(1)}px ${(ddy * i * step).toFixed(1)}px 0 ${i <= 12 ? "#0B0B14" : NAVY}`
+      );
+    }
+    return layers.join(",");
+  });
 
   return (
     <motion.span
       ref={ref}
       className="inline-block"
-      style={{ y, rotate, scale, color, textShadow: "0.05em 0.05em 0 #0B0B14" }}
+      style={{
+        y,
+        rotate,
+        scale,
+        color,
+        textShadow: shadow,
+        fontVariationSettings: variation,
+        WebkitTextStroke: "5px #0B0B14",
+        paintOrder: "stroke fill",
+      }}
     >
       {char}
     </motion.span>
@@ -62,6 +113,7 @@ function DodgeLetter({ char, color, index, mx, my }: LetterProps) {
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
+  const activeRef = useRef(true);
 
   const [isMobile, setIsMobile] = useState(false);
   const [terminalLines, setTerminalLines] = useState<string[]>([]);
@@ -152,6 +204,17 @@ export default function Hero() {
     const handleResize = () => setIsMobile(checkIsMobile());
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Pause the per-frame wordmark maths while the hero is off screen
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(([entry]) => {
+      activeRef.current = entry.isIntersecting;
+    });
+    io.observe(el);
+    return () => io.disconnect();
   }, []);
 
   // Typing animation logic
@@ -247,27 +310,37 @@ export default function Hero() {
         <div className="text-center lg:text-left">
           <h1
             aria-label="Mifta.dev"
-            className="font-display text-[clamp(4.5rem,16vw,15rem)] font-extrabold leading-[0.82] tracking-[-0.05em]"
-            style={{ fontVariationSettings: '"wdth" 80' }}
+            className="whitespace-nowrap font-display text-[clamp(4.5rem,14vw,13rem)] font-extrabold leading-[0.85] tracking-[-0.04em]"
           >
             {LETTERS.map((l, i) => (
               <motion.span
                 key={i}
                 aria-hidden="true"
                 className="inline-block"
-                initial={reduce ? false : { y: "70%", opacity: 0, rotate: 10 }}
-                animate={{ y: 0, opacity: 1, rotate: 0 }}
-                transition={{ type: "spring", stiffness: 120, damping: 12, delay: 0.1 + i * 0.07 }}
+                style={{ transformPerspective: 700 }}
+                initial={reduce ? false : { y: "80%", opacity: 0, rotateX: -80 }}
+                animate={{ y: 0, opacity: 1, rotateX: 0 }}
+                transition={{ type: "spring", stiffness: 110, damping: 12, delay: 0.1 + i * 0.07 }}
               >
-                <DodgeLetter char={l.char} color={l.color} index={i} mx={mx} my={my} />
+                <DodgeLetter
+                  char={l.char}
+                  color={l.color}
+                  index={i}
+                  mx={mx}
+                  my={my}
+                  reduce={!!reduce}
+                  activeRef={activeRef}
+                />
               </motion.span>
             ))}
             <motion.span
               aria-hidden="true"
-              className="inline-block text-[0.4em] text-bone"
-              initial={reduce ? false : { opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.6, duration: 0.6 }}
+              className="ml-4 inline-block rounded-full border-2 border-ink bg-bone px-[0.3em] py-[0.08em] font-display font-extrabold tracking-tight text-ink shadow-[5px_5px_0_0_#0B0B14]"
+              style={{ fontSize: "0.24em", verticalAlign: "1.1em" }}
+              initial={reduce ? false : { scale: 0, rotate: 20 }}
+              animate={{ scale: 1, rotate: -6 }}
+              whileHover={{ scale: 1.15, rotate: 4 }}
+              transition={{ type: "spring", stiffness: 200, damping: 10, delay: 0.7 }}
             >
               .dev
             </motion.span>

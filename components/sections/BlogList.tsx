@@ -8,9 +8,9 @@ import BlogCard from "@/components/blog/BlogCard";
 import Skeleton from "@/components/ui/Skeleton";
 import SectionHeading from "@/components/ui/SectionHeading";
 
-type Props = { limit?: number };
+type Props = { limit?: number; hideHeading?: boolean };
 
-export default function BlogList({ limit }: Props) {
+export default function BlogList({ limit, hideHeading = false }: Props) {
   const [posts, setPosts] = useState<BlogPost[] | null>(null);
 
   useEffect(() => {
@@ -24,11 +24,13 @@ export default function BlogList({ limit }: Props) {
   }, [limit]);
 
   return (
-    <section className="mt-24">
-      <SectionHeading
-        title="Notes & Writing"
-        description="Thoughts on building, systems, and the craft of engineering."
-      />
+    <section className={hideHeading ? "pb-12 md:pb-24" : "mt-24"}>
+      {!hideHeading && (
+        <SectionHeading
+          title="Notes & Writing"
+          description="Thoughts on building, systems, and the craft of engineering."
+        />
+      )}
 
       {!posts ? (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

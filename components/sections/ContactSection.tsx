@@ -31,10 +31,11 @@ export default function ContactSection() {
           <CircularBadge fill="#D4FF3A" />
         </div>
 
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 md:py-24">
+        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 md:py-20">
           <div className="grid items-start gap-12 md:grid-cols-[1fr_1.1fr]">
-            <div>
+            <div className="md:-mt-3">
               <SectionHeading
+                size="md"
                 title="Let’s build something extraordinary"
                 tone="dark"
                 className="!mb-8 md:!mb-8"
@@ -59,7 +60,7 @@ export default function ContactSection() {
               </div>
 
               {/* What I handle: straight from the experience section */}
-              <div className="mt-12">
+              <div className="mt-10">
                 <h3 className="mb-4 font-display text-2xl font-extrabold">What I handle</h3>
                 <div className="grid grid-cols-2 gap-4">
                   {handles.map(({ label, Icon, bg, fg }, idx) => (
@@ -81,7 +82,7 @@ export default function ContactSection() {
               </div>
 
               {/* Find me online */}
-              <div className="mt-12">
+              <div className="mt-10">
                 <h3 className="mb-4 font-display text-2xl font-extrabold">Find me online</h3>
                 <div className="flex flex-wrap gap-3">
                   {socials.map((s, idx) => (

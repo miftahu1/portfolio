@@ -1,13 +1,19 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { firestore } from '@/lib/firebase';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
+
+const RATING_LABELS = ['', 'Not great', 'Okay', 'Good', 'Great', 'Loved it'];
+
+const field =
+  'w-full rounded-[14px] border-2 border-ink bg-white px-4 py-3 text-ink placeholder:text-ink/40 transition-shadow duration-200 focus:outline-none focus:ring-4 focus:ring-pink/50';
 
 const CommentForm = () => {
   const [name, setName] = useState('');
   const [stars, setStars] = useState(0);
+  const [hover, setHover] = useState(0);
   const [text, setText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -41,28 +47,48 @@ const CommentForm = () => {
     }
   };
 
+  const shown = hover || stars;
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
-      className="glass rounded-xl border border-white/10 p-4 md:p-6"
+      initial={{ opacity: 0, y: 50, rotate: -2 }}
+      whileInView={{ opacity: 1, y: 0, rotate: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ type: 'spring', stiffness: 100, damping: 15 }}
+      className="relative rounded-[28px] border-2 border-ink bg-bone p-5 text-ink shadow-[8px_8px_0_0_rgba(244,241,255,0.2)] md:p-8"
     >
-      <h3 className="font-display text-xl md:text-2xl font-bold text-white mb-4">Leave a Feedback</h3>
-      {success && (
-        <div className="mb-4 p-3 bg-green-500/10 border border-green-500/30 rounded-lg text-green-400 text-sm">
-          Thank you for your feedback!
-        </div>
-      )}
-      {error && (
-        <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">
-          {error}
-        </div>
-      )}
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <h3 className="mb-1 font-display text-3xl font-extrabold tracking-tight md:text-4xl">Leave a Feedback</h3>
+      <p className="mb-6 text-sm text-ink/70">It takes a minute, and it means a lot.</p>
+
+      <AnimatePresence>
+        {success && (
+          <motion.div
+            key="ok"
+            initial={{ opacity: 0, scale: 0.9, y: -10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ type: 'spring', stiffness: 260, damping: 16 }}
+            className="mb-5 rounded-[14px] border-2 border-ink bg-lime p-3 text-sm font-bold"
+          >
+            Thank you for your feedback!
+          </motion.div>
+        )}
+        {error && (
+          <motion.div
+            key="err"
+            initial={{ opacity: 0, x: -12 }}
+            animate={{ opacity: 1, x: [0, -8, 8, -4, 0] }}
+            exit={{ opacity: 0 }}
+            className="mb-5 rounded-[14px] border-2 border-ink bg-pink p-3 text-sm font-bold"
+          >
+            {error}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label htmlFor="name" className="block text-white/70 text-sm font-bold mb-2">
+          <label htmlFor="name" className="mb-2 block text-sm font-extrabold">
             Name
           </label>
           <input
@@ -70,31 +96,39 @@ const CommentForm = () => {
             id="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full bg-white/5 rounded-lg border border-white/10 px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-accent-cyan transition-shadow duration-300"
+            className={field}
             required
           />
         </div>
+
         <div>
-          <label className="block text-white/70 text-sm font-bold mb-2">
-            Your Rating
-          </label>
-          <div className="flex items-center">
+          <label className="mb-2 block text-sm font-extrabold">Your Rating</label>
+          <div className="flex items-center gap-1" onMouseLeave={() => setHover(0)}>
             {[1, 2, 3, 4, 5].map((star) => (
               <motion.button
                 key={star}
                 type="button"
-                whileHover={{ scale: 1.2, y: -2 }}
-                whileTap={{ scale: 0.9 }}
+                aria-label={`Rate ${star} out of 5`}
+                aria-pressed={star === stars}
+                whileHover={{ scale: 1.25, rotate: -8 }}
+                whileTap={{ scale: 0.85 }}
+                animate={star === stars ? { scale: [1, 1.5, 1], rotate: [0, -18, 0] } : { scale: 1, rotate: 0 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 14 }}
+                onMouseEnter={() => setHover(star)}
                 onClick={() => setStars(star)}
-                className={`text-2xl md:text-3xl mr-1 transition-colors ${star <= stars ? 'text-yellow-400' : 'text-white/30 hover:text-yellow-400/50'}`}
+                className={`text-4xl leading-none transition-colors md:text-5xl ${
+                  star <= shown ? 'text-sun drop-shadow-[2px_2px_0_#0B0B14]' : 'text-ink/20'
+                }`}
               >
                 ★
               </motion.button>
             ))}
+            <span className="ml-3 min-w-[5rem] text-sm font-extrabold">{RATING_LABELS[shown]}</span>
           </div>
         </div>
+
         <div>
-          <label htmlFor="text" className="block text-white/70 text-sm font-bold mb-2">
+          <label htmlFor="text" className="mb-2 block text-sm font-extrabold">
             Feedback
           </label>
           <textarea
@@ -102,18 +136,19 @@ const CommentForm = () => {
             value={text}
             onChange={(e) => setText(e.target.value)}
             rows={4}
-            className="w-full bg-white/5 rounded-lg border border-white/10 px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-accent-cyan transition-shadow duration-300"
+            className={field}
             maxLength={500}
             required
           />
-          <p className="text-right text-xs text-white/50 mt-1">{text.length} / 500</p>
+          <p className="mt-1 text-right text-xs font-bold text-ink/60">{text.length} / 500</p>
         </div>
+
         <motion.button
-            type="submit"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="w-full bg-gradient-to-r from-accent-purple to-accent-blue text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition-transform duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={isSubmitting}
+          type="submit"
+          whileHover={{ y: -3 }}
+          whileTap={{ y: 2 }}
+          className="w-full rounded-full border-2 border-ink bg-lime px-4 py-3.5 font-display text-lg font-extrabold text-ink shadow-[5px_5px_0_0_#0B0B14] transition-colors hover:bg-pink disabled:cursor-not-allowed disabled:opacity-50"
+          disabled={isSubmitting}
         >
           {isSubmitting ? 'Submitting...' : 'Submit Feedback'}
         </motion.button>

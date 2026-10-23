@@ -117,8 +117,9 @@ export default function ProjectsGrid({ limit }: Props) {
   }, [limit]);
 
   return (
-    <section className="py-12 md:py-24">
+    <section className={limit ? "py-12 md:py-24" : "pb-12 pt-2 md:pb-24 md:pt-4"}>
       <SectionHeading
+        level={limit ? 2 : 1}
         title={limit ? "Selected Work" : "All Projects"}
         description={
           limit
