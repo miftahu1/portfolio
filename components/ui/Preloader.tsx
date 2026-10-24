@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { markIntroDone } from "@/lib/intro";
 
 const BARS = ["#D4FF3A", "#FF3D8B", "#FFC83D", "#3626FF", "#8B5CFF"];
 
@@ -19,6 +20,7 @@ export default function Preloader() {
       seen = false;
     }
     if (seen || reduce) {
+      markIntroDone();
       setShow(false);
       return;
     }
@@ -39,7 +41,10 @@ export default function Preloader() {
         } catch {
           /* storage unavailable: intro just replays next visit */
         }
-        timeout = setTimeout(() => setShow(false), 250);
+        timeout = setTimeout(() => {
+          markIntroDone();
+          setShow(false);
+        }, 250);
       }
     };
     raf = requestAnimationFrame(tick);

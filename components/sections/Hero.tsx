@@ -14,6 +14,7 @@ import {
 } from "framer-motion";
 import { Terminal } from "lucide-react";
 import MagneticButton from "@/components/ui/MagneticButton";
+import { onIntroDone } from "@/lib/intro";
 import VelocityMarquee from "@/components/ui/VelocityMarquee";
 import Cube3D from "@/components/ui/Cube3D";
 import CircularBadge from "@/components/ui/CircularBadge";
@@ -114,6 +115,7 @@ export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
   const activeRef = useRef(true);
+  const [ready, setReady] = useState(false);
 
   const [isMobile, setIsMobile] = useState(false);
   const [terminalLines, setTerminalLines] = useState<string[]>([]);
@@ -205,6 +207,17 @@ export default function Hero() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // Start the entrance once the intro curtain begins to lift (with a failsafe)
+  useEffect(() => {
+    const stop = onIntroDone(() => setReady(true));
+    const failsafe = window.setTimeout(() => setReady(true), 3500);
+    return () => {
+      stop();
+      window.clearTimeout(failsafe);
+    };
+  }, []);
+  const go = ready || !!reduce;
 
   // Pause the per-frame wordmark maths while the hero is off screen
   useEffect(() => {
@@ -319,7 +332,7 @@ export default function Hero() {
                 className="inline-block"
                 style={{ transformPerspective: 700 }}
                 initial={reduce ? false : { y: "80%", opacity: 0, rotateX: -80 }}
-                animate={{ y: 0, opacity: 1, rotateX: 0 }}
+                animate={go ? { y: 0, opacity: 1, rotateX: 0 } : { y: "80%", opacity: 0, rotateX: -80 }}
                 transition={{ type: "spring", stiffness: 110, damping: 12, delay: 0.1 + i * 0.07 }}
               >
                 <DodgeLetter
@@ -338,7 +351,7 @@ export default function Hero() {
               className="ml-4 inline-block rounded-full border-2 border-ink bg-bone px-[0.3em] py-[0.08em] font-display font-extrabold tracking-tight text-ink shadow-[5px_5px_0_0_#0B0B14]"
               style={{ fontSize: "0.24em", verticalAlign: "1.1em" }}
               initial={reduce ? false : { scale: 0, rotate: 20 }}
-              animate={{ scale: 1, rotate: -6 }}
+              animate={go ? { scale: 1, rotate: -6 } : { scale: 0, rotate: 20 }}
               whileHover={{ scale: 1.15, rotate: 4 }}
               transition={{ type: "spring", stiffness: 200, damping: 10, delay: 0.7 }}
             >
@@ -348,7 +361,7 @@ export default function Hero() {
 
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={go ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ delay: 0.7, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             className="mt-8 font-display text-3xl font-bold tracking-tight text-bone md:text-5xl"
           >
@@ -357,7 +370,7 @@ export default function Hero() {
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={go ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ delay: 0.85, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             className="mx-auto mt-4 max-w-[46ch] text-base leading-relaxed text-bone/85 md:text-lg lg:mx-0"
           >
@@ -366,7 +379,7 @@ export default function Hero() {
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={go ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ delay: 1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row lg:justify-start"
           >
@@ -398,7 +411,7 @@ export default function Hero() {
 
           <motion.div
             initial={{ opacity: 0, y: 60, rotate: 4 }}
-            animate={{ opacity: 1, y: 0, rotate: 0 }}
+            animate={go ? { opacity: 1, y: 0, rotate: 0 } : { opacity: 0, y: 60, rotate: 4 }}
             transition={{ type: "spring", stiffness: 90, damping: 14, delay: isMobile ? 0.2 : 0.9 }}
             style={
               reduce || isMobile

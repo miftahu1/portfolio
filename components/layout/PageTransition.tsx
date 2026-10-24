@@ -41,11 +41,11 @@ export default function PageTransition({ children }: { children: ReactNode }) {
         </div>
       )}
 
-      <AnimatePresence mode="wait" initial={false}>
+      <AnimatePresence mode="wait">
         <motion.div
           key={pathname}
           variants={variants}
-          initial="hidden"
+          initial={skipWipe ? false : 'hidden'}
           animate="enter"
           exit="exit"
           transition={{ type: 'tween', ease: 'easeInOut', duration: 0.4 }}

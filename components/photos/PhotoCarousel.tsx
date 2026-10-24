@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useRef, useState, type MutableRefObject } from 'react';
+import { useCallback, useEffect, useRef, useState, type MutableRefObject } from 'react';
 import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
 
@@ -10,6 +10,9 @@ type Props = {
   photos: CarouselPhoto[];
   itemRefs: MutableRefObject<Record<number, HTMLElement | null>>;
   onOpen: (index: number, el: HTMLElement) => void;
+  /** Advance on its own every N ms. Pauses on hover/focus, off screen, or when `paused`. */
+  autoPlayMs?: number;
+  paused?: boolean;
 };
 
 const W = 'min(64vw, 26rem)';
@@ -18,12 +21,30 @@ const arrow =
   'flex h-12 w-12 items-center justify-center rounded-full border-2 border-ink bg-lime font-display text-xl font-extrabold text-ink shadow-[3px_3px_0_0_#0B0B14] transition-colors hover:bg-pink disabled:opacity-40';
 
 /** Coverflow-style 3D carousel: drag, swipe, arrow keys, or click a side photo. */
-export default function PhotoCarousel({ photos, itemRefs, onOpen }: Props) {
+export default function PhotoCarousel({ photos, itemRefs, onOpen, autoPlayMs, paused = false }: Props) {
   const reduce = useReducedMotion();
   const n = photos.length;
   const [active, setActive] = useState(0);
   const panned = useRef(false);
   const current = Math.min(active, n - 1);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [hover, setHover] = useState(false);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    if (!autoPlayMs) return;
+    const el = rootRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+    const io = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { threshold: 0.3 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [autoPlayMs]);
+
+  useEffect(() => {
+    if (!autoPlayMs || reduce || paused || hover || !visible || n < 2) return;
+    const id = window.setTimeout(() => setActive((i) => (i + 1) % n), autoPlayMs);
+    return () => window.clearTimeout(id);
+  }, [autoPlayMs, reduce, paused, hover, visible, n, active]);
 
   const go = useCallback((d: number) => setActive((i) => Math.min(n - 1, Math.max(0, i + d))), [n]);
 
@@ -40,13 +61,17 @@ export default function PhotoCarousel({ photos, itemRefs, onOpen }: Props) {
   const transition = reduce ? { duration: 0.01 } : { type: 'spring' as const, stiffness: 160, damping: 22 };
 
   return (
-    <div>
+    <div ref={rootRef}>
       <div
         tabIndex={0}
         role="group"
         aria-roledescription="carousel"
         aria-label="Photo carousel"
         onKeyDown={onKeyDown}
+        onPointerEnter={() => setHover(true)}
+        onPointerLeave={() => setHover(false)}
+        onFocus={() => setHover(true)}
+        onBlur={() => setHover(false)}
         className="relative mx-auto w-full select-none overflow-hidden rounded-[28px] bg-gradient-mesh focus:outline-none focus-visible:ring-2 focus-visible:ring-lime"
         style={{ height: `calc(${W} * 1.25 + 3rem)`, touchAction: 'pan-y' }}
       >
