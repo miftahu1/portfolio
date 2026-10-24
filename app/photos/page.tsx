@@ -1,25 +1,29 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Photo } from '@/lib/types';
-import Lightbox, { type Slide } from "yet-another-react-lightbox";
-import "yet-another-react-lightbox/styles.css";
 import { IconLoader, IconPhoto } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import PageHeader from '@/components/ui/PageHeader';
+import Tilt from '@/components/ui/Tilt';
+import PhotoCarousel from '@/components/photos/PhotoCarousel';
+import PhotoLightbox, {
+  originFromElement,
+  type LightboxOrigin,
+  type LightboxPhoto,
+  type Rect,
+} from '@/components/photos/PhotoLightbox';
+import { cloudUrl, GRID_ASPECTS } from '@/components/photos/utils';
 
-// Custom slide type for the lightbox
-type CustomSlide = Slide & {
-    title?: string;
-    description?: string;
-};
+type View = 'grid' | 'carousel';
 
 export default function PhotosPage() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [loading, setLoading] = useState(true);
-  const [open, setOpen] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [view, setView] = useState<View>('grid');
+  const [origin, setOrigin] = useState<LightboxOrigin | null>(null);
+  const itemRefs = useRef<Record<number, HTMLElement | null>>({});
 
   useEffect(() => {
     setLoading(true);
@@ -35,64 +39,121 @@ export default function PhotosPage() {
       });
   }, []);
 
-  const handleOpen = (index: number) => {
-    setCurrentIndex(index);
-    setOpen(true);
-  };
+  const lbPhotos: LightboxPhoto[] = useMemo(
+    () =>
+      photos.map(photo => ({
+        id: photo.id,
+        src: cloudUrl(photo.publicId, 1600),
+        thumb: cloudUrl(photo.publicId, 800),
+        title: photo.title,
+        description: photo.description,
+      })),
+    [photos]
+  );
 
-  const slides: CustomSlide[] = photos.map(photo => ({
-    src: `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/w_1600/v1/${photo.publicId}`,
-    title: photo.title,
-    description: photo.description,
-  }));
+  const carouselPhotos = useMemo(
+    () => photos.map(photo => ({ id: photo.id, thumb: cloudUrl(photo.publicId, 800), title: photo.title })),
+    [photos]
+  );
 
-  const photoVariants = {
-    hidden: { opacity: 0, scale: 0.95 },
-    visible: { opacity: 1, scale: 1 },
-  };
+  const onOpen = useCallback((index: number, el: HTMLElement) => setOrigin(originFromElement(index, el)), []);
+  const onClose = useCallback(() => setOrigin(null), []);
+  const getRect = useCallback((index: number): Rect | null => {
+    const el = itemRefs.current[index];
+    if (!el) return null;
+    const r = el.getBoundingClientRect();
+    return { left: r.left, top: r.top, width: r.width, height: r.height };
+  }, []);
 
   return (
     <div className="min-h-screen text-white">
-        <PageHeader 
-            title="Photo Gallery" 
+        <PageHeader
+            title="Photo Gallery"
             description="A collection of my work. Click on any image to view it in fullscreen."
         />
-        
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-12">
             {loading ? (
                 <div className="flex justify-center items-center h-96">
-                    <IconLoader size={56} className="animate-spin text-accent-purple" />
+                    <IconLoader size={56} className="animate-spin text-lime" />
                 </div>
             ) : photos.length > 0 ? (
-                <motion.div 
-                    className="columns-2 md:columns-3 lg:columns-4 gap-4"
-                    initial="hidden"
-                    animate="visible"
-                    transition={{ staggerChildren: 0.05 }}
-                >
-                    {photos.map((photo, index) => (
-                        <motion.div 
-                            key={photo.id} 
-                            className="break-inside-avoid mb-4 rounded-lg overflow-hidden group relative cursor-pointer shadow-lg hover:shadow-accent-purple/20 transition-all duration-300"
-                            onClick={() => handleOpen(index)}
-                            variants={photoVariants}
+                <>
+                    <div className="mb-10 flex justify-center">
+                        <div
+                            role="group"
+                            aria-label="Gallery view"
+                            className="inline-flex rounded-full border-2 border-bone/25 bg-ink/40 p-1"
                         >
-                            <Image 
-                                src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/w_800/v1/${photo.publicId}`}
-                                alt={photo.title || ''} 
-                                width={800}
-                                height={600} // This is just a placeholder, actual height will be auto
-                                className="w-full h-auto transition-transform duration-300 group-hover:scale-105"
-                                priority={index < 8} // Prioritize loading for first few images
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                                <div className="text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                                    {photo.title && <h3 className="text-lg font-bold">{photo.title}</h3>}
+                            {(['grid', 'carousel'] as const).map((v) => (
+                                <button
+                                    key={v}
+                                    type="button"
+                                    aria-pressed={view === v}
+                                    onClick={() => setView(v)}
+                                    className={`relative rounded-full px-5 py-2 text-sm font-bold transition-colors ${
+                                        view === v ? 'text-ink' : 'text-bone/80 hover:text-lime'
+                                    }`}
+                                >
+                                    {view === v && (
+                                        <motion.span
+                                            layoutId="photo-view-pill"
+                                            transition={{ type: 'spring', stiffness: 380, damping: 28 }}
+                                            className="absolute inset-0 rounded-full bg-lime"
+                                        />
+                                    )}
+                                    <span className="relative z-10">{v === 'grid' ? 'Grid' : '3D Carousel'}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {view === 'grid' ? (
+                        <div className="columns-2 gap-3 md:columns-3 md:gap-4 lg:columns-4">
+                            {photos.map((photo, index) => (
+                                <div key={photo.id} className="mb-3 break-inside-avoid md:mb-4">
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 30 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: true, margin: '-40px' }}
+                                        transition={{ type: 'spring', stiffness: 110, damping: 16 }}
+                                    >
+                                        <Tilt max={4} className="rounded-[20px]">
+                                            <button
+                                                type="button"
+                                                ref={(el) => {
+                                                    itemRefs.current[index] = el;
+                                                }}
+                                                onClick={(e) => onOpen(index, e.currentTarget)}
+                                                aria-label={`Open photo${photo.title ? `: ${photo.title}` : ''}`}
+                                                className={`group relative block w-full cursor-zoom-in overflow-hidden rounded-[20px] border-2 border-ink bg-surface shadow-[5px_5px_0_0_rgba(244,241,255,0.18)] transition-shadow duration-300 hover:shadow-[8px_8px_0_0_#D4FF3A] ${GRID_ASPECTS[index % GRID_ASPECTS.length]}`}
+                                            >
+                                                <Image
+                                                    src={cloudUrl(photo.publicId, 800)}
+                                                    alt={photo.title || ''}
+                                                    fill
+                                                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                                                    priority={index < 8}
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent" />
+                                                {photo.title && (
+                                                    <div className="absolute bottom-0 left-0 p-4 text-left">
+                                                        <h3 className="translate-y-4 font-display text-lg font-extrabold text-lime opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                                                            {photo.title}
+                                                        </h3>
+                                                    </div>
+                                                )}
+                                            </button>
+                                        </Tilt>
+                                    </motion.div>
                                 </div>
-                            </div>
-                        </motion.div>
-                    ))}
-                </motion.div>
+                            ))}
+                        </div>
+                    ) : (
+                        <PhotoCarousel photos={carouselPhotos} itemRefs={itemRefs} onOpen={onOpen} />
+                    )}
+                </>
             ) : (
                 <div className="text-center py-20">
                     <IconPhoto size={64} className="mx-auto text-gray-500"/>
@@ -102,35 +163,7 @@ export default function PhotosPage() {
             )}
         </div>
 
-        <Lightbox
-            open={open}
-            close={() => setOpen(false)}
-            slides={slides}
-            index={currentIndex}
-            styles={{ container: { backgroundColor: "rgba(0, 0, 0, .9)" } }}
-            render={{ 
-                slide: ({ slide }) => {
-                    const customSlide = slide as CustomSlide;
-                    return (
-                        <div className="relative w-full h-full flex justify-center items-center">
-                            <Image 
-                                alt={customSlide.title || ''}
-                                src={customSlide.src || ''}
-                                width={1600}
-                                height={1200}
-                                className="max-w-[90vw] max-h-[90vh] object-contain rounded-lg"
-                            />
-                            {(customSlide.title || customSlide.description) && (
-                                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-full max-w-4xl text-center p-4 bg-black/50 rounded-lg backdrop-blur-sm">
-                                    {customSlide.title && <h2 className="text-2xl font-bold">{customSlide.title}</h2>}
-                                    {customSlide.description && <p className="mt-2 text-gray-300 max-w-2xl mx-auto">{customSlide.description}</p>}
-                                </div>
-                            )}
-                        </div>
-                    )
-                }
-            }}
-        />
+        <PhotoLightbox photos={lbPhotos} origin={origin} onClose={onClose} getRect={getRect} />
     </div>
   );
 }

@@ -10,7 +10,7 @@ type PageHeaderProps = {
 export default function PageHeader({ title, description }: PageHeaderProps) {
   return (
     <motion.header 
-        className="py-16 md:py-24 text-center"
+        className="pb-10 pt-4 text-center md:pb-14 md:pt-6"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
